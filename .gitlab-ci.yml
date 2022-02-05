@@ -5,13 +5,13 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   DOCKER_TLS_CERTDIR: ""
   GIT_SSL_NO_VERIFY: "true"
-  CONTAINER_JOBID_IMAGE    :  gitlab.demisco.com:5050/cfs/rprq:$CI_PIPELINE_ID
-  CONTAINER_JOBID_IMAGE_DEV:  gitlab.demisco.com:5050/cfs/rprq:dev-$CI_PIPELINE_ID
+  CONTAINER_JOBID_IMAGE    :  gitlab.demisco.com:5050/cfs/fnsc:$CI_PIPELINE_ID
+  CONTAINER_JOBID_IMAGE_DEV:  gitlab.demisco.com:5050/cfs/fnsc:dev-$CI_PIPELINE_ID
 
 
   REGISTRY_ADDRESS: $CI_REGISTRY
-  app_name: "rprq-service"
-  nodePort: "30657"
+  app_name: "fnsc-service"
+  nodePort: "30757"
   clusterPort: "8080"
   containerPort: "8080"
   name_space: "cfs"
