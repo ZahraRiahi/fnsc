@@ -8,7 +8,7 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   SONAR_TOKEN: "82f58e9c88675cfed0b8c35c841184df5cbbed1f"
   SONAR_HOST_URL: "https://sonar.demisco.com"
-  SONAR_PROJECT_KEY: "cfs.rprq"
+  SONAR_PROJECT_KEY: "cfs.fnsc"
   SONAR_TOKEN: "e8ea8d204ca989834c4baf97aa9d5d80ccefffb2"
   GITLAB_ACCESS_TOKEN: "nBY4FLt4LSfv4yM5nQs8"
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
@@ -39,7 +39,6 @@ QCbuild:
         - find . -type f -name app*.jar -exec cp -rf {} . \;
         - find . -type f -name model*.jar -exec cp -rf {} . \;
         - find . -type f -name service*.jar -exec cp -rf {} . \;
-        - rm -Rf ihio
         - ls
     artifacts:
         paths:
