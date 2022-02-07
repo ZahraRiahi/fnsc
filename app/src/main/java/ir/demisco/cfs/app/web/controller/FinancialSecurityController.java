@@ -3,6 +3,7 @@ package ir.demisco.cfs.app.web.controller;
 import ir.demisco.cfs.model.dto.request.FinancialSecurityFilterRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecurityOutputResponse;
 import ir.demisco.cfs.service.api.FinancialSecurityService;
+import ir.demisco.cloud.core.security.util.SecurityHelper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,6 @@ public class FinancialSecurityController {
 
     @PostMapping("/HasPermission")
     public ResponseEntity<FinancialSecurityOutputResponse> responseEntitySetStatus(@RequestBody FinancialSecurityFilterRequest financialSecurityFilterRequest,Long organizationId) {
-        return ResponseEntity.ok(financialSecurityService.hasPermission(financialSecurityFilterRequest,100L));
+        return ResponseEntity.ok(financialSecurityService.hasPermission(financialSecurityFilterRequest, SecurityHelper.getCurrentUser().getOrganizationId()));
     }
 }
