@@ -18,12 +18,10 @@ import java.util.List;
 public class DefaultFinancialSecurity implements FinancialSecurityService {
     private final FinancialActivityTypeRepository financialActivityTypeRepository;
     private final EntityManager entityManager;
-//    private final FinancialSecurityService financialSecurityService;
 
     public DefaultFinancialSecurity(FinancialActivityTypeRepository financialActivityTypeRepository, EntityManager entityManager) {
         this.financialActivityTypeRepository = financialActivityTypeRepository;
         this.entityManager = entityManager;
-//        this.financialSecurityService = financialSecurityService;
     }
 
     @Override
