@@ -41,7 +41,7 @@ public class DefaultFinancialSecurity implements FinancialSecurityService {
         }
         List<Object[]> financialDocumentItemList = financialActivityTypeRepository.getFinancialActivityTypeByActivityCode(financialSecurityFilterRequest.getActivityCode());
         FinancialSecurityOutputResponse financialSecurityOutputResponse = new FinancialSecurityOutputResponse();
-        if (financialDocumentItemList.size() != 0 && financialDocumentItemList.get(0)[0] == null) {
+        if (financialDocumentItemList.size() == 0) {
             financialSecurityOutputResponse.setPermissionMessage("اشکال در واکشی اطلاعات امنیت سیستم");
             financialSecurityOutputResponse.setHasPermissionStatus(2L);
         } else {
