@@ -11,9 +11,6 @@
 
     <artifactId>app</artifactId>
 
-    <!--    <profiles>-->
-    <!--        <profile>-->
-    <!--            <id>DEV</id>-->
     <build>
         <plugins>
             <plugin>
@@ -28,8 +25,6 @@
             </plugin>
         </plugins>
     </build>
-    <!--        </profile>-->
-    <!--    </profiles>-->
 
     <dependencies>
         <dependency>
@@ -81,11 +76,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.oracle.ojdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>ir.demisco.cloud.core</groupId>
             <artifactId>dms-middleware</artifactId>
         </dependency>
@@ -105,26 +95,10 @@
             <artifactId>spring-cloud-openfeign-core</artifactId>
             <version>2.1.2.RELEASE</version>
         </dependency>
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.cloud</groupId>-->
-        <!--            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>-->
-        <!--        </dependency>-->
-
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>ir.demisco.cloud.core</groupId>-->
-        <!--            <artifactId>dms.security.service</artifactId>-->
-        <!--            <version>${basic-Service-version}</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.security</groupId>-->
-        <!--            <artifactId>spring-security-test</artifactId>-->
-        <!--        </dependency>-->
-
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
