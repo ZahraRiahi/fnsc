@@ -19,7 +19,7 @@ import java.util.Date;
 @Table(name = "FINANCIAL_USER_ALTERNATIVE", schema = "fnsc")
 public class FinancialUserAlternative extends AuditModel<Long> {
     private FinancialUser financialUser;
-    private FinancialUser financialUserAlternative;
+    private FinancialUser alternative;
     private Date disableDate;
     private Date effectiveDate;
     private Organization organization;
@@ -44,13 +44,14 @@ public class FinancialUserAlternative extends AuditModel<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FINANCIAL_USER_ID_ALTERNATE")
-    public FinancialUser getFinancialUserAlternative() {
-        return financialUserAlternative;
+    public FinancialUser getAlternative() {
+        return alternative;
     }
 
-    public void setFinancialUserAlternative(FinancialUser financialUserAlternative) {
-        this.financialUserAlternative = financialUserAlternative;
+    public void setAlternative(FinancialUser alternative) {
+        this.alternative = alternative;
     }
+
 
     @Column(name = "DISABLE_DATE")
     public Date getDisableDate() {
