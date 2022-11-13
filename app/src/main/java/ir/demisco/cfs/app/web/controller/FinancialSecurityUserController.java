@@ -1,5 +1,6 @@
 package ir.demisco.cfs.app.web.controller;
 
+import ir.demisco.cfs.model.dto.request.FinancialUsersInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecurityUserResponse;
 import ir.demisco.cfs.service.api.FinancialSecurityUserService;
 import ir.demisco.cloud.core.middle.model.dto.DataSourceRequest;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api-financialSecurityUser")
@@ -31,5 +31,10 @@ public class FinancialSecurityUserController {
     @GetMapping("/GetFinancialUsers")
     public ResponseEntity<List<FinancialSecurityUserResponse>> responseEntity(){
         return ResponseEntity.ok(financialSecurityUserService.getGetFinancialUsersList());
+    }
+
+    @PostMapping("/SaveFinancialUsers")
+    public ResponseEntity<Boolean> saveFinancialUsers(@RequestBody FinancialUsersInputModelRequest financialUsersInputModelRequest) {
+        return ResponseEntity.ok(financialSecurityUserService.saveFinancialUsers(financialUsersInputModelRequest));
     }
 }
