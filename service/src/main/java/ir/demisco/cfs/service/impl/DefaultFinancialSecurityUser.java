@@ -61,7 +61,7 @@ public class DefaultFinancialSecurityUser implements FinancialSecurityUserServic
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public Boolean saveFinancialUsers(FinancialUsersInputModelRequest financialUsersInputModelRequest) {
-        financialUsersInputModelRequest.getApplicationUserId().forEach(aLong -> {
+        financialUsersInputModelRequest.getApplicationUserId().forEach((Long aLong) -> {
             Long byFinancialUserByListUserId = financialUserRepository.findByFinancialUserByListUserId(aLong);
             if (byFinancialUserByListUserId == null){
                 FinancialUser financialUser=new FinancialUser();
