@@ -1,7 +1,9 @@
 package ir.demisco.cfs.service.impl;
 
+import ir.demisco.cfs.model.dto.request.FinancialUsersInputModelRequest;
 import ir.demisco.cfs.model.dto.response.ApplicationUsersOutputResponse;
 import ir.demisco.cfs.model.dto.response.FinancialSecurityUserResponse;
+import ir.demisco.cfs.model.entity.FinancialUser;
 import ir.demisco.cfs.service.api.FinancialSecurityUserService;
 import ir.demisco.cfs.service.repository.ApplicationUserRepository;
 import ir.demisco.cfs.service.repository.FinancialUserRepository;
@@ -54,6 +56,21 @@ public class DefaultFinancialSecurityUser implements FinancialSecurityUserServic
                 .nickName(objects[3].toString())
                 .build()).collect(Collectors.toList());
 
+    }
+
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public Boolean saveFinancialUsers(FinancialUsersInputModelRequest financialUsersInputModelRequest) {
+        financialUsersInputModelRequest.getApplicationUserId().forEach((Long aLong) -> {
+            Long byFinancialUserByListUserId = financialUserRepository.findByFinancialUserByListUserId(aLong);
+            if (byFinancialUserByListUserId == null){
+                FinancialUser financialUser=new FinancialUser();
+                financialUser.setApplicationUser(applicationUserRepository.getById(aLong));
+                financialUserRepository.save(financialUser);
+            }
+        });
+
+        return true;
     }
 
 }
