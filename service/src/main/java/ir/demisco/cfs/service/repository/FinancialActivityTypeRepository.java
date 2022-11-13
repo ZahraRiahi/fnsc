@@ -11,9 +11,4 @@ public interface FinancialActivityTypeRepository extends JpaRepository<Financial
             " where fa.code= :activityCode")
     List<Object[]> getFinancialActivityTypeByActivityCode(String activityCode);
 
-
-    @Query("select fa from FinancialActivityType fa where fa.code=:code " +
-            "and fa.financialSystem.id=:financialSystemId and fa.financialSystemSubject.id=:financialSystemSubjectId ")
-    FinancialActivityType getFinancialActivityByCodeAndSystemIdAndSubjectId(String code, Long financialSystemId, Long financialSystemSubjectId);
-
 }
