@@ -4,7 +4,6 @@ import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersInputRequest;
 import ir.demisco.cfs.model.dto.response.FinancialAlternativeUsersOutputResponse;
 import ir.demisco.cfs.service.api.FinancialAlternativeUsersService;
 import ir.demisco.cfs.service.repository.FinancialUsersAlternativeRepository;
-import ir.demisco.cloud.core.security.util.SecurityHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,19 +17,20 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
 
     public DefaultFinancialAlternativeUsers(FinancialUsersAlternativeRepository financialUsersAlternativeRepository) {
         this.financialUsersAlternativeRepository = financialUsersAlternativeRepository;
+
     }
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public List<FinancialAlternativeUsersOutputResponse> getFinancialAlternativeUsers(FinancialAlternativeUsersInputRequest financialAlternativeUsersInputRequest, Long organizationId) {
+    public List<FinancialAlternativeUsersOutputResponse> getFinancialAlternativeUsers(FinancialAlternativeUsersInputRequest financialAlternativeUsersInputRequest) {
         Object mainFinancialUserId = null;
         if (financialAlternativeUsersInputRequest.getMainFinancialUserId() != null) {
             mainFinancialUserId = "mainFinancialUserId";
         } else {
             financialAlternativeUsersInputRequest.setMainFinancialUserId(0L);
         }
-        List<Object[]> financialUsersAlternativeList = financialUsersAlternativeRepository.getFinancialUserAlternativeByUserIdAndFlgAndOrgan(mainFinancialUserId,financialAlternativeUsersInputRequest.getMainFinancialUserId()
-                , financialAlternativeUsersInputRequest.getFlgAllOrganizations(), SecurityHelper.getCurrentUser().getOrganizationId());
+        List<Object[]> financialUsersAlternativeList = financialUsersAlternativeRepository.getFinancialUserAlternativeByUserIdAndFlgAndOrgan(mainFinancialUserId, financialAlternativeUsersInputRequest.getMainFinancialUserId()
+                , financialAlternativeUsersInputRequest.getFlgAllOrganizations(), financialAlternativeUsersInputRequest.getOrganizationId());
         return financialUsersAlternativeList.stream().map(objects -> FinancialAlternativeUsersOutputResponse.builder().financialAlternativeId(Long.parseLong(objects[0].toString()))
                 .mainUserId(Long.parseLong(objects[1].toString()))
                 .mainUserName(objects[2].toString())
