@@ -1,16 +1,12 @@
 package ir.demisco.cfs.service.impl;
 
 import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersInputRequest;
-import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersListRequest;
 import ir.demisco.cfs.model.dto.response.FinancialAlternativeUsersOutputResponse;
 import ir.demisco.cfs.service.api.FinancialAlternativeUsersService;
 import ir.demisco.cfs.service.repository.FinancialUsersAlternativeRepository;
-import ir.demisco.cloud.core.middle.exception.RuleException;
-import ir.demisco.cloud.core.security.util.SecurityHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,11 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUsersService {
     private final FinancialUsersAlternativeRepository financialUsersAlternativeRepository;
-    private final EntityManager entityManager;
 
-    public DefaultFinancialAlternativeUsers(FinancialUsersAlternativeRepository financialUsersAlternativeRepository, EntityManager entityManager) {
+    public DefaultFinancialAlternativeUsers(FinancialUsersAlternativeRepository financialUsersAlternativeRepository) {
         this.financialUsersAlternativeRepository = financialUsersAlternativeRepository;
-        this.entityManager = entityManager;
+
     }
 
     @Override
@@ -48,25 +43,6 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
                 .organizationId(Long.parseLong(objects[9].toString()))
                 .organizationName(objects[10].toString())
                 .build()).collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional(rollbackFor = Throwable.class)
-    public Boolean setAlternativeUserEndDate(FinancialAlternativeUsersListRequest financialAlternativeUsersListRequest) {
-        List<Long> uniqueEffectiveDate = financialUsersAlternativeRepository.getCountByFinancialUserAlternateByEffectiveDateAndOrg(financialAlternativeUsersListRequest.getFinancialAlternativeId().get(0), financialAlternativeUsersListRequest.getFinancialAlternativeId(), financialAlternativeUsersListRequest.getDisableDate()
-                , SecurityHelper.getCurrentUser().getOrganizationId());
-        if (uniqueEffectiveDate != null) {
-            throw new RuleException("با این اطلاعات قبلا رکوردی ثبت شده است");
-        }
-        List<Object> resultList = entityManager.createNativeQuery(" UPDATE FNSC.FINANCIAL_USER_ALTERNATIVE T " +
-                "   SET T.DISABLE_DATE = :disableDate " +
-                " WHERE T.DISABLE_DATE IS NULL " +
-                "   AND T.ID IN " +
-                "       (:financialAlternativeUsersList)  ").setParameter("disableDate", financialAlternativeUsersListRequest.getDisableDate())
-                .setParameter("financialAlternativeUsersList", financialAlternativeUsersListRequest.getFinancialAlternativeId())
-                .getResultList();
-
-        return true;
     }
 
 }
