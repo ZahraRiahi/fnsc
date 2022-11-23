@@ -4,6 +4,7 @@ import ir.demisco.cfs.model.entity.FinancialUserAlternative;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface FinancialUsersAlternativeRepository extends JpaRepository<FinancialUserAlternative, Long> {
@@ -35,4 +36,17 @@ public interface FinancialUsersAlternativeRepository extends JpaRepository<Finan
             "       AL.ORGANIZATION_ID = :organizationId)"
             , nativeQuery = true)
     List<Object[]> getFinancialUserAlternativeByUserIdAndFlgAndOrgan(Object mainFinancialUser,Long mainFinancialUserId,Long flgAllOrganizations,Long organizationId);
+
+    @Query(value = " select count(T.id)" +
+            "  from FNSC.FINANCIAL_USER_ALTERNATIVE T " +
+            " inner join fnsc.FINANCIAL_USER fu " +
+            "    on fu.id = T.financial_user_id " +
+            " inner join fnsc.FINANCIAL_USER fu2" +
+            "    on fu2.id=T.financial_user_id_alternate " +
+            " where T.financial_user_id = :financialUserId " +
+            "   and T.financial_user_id_alternate in (:financialUserIdAlternate) " +
+            "   and T.DISABLE_DATE = trunc(:disableDate) " +
+            "   and T.Organization_Id= :organizationId "
+            , nativeQuery = true)
+    List<Long> getCountByFinancialUserAlternateByEffectiveDateAndOrg(Long financialUserId, List<Long> financialUserIdAlternate, LocalDateTime disableDate, Long organizationId);
 }
