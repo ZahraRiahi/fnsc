@@ -50,7 +50,7 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public Boolean setAlternativeUserEndDate(FinancialAlternativeUsersListRequest financialAlternativeUsersListRequest) {
-        financialAlternativeUsersListRequest.getFinancialAlternativeId().forEach(aLong -> {
+        financialAlternativeUsersListRequest.getFinancialAlternativeId().forEach((Long aLong) -> {
             Optional<FinancialUserAlternative> alternativeRepository = financialUsersAlternativeRepository.findById(aLong);
             alternativeRepository.get().setDisableDate(financialAlternativeUsersListRequest.getDisableDate());
 
