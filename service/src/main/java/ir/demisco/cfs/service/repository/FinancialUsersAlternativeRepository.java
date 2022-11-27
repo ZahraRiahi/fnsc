@@ -35,7 +35,7 @@ public interface FinancialUsersAlternativeRepository extends JpaRepository<Finan
             "   AND (NVL(:flgAllOrganizations, 0) = 1 OR" +
             "       AL.ORGANIZATION_ID = :organizationId)"
             , nativeQuery = true)
-    List<Object[]> getFinancialUserAlternativeByUserIdAndFlgAndOrgan(Object mainFinancialUser,Long mainFinancialUserId,Long flgAllOrganizations,Long organizationId);
+    List<Object[]> getFinancialUserAlternativeByUserIdAndFlgAndOrgan(Object mainFinancialUser, Long mainFinancialUserId, Long flgAllOrganizations, Long organizationId);
 
     @Query(value = " select count(T.id)" +
             "  from FNSC.FINANCIAL_USER_ALTERNATIVE T " +
@@ -49,4 +49,10 @@ public interface FinancialUsersAlternativeRepository extends JpaRepository<Finan
             "   and T.Organization_Id= :organizationId "
             , nativeQuery = true)
     List<Long> getCountByFinancialUserAlternateByEffectiveDateAndOrg(Long financialUserId, List<Long> financialUserIdAlternate, LocalDateTime disableDate, Long organizationId);
+
+    @Query(value = " select T.id " +
+            "  from FNSC.FINANCIAL_USER_ALTERNATIVE T" +
+            " where  T.financial_user_id_alternate in (:financialUserIdAlternate) "
+            , nativeQuery = true)
+    List<Long> getFinancialUserAlternativeById(List<Long> financialUserIdAlternate);
 }

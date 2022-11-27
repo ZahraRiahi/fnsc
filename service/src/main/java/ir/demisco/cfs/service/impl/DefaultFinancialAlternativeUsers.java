@@ -1,7 +1,9 @@
 package ir.demisco.cfs.service.impl;
 
 import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersInputRequest;
+import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersListRequest;
 import ir.demisco.cfs.model.dto.response.FinancialAlternativeUsersOutputResponse;
+import ir.demisco.cfs.model.entity.FinancialUserAlternative;
 import ir.demisco.cfs.service.api.FinancialAlternativeUsersService;
 import ir.demisco.cfs.service.repository.FinancialUsersAlternativeRepository;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,7 +20,6 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
 
     public DefaultFinancialAlternativeUsers(FinancialUsersAlternativeRepository financialUsersAlternativeRepository) {
         this.financialUsersAlternativeRepository = financialUsersAlternativeRepository;
-
     }
 
     @Override
@@ -43,6 +45,19 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
                 .organizationId(Long.parseLong(objects[9].toString()))
                 .organizationName(objects[10].toString())
                 .build()).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public Boolean setAlternativeUserEndDate(FinancialAlternativeUsersListRequest financialAlternativeUsersListRequest) {
+        financialAlternativeUsersListRequest.getFinancialAlternativeId().forEach(aLong -> {
+            Optional<FinancialUserAlternative> alternativeRepository = financialUsersAlternativeRepository.findById(aLong);
+            alternativeRepository.get().setDisableDate(financialAlternativeUsersListRequest.getDisableDate());
+
+        });
+
+
+        return true;
     }
 
 }

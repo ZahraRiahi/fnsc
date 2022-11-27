@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -19,7 +20,7 @@ import java.util.Date;
 public class FinancialUserAlternative extends AuditModel<Long> {
     private FinancialUser financialUser;
     private FinancialUser alternative;
-    private Date disableDate;
+    private LocalDateTime disableDate;
     private Date effectiveDate;
     private Organization organization;
 
@@ -53,11 +54,11 @@ public class FinancialUserAlternative extends AuditModel<Long> {
 
 
     @Column(name = "DISABLE_DATE")
-    public Date getDisableDate() {
+    public LocalDateTime getDisableDate() {
         return disableDate;
     }
 
-    public void setDisableDate(Date disableDate) {
+    public void setDisableDate(LocalDateTime disableDate) {
         this.disableDate = disableDate;
     }
 
