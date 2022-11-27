@@ -6,7 +6,6 @@ import java.util.List;
 public class FinancialAlternativeUsersListRequest {
     private List<Long> financialAlternativeId;
     private LocalDateTime disableDate;
-    private LocalDateTime effectiveDate;
 
     public List<Long> getFinancialAlternativeId() {
         return financialAlternativeId;
@@ -24,11 +23,4 @@ public class FinancialAlternativeUsersListRequest {
         this.disableDate = disableDate;
     }
 
-    public LocalDateTime getEffectiveDate() {
-        return effectiveDate;
-    }
-
-    public void setEffectiveDate(LocalDateTime effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
 }
