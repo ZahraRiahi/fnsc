@@ -24,7 +24,7 @@ public class DefaultFinancialUserGroup implements FinancialUserGroupService {
     public Boolean setFinancialUserGroup(FinancialUserGroupInputRequest financialUserGroupInputRequest) {
         Long count = financialUserGroupRepository.findByFinancialUserGroupByIdAndDisableDate(financialUserGroupInputRequest.getUserGroupId(), financialUserGroupInputRequest.getDisableDate());
         if (count != null) {
-            throw new RuleException("تاریخ پایان قبلا پر شده ویا با تاریخ شروع هماهنگی ندارد");
+            throw new RuleException("تاریخ پایان قبلا پر شده و یا با تاریخ شروع هماهنگی ندارد");
         }
         entityManager.createNativeQuery(" update FNSC.FINANCIAL_USER_GROUP T " +
                 "   set   T.DISABLE_DATE = :disableDate " +
