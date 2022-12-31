@@ -10,7 +10,7 @@ public interface FinancialUserGroupRepository extends JpaRepository<FinancialUse
     @Query(value = " SELECT 1 " +
             "              FROM FNSC.FINANCIAL_USER_GROUP T " +
             "             WHERE T.ID = :financialUserGroupId " +
-            "             and T.DISABLE_DATE IS NOT NULL " +
-            "                OR :disableDate < T.DISABLE_DATE ", nativeQuery = true)
+            "             and (T.DISABLE_DATE IS NOT NULL " +
+            "                OR :disableDate < T.EFFECTIVE_DATE) ", nativeQuery = true)
     Long findByFinancialUserGroupByIdAndDisableDate(Long financialUserGroupId, LocalDateTime disableDate);
 }
