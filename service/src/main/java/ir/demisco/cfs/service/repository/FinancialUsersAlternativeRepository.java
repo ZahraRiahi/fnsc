@@ -37,22 +37,18 @@ public interface FinancialUsersAlternativeRepository extends JpaRepository<Finan
             , nativeQuery = true)
     List<Object[]> getFinancialUserAlternativeByUserIdAndFlgAndOrgan(Object mainFinancialUser, Long mainFinancialUserId, Long flgAllOrganizations, Long organizationId);
 
-    @Query(value = " select count(T.id)" +
-            "  from FNSC.FINANCIAL_USER_ALTERNATIVE T " +
-            " inner join fnsc.FINANCIAL_USER fu " +
-            "    on fu.id = T.financial_user_id " +
-            " inner join fnsc.FINANCIAL_USER fu2" +
-            "    on fu2.id=T.financial_user_id_alternate " +
-            " where T.financial_user_id = :financialUserId " +
-            "   and T.financial_user_id_alternate in (:financialUserIdAlternate) " +
-            "   and T.DISABLE_DATE = trunc(:disableDate) " +
-            "   and T.Organization_Id= :organizationId "
-            , nativeQuery = true)
-    List<Long> getCountByFinancialUserAlternateByEffectiveDateAndOrg(Long financialUserId, List<Long> financialUserIdAlternate, LocalDateTime disableDate, Long organizationId);
-
-    @Query(value = " select T.id " +
-            "  from FNSC.FINANCIAL_USER_ALTERNATIVE T" +
-            " where  T.financial_user_id_alternate in (:financialUserIdAlternate) "
-            , nativeQuery = true)
-    List<Long> getFinancialUserAlternativeById(List<Long> financialUserIdAlternate);
+    @Query(value = " SELECT 1 " +
+            "  FROM FNSC.FINANCIAL_USER_ALTERNATIVE UA " +
+            " WHERE UA.ID IN (:userAlternativeIdList) " +
+            "   AND EXISTS " +
+            " (SELECT 1 " +
+            "          FROM FNSC.FINANCIAL_USER_ALTERNATIVE UA_IN " +
+            "         WHERE UA_IN.ID != UA.ID " +
+            "           AND UA_IN.FINANCIAL_USER_ID = UA.FINANCIAL_USER_ID " +
+            "           AND UA_IN.FINANCIAL_USER_ID_ALTERNATE = " +
+            "               UA.FINANCIAL_USER_ID_ALTERNATE " +
+            "           AND UA_IN.ORGANIZATION_ID = UA.ORGANIZATION_ID " +
+            "           AND ((:disableDate BETWEEN UA_IN.EFFECTIVE_DATE AND " +
+            "               NVL(UA_IN.DISABLE_DATE, SYSDATE + 10000))))  ", nativeQuery = true)
+    List<Long> getFinancialUserAlternativeByIdList(List<Long> userAlternativeIdList, LocalDateTime disableDate);
 }

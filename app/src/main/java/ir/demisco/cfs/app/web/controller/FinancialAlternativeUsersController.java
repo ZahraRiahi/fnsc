@@ -2,6 +2,7 @@ package ir.demisco.cfs.app.web.controller;
 
 import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersInputRequest;
 import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersListRequest;
+import ir.demisco.cfs.model.dto.request.FinancialUserAlternativeInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialAlternativeUsersOutputResponse;
 import ir.demisco.cfs.service.api.FinancialAlternativeUsersService;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +29,10 @@ public class FinancialAlternativeUsersController {
     @PostMapping("/SetAlternativeUserEndDate")
     public ResponseEntity<Boolean> setAlternativeUserEndDate(@RequestBody FinancialAlternativeUsersListRequest financialAlternativeUsersListRequest) {
          return ResponseEntity.ok(financialAlternativeUsersService.setAlternativeUserEndDate(financialAlternativeUsersListRequest));
+    }
+
+    @PostMapping("/setDisableDate")
+    public ResponseEntity<Boolean> setAlternativeSetDisableDate(@RequestBody FinancialUserAlternativeInputModelRequest financialUserAlternativeInputModelRequest) {
+        return ResponseEntity.ok(financialAlternativeUsersService.setAlternativeSetDisableDate(financialUserAlternativeInputModelRequest));
     }
 }
