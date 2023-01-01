@@ -2,13 +2,16 @@ package ir.demisco.cfs.service.impl;
 
 import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersInputRequest;
 import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersListRequest;
+import ir.demisco.cfs.model.dto.request.FinancialUserAlternativeInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialAlternativeUsersOutputResponse;
 import ir.demisco.cfs.model.entity.FinancialUserAlternative;
 import ir.demisco.cfs.service.api.FinancialAlternativeUsersService;
 import ir.demisco.cfs.service.repository.FinancialUsersAlternativeRepository;
+import ir.demisco.cloud.core.middle.exception.RuleException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +20,10 @@ import java.util.stream.Collectors;
 @Service
 public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUsersService {
     private final FinancialUsersAlternativeRepository financialUsersAlternativeRepository;
-
-    public DefaultFinancialAlternativeUsers(FinancialUsersAlternativeRepository financialUsersAlternativeRepository) {
+    private final EntityManager entityManager;
+    public DefaultFinancialAlternativeUsers(FinancialUsersAlternativeRepository financialUsersAlternativeRepository, EntityManager entityManager) {
         this.financialUsersAlternativeRepository = financialUsersAlternativeRepository;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -53,10 +57,23 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
         financialAlternativeUsersListRequest.getFinancialAlternativeId().forEach((Long aLong) -> {
             Optional<FinancialUserAlternative> alternativeRepository = financialUsersAlternativeRepository.findById(aLong);
             alternativeRepository.get().setDisableDate(financialAlternativeUsersListRequest.getDisableDate());
-
         });
+        return true;
+    }
 
-
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public Boolean setAlternativeSetDisableDate(FinancialUserAlternativeInputModelRequest financialUserAlternativeInputModelRequest) {
+        List<Long> count = financialUsersAlternativeRepository.getFinancialUserAlternativeByIdList(financialUserAlternativeInputModelRequest.getUserAlternativeIdList(),
+                financialUserAlternativeInputModelRequest.getDisableDate());
+        if (!count.isEmpty()) {
+            throw new RuleException("برای کاربران جایگزین نمیبایست همپوشانی تاریخ وجود داشته باشد");
+        }
+        entityManager.createNativeQuery(" update FNSC.FINANCIAL_USER_ALTERNATIVE  T " +
+                "   set   T.DISABLE_DATE = :disableDate " +
+                "   WHERE T.ID in (:userAlternativeIdList) ")
+                .setParameter("disableDate", financialUserAlternativeInputModelRequest.getDisableDate())
+                .setParameter("userAlternativeIdList", financialUserAlternativeInputModelRequest.getUserAlternativeIdList()).executeUpdate();
         return true;
     }
 
