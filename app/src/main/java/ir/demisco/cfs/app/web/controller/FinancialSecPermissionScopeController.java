@@ -1,5 +1,6 @@
 package ir.demisco.cfs.app.web.controller;
 
+import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
@@ -24,4 +25,10 @@ public class FinancialSecPermissionScopeController {
     public ResponseEntity<List<FinancialSecPermissionScopeOutputResponse>> responseEntity(@RequestBody FinancialSecPermissionScopeInputRequest financialSecPermissionScopeInputRequest) {
         return ResponseEntity.ok(financialSecPermissionScopeService.getFinancialSecPermissionScope(financialSecPermissionScopeInputRequest));
     }
+
+    @PostMapping("/delete")
+    public ResponseEntity<Boolean> deleteFinancialSecPermissionScope(@RequestBody FinancialSecPermissionScopeInputModelRequest financialSecPermissionScopeInputModelRequest) {
+        return ResponseEntity.ok(financialSecPermissionScopeService.deleteFinancialSecPermissionScope(financialSecPermissionScopeInputModelRequest));
+    }
+
 }

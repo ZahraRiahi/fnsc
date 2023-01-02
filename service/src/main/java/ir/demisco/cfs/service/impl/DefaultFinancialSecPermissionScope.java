@@ -1,5 +1,6 @@
 package ir.demisco.cfs.service.impl;
 
+import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
@@ -60,5 +61,12 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                 .financialDepartmentName(objects[17] == null ? null : objects[17].toString())
                 .ledgerTypeDescription(objects[18] == null ? null : objects[18].toString())
                 .build()).collect(Collectors.toList());
+    }
+    @Override
+    @Transactional(rollbackOn = Throwable.class)
+    public Boolean deleteFinancialSecPermissionScope(FinancialSecPermissionScopeInputModelRequest financialSecPermissionScopeInputModelRequest) {
+        financialSecPermissionScopeInputModelRequest.getUserPermissionScopeId().forEach(aLong -> userPermissionScopeRepository.deleteById(aLong));
+
+        return true;
     }
 }
