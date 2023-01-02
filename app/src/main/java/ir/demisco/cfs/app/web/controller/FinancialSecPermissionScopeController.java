@@ -2,6 +2,7 @@ package ir.demisco.cfs.app.web.controller;
 
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
+import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,11 @@ public class FinancialSecPermissionScopeController {
     @PostMapping("/delete")
     public ResponseEntity<Boolean> deleteFinancialSecPermissionScope(@RequestBody FinancialSecPermissionScopeInputModelRequest financialSecPermissionScopeInputModelRequest) {
         return ResponseEntity.ok(financialSecPermissionScopeService.deleteFinancialSecPermissionScope(financialSecPermissionScopeInputModelRequest));
+    }
+
+    @PostMapping("/setDisableDate")
+    public ResponseEntity<Boolean> setDisableDate(@RequestBody PermissionScopeInputModelRequest permissionScopeInputModelRequest) {
+        return ResponseEntity.ok(financialSecPermissionScopeService.setDisableDate(permissionScopeInputModelRequest));
     }
 
 }

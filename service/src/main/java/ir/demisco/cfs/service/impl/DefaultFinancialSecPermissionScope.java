@@ -2,12 +2,14 @@ package ir.demisco.cfs.service.impl;
 
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
+import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
 import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
 import ir.demisco.cloud.core.security.util.SecurityHelper;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
@@ -16,9 +18,10 @@ import java.util.stream.Collectors;
 @Service
 public class DefaultFinancialSecPermissionScope implements FinancialSecPermissionScopeService {
     private final UserPermissionScopeRepository userPermissionScopeRepository;
-
-    public DefaultFinancialSecPermissionScope(UserPermissionScopeRepository userPermissionScopeRepository) {
+    private final EntityManager entityManager;
+    public DefaultFinancialSecPermissionScope(UserPermissionScopeRepository userPermissionScopeRepository, EntityManager entityManager) {
         this.userPermissionScopeRepository = userPermissionScopeRepository;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -66,7 +69,18 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
     @Transactional(rollbackOn = Throwable.class)
     public Boolean deleteFinancialSecPermissionScope(FinancialSecPermissionScopeInputModelRequest financialSecPermissionScopeInputModelRequest) {
         financialSecPermissionScopeInputModelRequest.getUserPermissionScopeId().forEach(aLong -> userPermissionScopeRepository.deleteById(aLong));
+        return true;
+    }
 
+    @Override
+    @Transactional(rollbackOn = Throwable.class)
+    public Boolean setDisableDate(PermissionScopeInputModelRequest permissionScopeInputModelRequest) {
+        entityManager.createNativeQuery(" update FNSC.USER_PERMISSION_SCOPE T " +
+                "   set   T.DISABLE_DATE = :disableDate " +
+                "   WHERE T.DISABLE_DATE IS NULL " +
+                " and  T.ID in (:permissionScopeIdList) ")
+                .setParameter("disableDate", permissionScopeInputModelRequest.getDisableDate())
+                .setParameter("permissionScopeIdList", permissionScopeInputModelRequest.getPermissionScopeIdList()).executeUpdate();
         return true;
     }
 }
