@@ -61,7 +61,7 @@ public class DefaultUserPermission implements UserPermissionService {
         if (countDisableDate == 0) {
             throw new RuleException(" رکوردی با این اطلاعات قبلا ثبت شده است");
         }
-        financialUserPermissionInputModelRequest.forEach(e -> {
+        financialUserPermissionInputModelRequest.forEach((FinancialUserPermissionInputModelRequest e) -> {
             UserPermission userPermission = new UserPermission();
             userPermission.setUserPermissionScopeId(userPermissionScopeRepository.getOne(e.getUserPermissionScopeId()));
             userPermission.setFinancialUserIdCreator(e.getFinancialUserIdCreator() == null ? null : financialUserRepository.getOne(e.getFinancialUserIdCreator()));
