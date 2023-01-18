@@ -14,4 +14,5 @@ public interface FinancialSecPermissionScopeService {
     Boolean deleteFinancialSecPermissionScope(FinancialSecPermissionScopeInputModelRequest financialSecPermissionScopeInputModelRequest);
 
     Boolean setDisableDate(PermissionScopeInputModelRequest permissionScopeInputModelRequest);
+
 }
