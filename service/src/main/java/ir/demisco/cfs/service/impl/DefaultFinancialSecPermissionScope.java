@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class DefaultFinancialSecPermissionScope implements FinancialSecPermissionScopeService {
     private final UserPermissionScopeRepository userPermissionScopeRepository;
     private final EntityManager entityManager;
+
     public DefaultFinancialSecPermissionScope(UserPermissionScopeRepository userPermissionScopeRepository, EntityManager entityManager) {
         this.userPermissionScopeRepository = userPermissionScopeRepository;
         this.entityManager = entityManager;
@@ -65,6 +66,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                 .ledgerTypeDescription(objects[18] == null ? null : objects[18].toString())
                 .build()).collect(Collectors.toList());
     }
+
     @Override
     @Transactional(rollbackOn = Throwable.class)
     public Boolean deleteFinancialSecPermissionScope(FinancialSecPermissionScopeInputModelRequest financialSecPermissionScopeInputModelRequest) {
