@@ -25,4 +25,11 @@ public interface FinancialUserGroupRepository extends JpaRepository<FinancialUse
             "   AND UG.FINANCIAL_GROUP_ID = :financialGroupId ", nativeQuery = true)
     List<Object[]> getFinancialUserGroupByOrganizationId(Long organizationId,Long financialGroupId);
 
+//    List<FinancialUserGroup> findByFinancialUserGroupIdAndFinancialGroupId(Long financialDocumentId);
+
+
+    @Query(value = "select fug from  FinancialUserGroup fug where fug.financialGroupId.id in (:financialGroupId)")
+    List<FinancialUserGroup> findByFinancialGroupId(List<Long> financialGroupId);
+
+
 }
