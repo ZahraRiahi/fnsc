@@ -3,7 +3,6 @@ package ir.demisco.cfs.service.repository;
 import ir.demisco.cfs.model.entity.FinancialUserGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,5 +23,9 @@ public interface FinancialUserGroupRepository extends JpaRepository<FinancialUse
             " WHERE UG.ORGANIZATION_ID = :organizationId " +
             "   AND UG.FINANCIAL_GROUP_ID = :financialGroupId ", nativeQuery = true)
     List<Object[]> getFinancialUserGroupByOrganizationId(Long organizationId,Long financialGroupId);
+
+    @Query(value = "select fug from  FinancialUserGroup fug where fug.financialGroupId.id in (:financialGroupId)")
+    List<FinancialUserGroup> findByFinancialGroupId(List<Long> financialGroupId);
+
 
 }
