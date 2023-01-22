@@ -3,7 +3,9 @@ package ir.demisco.cfs.service.api;
 import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersInputRequest;
 import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersListRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserAlternativeInputModelRequest;
+import ir.demisco.cfs.model.dto.request.FinancialUserAlternativeInputRequest;
 import ir.demisco.cfs.model.dto.response.FinancialAlternativeUsersOutputResponse;
+
 import java.util.List;
 
 public interface FinancialAlternativeUsersService {
@@ -12,5 +14,7 @@ public interface FinancialAlternativeUsersService {
     Boolean setAlternativeUserEndDate(FinancialAlternativeUsersListRequest financialAlternativeUsersListRequest);
 
     Boolean setAlternativeSetDisableDate(FinancialUserAlternativeInputModelRequest financialUserAlternativeInputModelRequest);
+
+    Boolean SaveFinancialAlternativeUsers(FinancialUserAlternativeInputRequest financialUserAlternativeInputRequest);
 
 }

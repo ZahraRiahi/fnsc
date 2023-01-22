@@ -51,4 +51,47 @@ public interface FinancialUsersAlternativeRepository extends JpaRepository<Finan
             "           AND ((:disableDate BETWEEN UA_IN.EFFECTIVE_DATE AND " +
             "               NVL(UA_IN.DISABLE_DATE, SYSDATE + 10000))))  ", nativeQuery = true)
     List<Long> getFinancialUserAlternativeByIdList(List<Long> userAlternativeIdList, LocalDateTime disableDate);
+
+    @Query(value = " SELECT 1 " +
+            "  FROM FNSC.FINANCIAL_USER_ALTERNATIVE UA" +
+            " WHERE UA.ORGANIZATION_ID = :organizationId " +
+            "   AND UA.FINANCIAL_USER_ID = :financialUserId " +
+            "   AND UA.FINANCIAL_USER_ID_ALTERNATE IN :userAlternativeIdList" +
+            "   AND ((:effectiveDate BETWEEN UA.EFFECTIVE_DATE AND case" +
+            "         when UA.DISABLE_DATE is null then" +
+            "          SYSDATE + 10000" +
+            "         else" +
+            "          UA.DISABLE_DATE" +
+            "       end) OR (:disableDate IS NOT NULL AND" +
+            "       :disableDate BETWEEN UA.EFFECTIVE_DATE AND case" +
+            "         when UA.DISABLE_DATE is null then" +
+            "          SYSDATE + 10000" +
+            "         else" +
+            "          UA.DISABLE_DATE" +
+            "       end" +
+            "       ) OR (UA.EFFECTIVE_DATE BETWEEN :effectiveDate AND case" +
+            "         when :disableDate is null then" +
+            "          SYSDATE + 10000" +
+            "         else" +
+            "          :disableDate " +
+            "       end)) ", nativeQuery = true)
+    List<Long> getFinancialUserAlternativeByOrganizationAndEffectiveDateAndDisableDate(Long organizationId, Long financialUserId, List<Long> userAlternativeIdList, LocalDateTime effectiveDate, LocalDateTime disableDate);
+
+    @Query(value = " select count(UA.id)" +
+            "  from FNSC.FINANCIAL_USER_ALTERNATIVE UA " +
+            " where UA.FINANCIAL_USER_ID = :financialUserId" +
+            " and  UA.ORGANIZATION_ID = :organizationId " +
+            " and UA.EFFECTIVE_DATE= :effectiveDate " +
+            " and UA.FINANCIAL_USER_ID_ALTERNATE= :userAlternativeId"
+            , nativeQuery = true)
+    Long getFinancialUserAlternativeByEffectiveDate(Long financialUserId, Long organizationId, LocalDateTime effectiveDate, Long userAlternativeId);
+
+    @Query(value = " select count(UA.id)" +
+            "  from FNSC.FINANCIAL_USER_ALTERNATIVE UA " +
+            " where UA.FINANCIAL_USER_ID = :financialUserId" +
+            " and  UA.ORGANIZATION_ID = :organizationId " +
+            " and UA.DISABLE_DATE = :disableDate " +
+            " and UA.FINANCIAL_USER_ID_ALTERNATE= :userAlternativeId"
+            , nativeQuery = true)
+    Long getFinancialUserAlternativeByDisableDate(Long financialUserId, Long organizationId, LocalDateTime disableDate, Long userAlternativeId);
 }
