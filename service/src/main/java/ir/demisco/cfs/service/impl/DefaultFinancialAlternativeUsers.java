@@ -3,15 +3,21 @@ package ir.demisco.cfs.service.impl;
 import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersInputRequest;
 import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersListRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserAlternativeInputModelRequest;
+import ir.demisco.cfs.model.dto.request.FinancialUserAlternativeInputRequest;
 import ir.demisco.cfs.model.dto.response.FinancialAlternativeUsersOutputResponse;
 import ir.demisco.cfs.model.entity.FinancialUserAlternative;
 import ir.demisco.cfs.service.api.FinancialAlternativeUsersService;
+import ir.demisco.cfs.service.repository.FinancialUserRepository;
 import ir.demisco.cfs.service.repository.FinancialUsersAlternativeRepository;
+import ir.demisco.cfs.service.repository.OrganizationRepository;
 import ir.demisco.cloud.core.middle.exception.RuleException;
+import ir.demisco.cloud.core.security.util.SecurityHelper;
+import ir.demisco.core.utils.DateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +27,14 @@ import java.util.stream.Collectors;
 public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUsersService {
     private final FinancialUsersAlternativeRepository financialUsersAlternativeRepository;
     private final EntityManager entityManager;
-    public DefaultFinancialAlternativeUsers(FinancialUsersAlternativeRepository financialUsersAlternativeRepository, EntityManager entityManager) {
+    private final FinancialUserRepository financialUserRepository;
+    private final OrganizationRepository organizationRepository;
+
+    public DefaultFinancialAlternativeUsers(FinancialUsersAlternativeRepository financialUsersAlternativeRepository, EntityManager entityManager, FinancialUserRepository financialUserRepository, OrganizationRepository organizationRepository) {
         this.financialUsersAlternativeRepository = financialUsersAlternativeRepository;
         this.entityManager = entityManager;
+        this.financialUserRepository = financialUserRepository;
+        this.organizationRepository = organizationRepository;
     }
 
     @Override
@@ -77,5 +88,50 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
         return true;
     }
 
-}
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public Boolean saveFinancialAlternativeUsers(FinancialUserAlternativeInputRequest financialUserAlternativeInputRequest) {
+        LocalDateTime truncate;
 
+        if (financialUserAlternativeInputRequest.getDisableDate() == null) {
+            truncate = LocalDateTime.now();
+            Long ukDisableDate = financialUsersAlternativeRepository.getFinancialUserAlternativeByDisableDate(financialUserAlternativeInputRequest.getFinancialUserId(), SecurityHelper.getCurrentUser().getOrganizationId()
+                    , truncate, financialUserAlternativeInputRequest.getFinancialUserIdAlternative().get(0));
+            if (ukDisableDate != 0) {
+                throw new RuleException("رکوردی با این تاریخ پایان تاثیر قبلا ثبت شده است");
+            }
+        } else {
+            truncate = DateUtil.truncate(financialUserAlternativeInputRequest.getDisableDate());
+            Long ukDisableDate = financialUsersAlternativeRepository.getFinancialUserAlternativeByDisableDate(financialUserAlternativeInputRequest.getFinancialUserId(), SecurityHelper.getCurrentUser().getOrganizationId()
+                    , truncate, financialUserAlternativeInputRequest.getFinancialUserIdAlternative().get(0));
+            if (ukDisableDate != 0) {
+                throw new RuleException("رکوردی با این تاریخ پایان تاثیر قبلا ثبت شده است");
+            }
+        }
+
+        List<Long> count = financialUsersAlternativeRepository.getFinancialUserAlternativeByOrganizationAndEffectiveDateAndDisableDate(SecurityHelper.getCurrentUser().getOrganizationId(),
+                financialUserAlternativeInputRequest.getFinancialUserId(), financialUserAlternativeInputRequest.getFinancialUserIdAlternative(),
+                financialUserAlternativeInputRequest.getEffectiveDate(), truncate);
+        if (!count.isEmpty()) {
+            throw new RuleException("برای کاربران جایگزین نمیبایست همپوشانی تاریخ وجود داشته باشد");
+        }
+        Long ukEffectiveDate = financialUsersAlternativeRepository.getFinancialUserAlternativeByEffectiveDate(financialUserAlternativeInputRequest.getFinancialUserId(), SecurityHelper.getCurrentUser().getOrganizationId()
+                , financialUserAlternativeInputRequest.getEffectiveDate(), financialUserAlternativeInputRequest.getFinancialUserIdAlternative().get(0));
+        if (ukEffectiveDate != 0) {
+            throw new RuleException("رکوردی با این تاریخ شروع تاثیر قبلا ثبت شده است");
+        }
+        financialUserAlternativeInputRequest.getFinancialUserIdAlternative().forEach(e -> {
+            FinancialUserAlternative financialUserAlternative = new FinancialUserAlternative();
+            financialUserAlternative.setFinancialUser(financialUserRepository.getOne(financialUserAlternativeInputRequest.getFinancialUserId()));
+            financialUserAlternative.setAlternative(financialUserRepository.getOne(financialUserAlternativeInputRequest.getFinancialUserId()));
+            financialUserAlternative.setEffectiveDate(financialUserAlternativeInputRequest.getEffectiveDate());
+            financialUserAlternative.setDisableDate(financialUserAlternativeInputRequest.getDisableDate());
+            financialUserAlternative.setOrganization(organizationRepository.getOne(SecurityHelper.getCurrentUser().getOrganizationId()));
+            financialUsersAlternativeRepository.save(financialUserAlternative);
+        });
+
+        return true;
+
+    }
+
+}

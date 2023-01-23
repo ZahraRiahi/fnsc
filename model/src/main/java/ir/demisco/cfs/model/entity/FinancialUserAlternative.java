@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.Date;
+
 
 @Entity
 @Table(name = "FINANCIAL_USER_ALTERNATIVE", schema = "fnsc")
@@ -21,7 +21,7 @@ public class FinancialUserAlternative extends AuditModel<Long> {
     private FinancialUser financialUser;
     private FinancialUser alternative;
     private LocalDateTime disableDate;
-    private Date effectiveDate;
+    private LocalDateTime effectiveDate;
     private Organization organization;
 
     @Override
@@ -63,11 +63,11 @@ public class FinancialUserAlternative extends AuditModel<Long> {
     }
 
     @Column(name = "EFFECTIVE_DATE")
-    public Date getEffectiveDate() {
+    public LocalDateTime getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(Date effectiveDate) {
+    public void setEffectiveDate(LocalDateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
 
