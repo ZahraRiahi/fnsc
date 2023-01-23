@@ -90,7 +90,7 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public Boolean SaveFinancialAlternativeUsers(FinancialUserAlternativeInputRequest financialUserAlternativeInputRequest) {
+    public Boolean saveFinancialAlternativeUsers(FinancialUserAlternativeInputRequest financialUserAlternativeInputRequest) {
         LocalDateTime truncate;
 
         if (financialUserAlternativeInputRequest.getDisableDate() == null) {

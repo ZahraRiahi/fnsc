@@ -39,7 +39,7 @@ public class FinancialAlternativeUsersController {
     }
 
     @PostMapping("/saveFinancialAlternativeUsers")
-    public ResponseEntity<Boolean> SaveFinancialAlternativeUsers(@RequestBody FinancialUserAlternativeInputRequest financialUserAlternativeInputRequest) {
-        return ResponseEntity.ok(financialAlternativeUsersService.SaveFinancialAlternativeUsers(financialUserAlternativeInputRequest));
+    public ResponseEntity<Boolean> saveFinancialAlternativeUsers(@RequestBody FinancialUserAlternativeInputRequest financialUserAlternativeInputRequest) {
+        return ResponseEntity.ok(financialAlternativeUsersService.saveFinancialAlternativeUsers(financialUserAlternativeInputRequest));
     }
 }

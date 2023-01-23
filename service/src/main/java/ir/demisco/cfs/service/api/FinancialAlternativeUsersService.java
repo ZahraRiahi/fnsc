@@ -15,6 +15,6 @@ public interface FinancialAlternativeUsersService {
 
     Boolean setAlternativeSetDisableDate(FinancialUserAlternativeInputModelRequest financialUserAlternativeInputModelRequest);
 
-    Boolean SaveFinancialAlternativeUsers(FinancialUserAlternativeInputRequest financialUserAlternativeInputRequest);
+    Boolean saveFinancialAlternativeUsers(FinancialUserAlternativeInputRequest financialUserAlternativeInputRequest);
 
 }
