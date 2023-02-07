@@ -47,7 +47,7 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
             financialAlternativeUsersInputRequest.setMainFinancialUserId(0L);
         }
         List<Object[]> financialUsersAlternativeList = financialUsersAlternativeRepository.getFinancialUserAlternativeByUserIdAndFlgAndOrgan(mainFinancialUserId, financialAlternativeUsersInputRequest.getMainFinancialUserId()
-                , financialAlternativeUsersInputRequest.getFlgAllOrganizations(), financialAlternativeUsersInputRequest.getOrganizationId());
+                , financialAlternativeUsersInputRequest.getFlgAllOrganizations(), SecurityHelper.getCurrentUser().getOrganizationId());
         return financialUsersAlternativeList.stream().map(objects -> FinancialAlternativeUsersOutputResponse.builder().financialAlternativeId(Long.parseLong(objects[0].toString()))
                 .mainUserId(Long.parseLong(objects[1].toString()))
                 .mainUserName(objects[2].toString())
