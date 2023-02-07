@@ -1,12 +1,9 @@
 package ir.demisco.cfs.model.dto.response;
 
-import java.util.Map;
-
 public class ApplicationUsersOutputResponse {
     private Long applicationUserId;
     private String userName;
     private String nickName;
-    Map<String, Object> paramMap;
 
     public Long getApplicationUserId() {
         return applicationUserId;
@@ -30,14 +27,6 @@ public class ApplicationUsersOutputResponse {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
-    }
-
-    public Map<String, Object> getParamMap() {
-        return paramMap;
-    }
-
-    public void setParamMap(Map<String, Object> paramMap) {
-        this.paramMap = paramMap;
     }
 
     public static ApplicationUsersOutputResponse.Builder builder() {
