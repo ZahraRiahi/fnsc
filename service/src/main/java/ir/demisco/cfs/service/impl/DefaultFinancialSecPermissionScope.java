@@ -131,7 +131,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         saveCompletePermissionInputModelRequest.getFinancialSecPermissionScopeRequestList().forEach((FinancialSecPermissionScopeRequest e) -> {
             if (!e.getFinancialUserId().isEmpty()) {
                 UserPermissionScope userPermissionScope = new UserPermissionScope();
-                e.getFinancialUserId().forEach(aLong -> {
+                e.getFinancialUserId().forEach((Long aLong) -> {
                     userPermissionScope.setFinancialUser(financialUserRepository.getOne(aLong));
                     userPermissionScope.setFinancialLedgerType(e.getFinancialLedgerTypeId() == null ? null : financialLedgerTypeRepository.getOne(e.getFinancialLedgerTypeId()));
                     userPermissionScope.setFinancialDepartment(e.getFinancialDepartmentId() == null ? null : financialDepartmentRepository.getOne(e.getFinancialDepartmentId()));
