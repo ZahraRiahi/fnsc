@@ -4,6 +4,7 @@ import ir.demisco.cfs.model.entity.UserPermissionScope;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserPermissionScopeRepository extends JpaRepository<UserPermissionScope, Long> {
@@ -51,14 +52,49 @@ public interface UserPermissionScopeRepository extends JpaRepository<UserPermiss
             "       (:filterMode = 6 and ups.disable_date is null) or " +
             "       (:filterMode = 7 and ups.disable_date is not null))     " +
             "   and (ups.organization_id = :organizationId) " +
-            "  and  (:financialUser is null or ups.financial_user_id =:financialUserId ) " +
-            "  and  (:financialGroup is null or ups.financial_group_id =:financialGroupId ) " +
+            "  and (nvl(:financialUserId, ups.financial_user_id) = " +
+            "       ups.financial_user_id  or  (:financialUser is null and  ups.financial_user_id is null)) " +
+            " and (nvl(:financialGroupId, ups.financial_group_id) = " +
+            "       ups.financial_group_id or (:financialGroup is null and  ups.financial_group_id is null))" +
             "   and (nvl(:allFinancialDepartmentFlg, 0) = " +
             "       nvl(ups.all_fnc_department_flag, 0))" +
             "   and (nvl(:allFinancialLedgersFlg, 0) = " +
             "       nvl(ups.all_ledger_types_flag, 0)) "
             , nativeQuery = true)
-    List<Object[]> findByUserPermissionScopeAndOrgAndAllFinancialLedgersFlg(Long filterMode, Long organizationId,
-                                                                         Object financialUser, Long financialUserId, Object financialGroup, Long financialGroupId, Boolean allFinancialDepartmentFlg,
-                                                                         Boolean allFinancialLedgersFlg);
+    List<Object[]> findByUserPermissionScopeAndOrgAndAllFinancialLedgersFlg(Long filterMode, Long organizationId, Object financialUser,
+                                                                            Long financialUserId, Object financialGroup, Long financialGroupId, Boolean allFinancialDepartmentFlg,
+                                                                            Boolean allFinancialLedgersFlg);
+
+    @Query(value = " select count(ups.id)" +
+            "  from fnsc.user_permission_scope ups" +
+            " where (ups.financial_user_id = :financialUserId or" +
+            "       ups.financial_user_id is null)" +
+            "   and (ups.financial_group_id = :financialGroupId or" +
+            "       ups.financial_group_id is null)" +
+            "   and trunc(ups.effective_date) = trunc(:effectiveDate)" +
+            "   and ups.all_fnc_department_flag = :allFncDepartmentFlag" +
+            "   and ups.all_ledger_types_flag = :allLedgerTypesFlag" +
+            "   and ups.department_id = :departmentId" +
+            "   and (ups.financial_department_id = :financialDepartmentId or" +
+            "       ups.financial_department_id is null)" +
+            "   and (ups.financial_ledger_type_id = :financialLedgerTypeId or" +
+            "       ups.financial_ledger_type_id is null)" +
+            "   and ups.organization_id = :organizationId"
+            , nativeQuery = true)
+    Long getUserPermissionByScopeIdAndFlgAndEffectiveDate(Long financialUserId, Long financialGroupId, LocalDateTime effectiveDate, Boolean allFncDepartmentFlag,
+                                                          Boolean allLedgerTypesFlag, Long departmentId, Long financialDepartmentId, Long financialLedgerTypeId, Long organizationId);
+
+    @Query(value = " select count(up.id)" +
+            "  from fnsc.user_permission up" +
+            " where up.user_permission_scope_id = :userPermissionScopeId" +
+            "   and up.financial_activity_type_id = :financialActivityTypeId" +
+            "   and up.disable_date = trunc(:disableDate)" +
+            "   and up.financial_user_id_creator = :financialUserIdCreator" +
+            "   and up.financial_document_type_id = :financialDocumentTypeId" +
+            "   and up.financial_period_id = :financialPeriodId" +
+            "   and up.all_document_type_flag = :allDocumentTypeFlag" +
+            "   and up.all_financial_priod_flag = :allFinancialPeriodFlag"
+            , nativeQuery = true)
+    Long getPermissionByScopeIdAndFlgAndDisableDate(Long userPermissionScopeId, Long financialActivityTypeId, LocalDateTime disableDate, Long financialUserIdCreator,
+                                                    Long financialDocumentTypeId, Long financialPeriodId, Long allDocumentTypeFlag, Long allFinancialPeriodFlag);
 }
