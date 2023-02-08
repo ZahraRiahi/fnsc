@@ -32,8 +32,8 @@ public class UserPermissionScope extends AuditModel<Long> {
 
     @Override
     @Id
-    @SequenceGenerator(schema = "fnsc", name = "financial_permission_scope_generator", sequenceName = "sq_financial_permission_scope")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "financial_permission_scope_generator")
+    @SequenceGenerator(schema = "fnsc", name = "user_permission_scope_generator", sequenceName = "sq_user_permission_scope")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_permission_scope_generator")
     public Long getId() {
         return super.getId();
     }
