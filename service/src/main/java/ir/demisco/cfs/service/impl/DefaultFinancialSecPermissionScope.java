@@ -66,7 +66,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         }
 
         List<Object[]> controlFinancialAccountObject = userPermissionScopeRepository.findByUserPermissionScopeAndOrgAndAllFinancialLedgersFlg(financialSecPermissionScopeInputRequest.getFilterMode(),
-                SecurityHelper.getCurrentUser().getOrganizationId(), financialUser,financialSecPermissionScopeInputRequest.getFinancialUserId(),financialGroup,
+                SecurityHelper.getCurrentUser().getOrganizationId(), financialUser, financialSecPermissionScopeInputRequest.getFinancialUserId(), financialGroup,
                 financialSecPermissionScopeInputRequest.getFinancialGroupId(), financialSecPermissionScopeInputRequest.getAllFinancialDepartmentFlg(), financialSecPermissionScopeInputRequest.getAllFinancialLedgersFlg());
         return controlFinancialAccountObject.stream().map(objects -> FinancialSecPermissionScopeOutputResponse.builder().userPermissionScopeId(objects[0] == null ? null : Long.parseLong(objects[0].toString()))
                 .financialUserId(objects[1] == null ? null : Long.parseLong(objects[1].toString()))
@@ -143,7 +143,6 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                     userPermissionScope.setFinancialGroup(null);
                     userPermissionScope.setOrganization(organizationRepository.getOne(SecurityHelper.getCurrentUser().getOrganizationId()));
                     userPermissionScopeRepository.save(userPermissionScope);
-
                 });
                 financialSecPermissionScopeRequests.add(e);
             }
