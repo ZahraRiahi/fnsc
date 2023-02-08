@@ -28,8 +28,9 @@ public class FinancialSecurityUserController {
     public ResponseEntity<DataSourceResult> responseEntity(@RequestBody DataSourceRequest dataSourceRequest) {
         return ResponseEntity.ok(financialSecurityUserService.getFinancialSecurityUser(dataSourceRequest));
     }
+
     @GetMapping("/GetFinancialUsers")
-    public ResponseEntity<List<FinancialSecurityUserResponse>> responseEntity(){
+    public ResponseEntity<List<FinancialSecurityUserResponse>> responseEntity() {
         return ResponseEntity.ok(financialSecurityUserService.getGetFinancialUsersList());
     }
 

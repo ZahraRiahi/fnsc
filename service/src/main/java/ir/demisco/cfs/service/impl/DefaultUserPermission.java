@@ -39,12 +39,11 @@ public class DefaultUserPermission implements UserPermissionService {
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public Boolean saveUserPermission(List<FinancialUserPermissionInputModelRequest> financialUserPermissionInputModelRequest) {
-        if (financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId() == null && financialUserPermissionInputModelRequest.get(0).getAllDocumentTypeFlag().equals(false)) {
-            throw new RuleException(" در این حالت میبایستی شناسه ی نوع سند مخالف null بوده و یا فلگ دسترسی به همه ی انوع سند true باشد");
-        } else if (financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId() != null && financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId().equals(true)) {
-            throw new RuleException(" در این حالت میبایستی شناسه ی نوع سند null بوده و یا فلگ دسترسی به همه ی انوع سند false باشد");
-        }
-
+//           if (financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId() == null && financialUserPermissionInputModelRequest.get(0).getAllDocumentTypeFlag().equals(false)) {
+//            throw new RuleException(" در این حالت میبایستی شناسه ی نوع سند مخالف null بوده و یا فلگ دسترسی به همه ی انوع سند true باشد");
+//        } else if (financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId() != null && financialUserPermissionInputModelRequest.get(0).get().equals(true)) {
+//            throw new RuleException(" در این حالت میبایستی شناسه ی نوع سند null بوده و یا فلگ دسترسی به همه ی انوع سند false باشد");
+//        }
         Long countEffectiveDate = userPermissionRepository.getPermissionByScopeIdAndFlgAndEffectiveDate(financialUserPermissionInputModelRequest.get(0).getUserPermissionScopeId(),
                 financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(), financialUserPermissionInputModelRequest.get(0).getEffectiveDate()
                 , financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
@@ -83,6 +82,6 @@ public class DefaultUserPermission implements UserPermissionService {
     @Transactional(rollbackFor = Throwable.class)
     public Boolean deleteUserPermission(FinancialSecUserPermissionScopeInputModelRequest financialSecUserPermissionScopeInputModelRequest) {
         financialSecUserPermissionScopeInputModelRequest.getUserPermissionId().forEach(aLong -> userPermissionRepository.deleteById(aLong));
-        return  true;
+        return true;
     }
 }
