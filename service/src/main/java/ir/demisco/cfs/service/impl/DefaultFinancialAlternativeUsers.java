@@ -41,6 +41,9 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
     @Transactional(rollbackFor = Throwable.class)
     public List<FinancialAlternativeUsersOutputResponse> getFinancialAlternativeUsers(FinancialAlternativeUsersInputRequest financialAlternativeUsersInputRequest) {
         Object mainFinancialUserId = null;
+        if (financialAlternativeUsersInputRequest.getOrganizationId() == null && financialAlternativeUsersInputRequest.getFlgAllOrganizations() == 0L) {
+            throw new RuleException("لطفا سازمان مربوطه را انتخاب نمایید.");
+        }
         if (financialAlternativeUsersInputRequest.getMainFinancialUserId() != null) {
             mainFinancialUserId = "mainFinancialUserId";
         } else {
