@@ -13,6 +13,7 @@ import ir.demisco.cfs.service.repository.FinancialDepartmentRepository;
 import ir.demisco.cfs.service.repository.FinancialLedgerTypeRepository;
 import ir.demisco.cfs.service.repository.FinancialUserRepository;
 import ir.demisco.cfs.service.repository.OrganizationRepository;
+import ir.demisco.cfs.service.repository.UserPermissionRepository;
 import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
 import ir.demisco.cloud.core.middle.exception.RuleException;
 import ir.demisco.cloud.core.security.util.SecurityHelper;
@@ -34,8 +35,9 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
     private final FinancialDepartmentRepository financialDepartmentRepository;
     private final DepartmentRepository departmentRepository;
     private final OrganizationRepository organizationRepository;
+    private final UserPermissionRepository userPermissionRepository;
 
-    public DefaultFinancialSecPermissionScope(UserPermissionScopeRepository userPermissionScopeRepository, EntityManager entityManager, FinancialUserRepository financialUserRepository, FinancialLedgerTypeRepository financialLedgerTypeRepository, FinancialDepartmentRepository financialDepartmentRepository, DepartmentRepository departmentRepository, OrganizationRepository organizationRepository) {
+    public DefaultFinancialSecPermissionScope(UserPermissionScopeRepository userPermissionScopeRepository, EntityManager entityManager, FinancialUserRepository financialUserRepository, FinancialLedgerTypeRepository financialLedgerTypeRepository, FinancialDepartmentRepository financialDepartmentRepository, DepartmentRepository departmentRepository, OrganizationRepository organizationRepository, UserPermissionRepository userPermissionRepository) {
         this.userPermissionScopeRepository = userPermissionScopeRepository;
         this.entityManager = entityManager;
         this.financialUserRepository = financialUserRepository;
@@ -43,6 +45,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         this.financialDepartmentRepository = financialDepartmentRepository;
         this.departmentRepository = departmentRepository;
         this.organizationRepository = organizationRepository;
+        this.userPermissionRepository = userPermissionRepository;
     }
 
     @Override
@@ -93,6 +96,10 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
     @Override
     @Transactional(rollbackOn = Throwable.class)
     public Boolean deleteFinancialSecPermissionScope(FinancialSecPermissionScopeInputModelRequest financialSecPermissionScopeInputModelRequest) {
+        List<Long> userPermissionCount = userPermissionRepository.getUserPermissionByUserPermissionScopeId(financialSecPermissionScopeInputModelRequest.getUserPermissionScopeId().get(0));
+        if (userPermissionCount != null) {
+            throw new RuleException("امکان حذف این محدوده ی دسترسی کاربر وجود ندارد.");
+        }
         financialSecPermissionScopeInputModelRequest.getUserPermissionScopeId().forEach(aLong -> userPermissionScopeRepository.deleteById(aLong));
         return true;
     }
