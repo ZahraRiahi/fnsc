@@ -29,6 +29,7 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
     private final EntityManager entityManager;
     private final FinancialUserRepository financialUserRepository;
     private final OrganizationRepository organizationRepository;
+//    private final FinancialAlternativeUsersService financialAlternativeUsersService;
 
     public DefaultFinancialAlternativeUsers(FinancialUsersAlternativeRepository financialUsersAlternativeRepository, EntityManager entityManager, FinancialUserRepository financialUserRepository, OrganizationRepository organizationRepository) {
         this.financialUsersAlternativeRepository = financialUsersAlternativeRepository;
@@ -68,10 +69,15 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public Boolean setAlternativeUserEndDate(FinancialAlternativeUsersListRequest financialAlternativeUsersListRequest) {
-        financialAlternativeUsersListRequest.getFinancialAlternativeId().forEach((Long aLong) -> {
-            Optional<FinancialUserAlternative> alternativeRepository = financialUsersAlternativeRepository.findById(aLong);
-            alternativeRepository.get().setDisableDate(financialAlternativeUsersListRequest.getDisableDate());
-        });
+
+        LocalDateTime effectiveDate = financialUsersAlternativeRepository.getFinancialUserAlternativeById(financialAlternativeUsersListRequest.getFinancialAlternativeId());
+        if (effectiveDate.isAfter(financialAlternativeUsersListRequest.getDisableDate())){
+            throw new RuleException("تاریخ شروع دسترسی نباید از تاریخ پایان دسترسی بیشتر باشد");
+        }
+            financialAlternativeUsersListRequest.getFinancialAlternativeId().forEach((Long aLong) -> {
+                Optional<FinancialUserAlternative> alternativeRepository = financialUsersAlternativeRepository.findById(aLong);
+                alternativeRepository.get().setDisableDate(financialAlternativeUsersListRequest.getDisableDate());
+            });
         return true;
     }
 

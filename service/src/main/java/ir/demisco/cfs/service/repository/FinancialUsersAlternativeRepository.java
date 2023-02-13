@@ -94,4 +94,10 @@ public interface FinancialUsersAlternativeRepository extends JpaRepository<Finan
             " and UA.FINANCIAL_USER_ID_ALTERNATE= :userAlternativeId"
             , nativeQuery = true)
     Long getFinancialUserAlternativeByDisableDate(Long financialUserId, Long organizationId, LocalDateTime disableDate, Long userAlternativeId);
+
+    @Query(value = " select UA.EFFECTIVE_DATE " +
+            "  from FNSC.FINANCIAL_USER_ALTERNATIVE UA " +
+            " where UA.ID IN (:userAlternativeIdList)  "
+            , nativeQuery = true)
+    LocalDateTime getFinancialUserAlternativeById(List<Long> userAlternativeIdList);
 }
