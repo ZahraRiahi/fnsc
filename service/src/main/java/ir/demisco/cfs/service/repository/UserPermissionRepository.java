@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface UserPermissionRepository extends JpaRepository<UserPermission, Long> {
 
@@ -20,7 +21,7 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission, 
             "   and up.all_financial_priod_flag = :allFinancialPeriodFlag"
             , nativeQuery = true)
     Long getPermissionByScopeIdAndFlgAndEffectiveDate(Long userPermissionScopeId, Long financialActivityTypeId, LocalDateTime effectiveDate, Long financialUserIdCreator,
-                                      Long financialDocumentTypeId, Long financialPeriodId, Long allDocumentTypeFlag, Long allFinancialPeriodFlag);
+                                                      Long financialDocumentTypeId, Long financialPeriodId, Long allDocumentTypeFlag, Long allFinancialPeriodFlag);
 
     @Query(value = " select count(up.id)" +
             "  from fnsc.user_permission up" +
@@ -34,6 +35,10 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission, 
             "   and up.all_financial_priod_flag = :allFinancialPeriodFlag"
             , nativeQuery = true)
     Long getPermissionByScopeIdAndFlgAndDisableDate(Long userPermissionScopeId, Long financialActivityTypeId, LocalDateTime disableDate, Long financialUserIdCreator,
-                                      Long financialDocumentTypeId, Long financialPeriodId, Long allDocumentTypeFlag, Long allFinancialPeriodFlag);
+                                                    Long financialDocumentTypeId, Long financialPeriodId, Long allDocumentTypeFlag, Long allFinancialPeriodFlag);
 
+    @Query(" select up.id from UserPermission up " +
+            " join UserPermissionScope ups on ups.id=up.userPermissionScopeId.id " +
+            " where ups.id=:userPermissionScopeId")
+    List<Long> getUserPermissionByUserPermissionScopeId(Long userPermissionScopeId);
 }
