@@ -29,7 +29,6 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
     private final EntityManager entityManager;
     private final FinancialUserRepository financialUserRepository;
     private final OrganizationRepository organizationRepository;
-//    private final FinancialAlternativeUsersService financialAlternativeUsersService;
 
     public DefaultFinancialAlternativeUsers(FinancialUsersAlternativeRepository financialUsersAlternativeRepository, EntityManager entityManager, FinancialUserRepository financialUserRepository, OrganizationRepository organizationRepository) {
         this.financialUsersAlternativeRepository = financialUsersAlternativeRepository;
