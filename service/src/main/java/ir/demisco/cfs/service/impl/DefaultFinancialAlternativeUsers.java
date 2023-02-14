@@ -8,7 +8,6 @@ import ir.demisco.cfs.model.dto.response.FinancialAlternativeUsersOutputResponse
 import ir.demisco.cfs.model.entity.FinancialUser;
 import ir.demisco.cfs.model.entity.FinancialUserAlternative;
 import ir.demisco.cfs.service.api.FinancialAlternativeUsersService;
-import ir.demisco.cfs.service.repository.FinancialUserRepository;
 import ir.demisco.cfs.service.repository.FinancialUsersAlternativeRepository;
 import ir.demisco.cloud.basic.model.dto.org.response.OrganizationResponse;
 import ir.demisco.cloud.basic.model.entity.org.Organization;
@@ -35,14 +34,13 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
     private final DaoService daoService;
     private final OrganizationService organizationService;
     private final EntityManager entityManager;
-    private final FinancialUserRepository financialUserRepository;
 
-    public DefaultFinancialAlternativeUsers(FinancialUsersAlternativeRepository financialUsersAlternativeRepository, DaoService daoService, OrganizationService organizationService, EntityManager entityManager, FinancialUserRepository financialUserRepository) {
+    public DefaultFinancialAlternativeUsers(FinancialUsersAlternativeRepository financialUsersAlternativeRepository, DaoService daoService, OrganizationService organizationService, EntityManager entityManager
+    ) {
         this.financialUsersAlternativeRepository = financialUsersAlternativeRepository;
         this.daoService = daoService;
         this.organizationService = organizationService;
         this.entityManager = entityManager;
-        this.financialUserRepository = financialUserRepository;
     }
 
     @Override

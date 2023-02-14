@@ -112,8 +112,4 @@ public class FinancialUserAlternativeRequest {
     }
 }
 
-//    public static void main(String[] args) throws JsonProcessingException {
-//        ObjectMapper mapper=new ObjectMapper();
-//        mapper.writeValueAsString(FinancialUserAlternativeRequest.builder().build());
-//    }
 
