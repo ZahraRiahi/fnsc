@@ -37,6 +37,26 @@
             <groupId>ir.demisco.cloud.core</groupId>
             <artifactId>dms-resource-security</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ir.demisco.cloud.core</groupId>
+            <artifactId>dms-organization-service</artifactId>
+            <version>${basic-Service-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ir.demisco.cloud.core</groupId>
+            <artifactId>dms-security-service</artifactId>
+            <version>${basic-Service-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ir.demisco.cloud.core</groupId>
+            <artifactId>dms-contact</artifactId>
+            <version>${basic-Service-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ir.demisco.cloud.core</groupId>
+            <artifactId>common-service</artifactId>
+            <version>${basic-Service-version}</version>
+        </dependency>
     </dependencies>
 
 </project>

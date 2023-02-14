@@ -14,7 +14,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
-
 @Entity
 @Table(name = "FINANCIAL_USER_ALTERNATIVE", schema = "fnsc")
 public class FinancialUserAlternative extends AuditModel<Long> {
@@ -79,5 +78,48 @@ public class FinancialUserAlternative extends AuditModel<Long> {
 
     public void setOrganization(Organization organization) {
         this.organization = organization;
+    }
+
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private FinancialUserAlternative financialUserAlternative;
+
+        private Builder() {
+            financialUserAlternative = new FinancialUserAlternative();
+        }
+
+
+        public Builder financialUser(FinancialUser financialUser) {
+            financialUserAlternative.setFinancialUser(financialUser);
+            return this;
+        }
+
+        public Builder alternative(FinancialUser alternative) {
+            financialUserAlternative.setAlternative(alternative);
+            return this;
+        }
+
+        public Builder disableDate(LocalDateTime disableDate) {
+            financialUserAlternative.setDisableDate(disableDate);
+            return this;
+        }
+
+        public Builder effectiveDate(LocalDateTime effectiveDate) {
+            financialUserAlternative.setEffectiveDate(effectiveDate);
+            return this;
+        }
+
+        public Builder organization(Organization organization) {
+            financialUserAlternative.setOrganization(organization);
+            return this;
+        }
+
+        public FinancialUserAlternative build() {
+            return financialUserAlternative;
+        }
     }
 }

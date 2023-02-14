@@ -3,9 +3,11 @@ package ir.demisco.cfs.service.repository;
 import ir.demisco.cfs.model.entity.FinancialUserAlternative;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface FinancialUsersAlternativeRepository extends JpaRepository<FinancialUserAlternative, Long> {
     @Query(value = " SELECT AL.ID                          FINANCIAL_ALTERNATIVE_ID," +
@@ -95,9 +97,43 @@ public interface FinancialUsersAlternativeRepository extends JpaRepository<Finan
             , nativeQuery = true)
     Long getFinancialUserAlternativeByDisableDate(Long financialUserId, Long organizationId, LocalDateTime disableDate, Long userAlternativeId);
 
-    @Query(value = " select UA.EFFECTIVE_DATE " +
-            "  from FNSC.FINANCIAL_USER_ALTERNATIVE UA " +
-            " where UA.ID IN (:userAlternativeIdList)  "
-            , nativeQuery = true)
-    LocalDateTime getFinancialUserAlternativeById(List<Long> userAlternativeIdList);
+    @Query("select count(fua.id) " +
+            "    from FinancialUserAlternative fua     " +
+            "   inner join fua.financialUser fu     " +
+            "   inner join fua.organization o     " +
+            "   where fua.financialUser.id = :financialUserId     " +
+            "     and fua.organization.id = :organizationId     " +
+            "     and trunc(fua.effectiveDate) = :effectiveDate " +
+            "     and fua.alternative.id = :financialUserAlternativeId ")
+    Long findFinancialUserAlternativeByFinancialUserAndOrganizationAndEffectiveDate(@Param("financialUserId") Long financialUserId,
+                                                                                    @Param("organizationId") Long organizationId,
+                                                                                    @Param("effectiveDate") LocalDateTime effectiveDate,
+                                                                                    @Param("financialUserAlternativeId") Long financialUserAlternativeId);
+
+    @Query("select count(fua.id) " +
+            "                 from FinancialUserAlternative fua    " +
+            "                inner join fua.financialUser fu     " +
+            "                inner join fua.organization o    " +
+            "                where fua.financialUser.id = :financialUserId    " +
+            "                  and fua.organization.id = :organizationId   " +
+            "                  and (:disableDate is null or trunc(fua.disableDate) = :disableDate)   " +
+            "                  and fua.alternative.id = :financialUserAlternativeId ")
+    Long findFinancialUserAlternativeByFinancialUserAndOrganizationAndDisableDate(@Param("financialUserId") Long financialUserId,
+                                                                                  @Param("organizationId") Long organizationId,
+                                                                                  @Param("disableDate") LocalDateTime disableDate,
+                                                                                  @Param("financialUserAlternativeId") Long financialUserAlternativeId);
+
+    @Query("SELECT 1 " +
+            "  FROM FinancialUserAlternative IN_AL " +
+            " WHERE IN_AL.financialUser.id =  :mainFinancialUserId " +
+            "   AND IN_AL.organization.id = :organizationId " +
+            "   AND (IN_AL.disableDate IS NULL OR " +
+            "       (trunc(IN_AL.effectiveDate) =  :effectiveDate OR " +
+            "       trunc(IN_AL.disableDate) =  :effectiveDate) OR " +
+            "       ( :effectiveDate BETWEEN trunc(IN_AL.effectiveDate)" +
+            " AND trunc(IN_AL.disableDate))) ")
+    Optional<FinancialUserAlternative> findFinancialUserAlternativeByOrganizationId(@Param("mainFinancialUserId") Long mainFinancialUserId,
+                                                                                    @Param("effectiveDate") LocalDateTime effectiveDate,
+                                                                                    @Param("organizationId") Long organizationId);
+
 }
