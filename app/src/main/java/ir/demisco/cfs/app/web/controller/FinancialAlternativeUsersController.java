@@ -3,7 +3,7 @@ package ir.demisco.cfs.app.web.controller;
 import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersInputRequest;
 import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersListRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserAlternativeInputModelRequest;
-import ir.demisco.cfs.model.dto.request.FinancialUserAlternativeInputRequest;
+import ir.demisco.cfs.model.dto.request.FinancialUserAlternativeRequest;
 import ir.demisco.cfs.model.dto.response.FinancialAlternativeUsersOutputResponse;
 import ir.demisco.cfs.service.api.FinancialAlternativeUsersService;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +39,7 @@ public class FinancialAlternativeUsersController {
     }
 
     @PostMapping("/saveFinancialAlternativeUsers")
-    public ResponseEntity<Boolean> saveFinancialAlternativeUsers(@RequestBody FinancialUserAlternativeInputRequest financialUserAlternativeInputRequest) {
-        return ResponseEntity.ok(financialAlternativeUsersService.saveFinancialAlternativeUsers(financialUserAlternativeInputRequest));
+    public ResponseEntity<Boolean> saveFinancialAlternativeUsers(@RequestBody FinancialUserAlternativeRequest financialUserAlternativeRequest) {
+        return ResponseEntity.ok(financialAlternativeUsersService.saveFinancialAlternativeUsers(financialUserAlternativeRequest));
     }
 }

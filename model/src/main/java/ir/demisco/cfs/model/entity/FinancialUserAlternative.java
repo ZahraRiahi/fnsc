@@ -2,16 +2,8 @@ package ir.demisco.cfs.model.entity;
 
 import ir.demisco.cloud.basic.model.entity.domain.AuditModel;
 import ir.demisco.cloud.basic.model.entity.org.Organization;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
@@ -79,5 +71,48 @@ public class FinancialUserAlternative extends AuditModel<Long> {
 
     public void setOrganization(Organization organization) {
         this.organization = organization;
+    }
+
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private FinancialUserAlternative financialUserAlternative;
+
+        private Builder() {
+            financialUserAlternative = new FinancialUserAlternative();
+        }
+
+
+        public Builder financialUser(FinancialUser financialUser) {
+            financialUserAlternative.setFinancialUser(financialUser);
+            return this;
+        }
+
+        public Builder alternative(FinancialUser alternative) {
+            financialUserAlternative.setAlternative(alternative);
+            return this;
+        }
+
+        public Builder disableDate(LocalDateTime disableDate) {
+            financialUserAlternative.setDisableDate(disableDate);
+            return this;
+        }
+
+        public Builder effectiveDate(LocalDateTime effectiveDate) {
+            financialUserAlternative.setEffectiveDate(effectiveDate);
+            return this;
+        }
+
+        public Builder organization(Organization organization) {
+            financialUserAlternative.setOrganization(organization);
+            return this;
+        }
+
+        public FinancialUserAlternative build() {
+            return financialUserAlternative;
+        }
     }
 }

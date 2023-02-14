@@ -8,13 +8,13 @@ import ir.demisco.cfs.model.dto.request.SaveCompletePermissionInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 import ir.demisco.cfs.model.entity.UserPermissionScope;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
-import ir.demisco.cfs.service.repository.DepartmentRepository;
 import ir.demisco.cfs.service.repository.FinancialDepartmentRepository;
 import ir.demisco.cfs.service.repository.FinancialLedgerTypeRepository;
 import ir.demisco.cfs.service.repository.FinancialUserRepository;
-import ir.demisco.cfs.service.repository.OrganizationRepository;
 import ir.demisco.cfs.service.repository.UserPermissionRepository;
 import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
+import ir.demisco.cloud.basic.organization.repository.jpa.DepartmentRepository;
+import ir.demisco.cloud.basic.organization.repository.jpa.OrganizationRepository;
 import ir.demisco.cloud.core.middle.exception.RuleException;
 import ir.demisco.cloud.core.security.util.SecurityHelper;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,8 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
     private final OrganizationRepository organizationRepository;
     private final UserPermissionRepository userPermissionRepository;
 
-    public DefaultFinancialSecPermissionScope(UserPermissionScopeRepository userPermissionScopeRepository, EntityManager entityManager, FinancialUserRepository financialUserRepository, FinancialLedgerTypeRepository financialLedgerTypeRepository, FinancialDepartmentRepository financialDepartmentRepository, DepartmentRepository departmentRepository, OrganizationRepository organizationRepository, UserPermissionRepository userPermissionRepository) {
+    public DefaultFinancialSecPermissionScope(UserPermissionScopeRepository userPermissionScopeRepository,
+                                              EntityManager entityManager, FinancialUserRepository financialUserRepository, FinancialLedgerTypeRepository financialLedgerTypeRepository, FinancialDepartmentRepository financialDepartmentRepository, DepartmentRepository departmentRepository, OrganizationRepository organizationRepository, UserPermissionRepository userPermissionRepository) {
         this.userPermissionScopeRepository = userPermissionScopeRepository;
         this.entityManager = entityManager;
         this.financialUserRepository = financialUserRepository;
