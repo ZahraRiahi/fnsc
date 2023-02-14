@@ -24,7 +24,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <basic-Service-version>3.4.0</basic-Service-version>
+        <basic-Service-version>3.7.9</basic-Service-version>
     </properties>
 
     <dependencies>
@@ -32,6 +32,16 @@
             <groupId>ir.demisco.cloud.core</groupId>
             <artifactId>dms-basic-model</artifactId>
             <version>${basic-Service-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.5.9</version>
+        </dependency>
+        <dependency>
+            <groupId>ir.demisco.cloud.core</groupId>
+            <artifactId>hibernate-envers</artifactId>
+            <version>1.2.3</version>
         </dependency>
     </dependencies>
 
