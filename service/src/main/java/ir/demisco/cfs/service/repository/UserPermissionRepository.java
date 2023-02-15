@@ -21,7 +21,7 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission, 
             "   and up.all_financial_priod_flag = :allFinancialPeriodFlag"
             , nativeQuery = true)
     Long getPermissionByScopeIdAndFlgAndEffectiveDate(Long userPermissionScopeId, Long financialActivityTypeId, LocalDateTime effectiveDate, Long financialUserIdCreator,
-                                                      Long financialDocumentTypeId, Long financialPeriodId, Long allDocumentTypeFlag, Long allFinancialPeriodFlag);
+                                                      Long financialDocumentTypeId, Long financialPeriodId, Boolean allDocumentTypeFlag, Boolean allFinancialPeriodFlag);
 
     @Query(value = " select count(up.id)" +
             "  from fnsc.user_permission up" +
@@ -35,7 +35,7 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission, 
             "   and up.all_financial_priod_flag = :allFinancialPeriodFlag"
             , nativeQuery = true)
     Long getPermissionByScopeIdAndFlgAndDisableDate(Long userPermissionScopeId, Long financialActivityTypeId, LocalDateTime disableDate, Long financialUserIdCreator,
-                                                    Long financialDocumentTypeId, Long financialPeriodId, Long allDocumentTypeFlag, Long allFinancialPeriodFlag);
+                                                    Long financialDocumentTypeId, Long financialPeriodId, Boolean allDocumentTypeFlag, Boolean allFinancialPeriodFlag);
 
     @Query(" select up.id from UserPermission up " +
             " join UserPermissionScope ups on ups.id=up.userPermissionScopeId.id " +

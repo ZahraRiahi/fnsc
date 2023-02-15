@@ -44,7 +44,7 @@ public class DefaultUserPermission implements UserPermissionService {
                 , financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
                 financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId(), financialUserPermissionInputModelRequest.get(0).getAllDocumentTypeFlag(),
                 financialUserPermissionInputModelRequest.get(0).getAllFinancialPeriodFlag());
-        if (countEffectiveDate == 0) {
+        if (countEffectiveDate != 0) {
             throw new RuleException(" رکوردی با این اطلاعات قبلا ثبت شده است");
         }
 
@@ -53,7 +53,7 @@ public class DefaultUserPermission implements UserPermissionService {
                 , financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
                 financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId(), financialUserPermissionInputModelRequest.get(0).getAllDocumentTypeFlag(),
                 financialUserPermissionInputModelRequest.get(0).getAllFinancialPeriodFlag());
-        if (countDisableDate == 0) {
+        if (countDisableDate != 0) {
             throw new RuleException(" رکوردی با این اطلاعات قبلا ثبت شده است");
         }
         financialUserPermissionInputModelRequest.forEach((FinancialUserPermissionInputModelRequest e) -> {
