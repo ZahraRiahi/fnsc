@@ -14,6 +14,7 @@ import ir.demisco.cloud.core.middle.exception.RuleException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -60,12 +61,6 @@ public class DefaultUserPermission implements UserPermissionService {
         } else {
             financialUserPermissionInputModelRequest.get(0).setFinancialDocumentTypeId(0L);
         }
-        Object disableIdDate = null;
-        if (financialUserPermissionInputModelRequest.get(0).getDisableDate() != null) {
-            disableIdDate = "disableIdDate";
-        } else {
-            financialUserPermissionInputModelRequest.get(0).setDisableDate(null);
-        }
         Long countEffectiveDate = userPermissionRepository.getPermissionByScopeIdAndFlgAndEffectiveDate(financialUserPermissionInputModelRequest.get(0).getUserPermissionScopeId(),
                 financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(),
                 financialUserIdCreatorId, financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialDocumentTypeId, financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
@@ -75,7 +70,8 @@ public class DefaultUserPermission implements UserPermissionService {
         }
 
         Long countDisableDate = userPermissionRepository.getPermissionByScopeIdAndFlgAndDisableDate(financialUserPermissionInputModelRequest.get(0).getUserPermissionScopeId(),
-                financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(), disableIdDate, financialUserPermissionInputModelRequest.get(0).getDisableDate()
+                financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(),
+                financialUserPermissionInputModelRequest.get(0).getDisableDate() == null ? LocalDateTime.now() : null
                 , financialUserIdCreatorId, financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialDocumentTypeId, financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
                 financialPeriodId, financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId(), s1,
                 s2);
