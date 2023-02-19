@@ -11,7 +11,6 @@ import ir.demisco.cfs.service.repository.FinancialUserRepository;
 import ir.demisco.cfs.service.repository.UserPermissionRepository;
 import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
 import ir.demisco.cloud.core.middle.exception.RuleException;
-import ir.demisco.core.utils.DateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,8 +42,6 @@ public class DefaultUserPermission implements UserPermissionService {
     public Boolean saveUserPermission(List<FinancialUserPermissionInputModelRequest> financialUserPermissionInputModelRequest) {
         Long s1 = financialUserPermissionInputModelRequest.get(0).getAllDocumentTypeFlag() == true ? 1L : 0L;
         Long s2 = financialUserPermissionInputModelRequest.get(0).getAllFinancialPeriodFlag() == true ? 1L : 0L;
-        LocalDateTime disableDate = DateUtil.truncate(financialUserPermissionInputModelRequest.get(0).getDisableDate());
-
         Object financialPeriodId = null;
         if (financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId() != null) {
             financialPeriodId = "financialPeriodId";
