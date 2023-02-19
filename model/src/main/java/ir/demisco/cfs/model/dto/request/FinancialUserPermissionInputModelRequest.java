@@ -12,6 +12,7 @@ public class FinancialUserPermissionInputModelRequest {
     private LocalDateTime disableDate;
     private Boolean allDocumentTypeFlag;
     private Boolean allFinancialPeriodFlag;
+    private Boolean allUsersCreator;
     private Long id;
 
     public Long getUserPermissionScopeId() {
@@ -84,6 +85,14 @@ public class FinancialUserPermissionInputModelRequest {
 
     public void setAllFinancialPeriodFlag(Boolean allFinancialPeriodFlag) {
         this.allFinancialPeriodFlag = allFinancialPeriodFlag;
+    }
+
+    public Boolean getAllUsersCreator() {
+        return allUsersCreator;
+    }
+
+    public void setAllUsersCreator(Boolean allUsersCreator) {
+        this.allUsersCreator = allUsersCreator;
     }
 
     public Long getId() {

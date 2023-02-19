@@ -81,9 +81,9 @@ public class DefaultUserPermission implements UserPermissionService {
         financialUserPermissionInputModelRequest.forEach((FinancialUserPermissionInputModelRequest e) -> {
             UserPermission userPermission = new UserPermission();
             userPermission.setUserPermissionScopeId(userPermissionScopeRepository.getOne(e.getUserPermissionScopeId()));
-            userPermission.setFinancialUserIdCreator(e.getFinancialUserIdCreator() == null ? null : financialUserRepository.getOne(e.getFinancialUserIdCreator()));
+            userPermission.setFinancialUserIdCreator(e.getFinancialUserIdCreator() == 0L ? null : financialUserRepository.getOne(e.getFinancialUserIdCreator()));
             userPermission.setFinancialTypeActivityId(financialActivityTypeRepository.getOne(e.getFinancialTypeActivityId()));
-            userPermission.setFinancialDocumentTypeId(e.getFinancialDocumentTypeId() == null ? null : financialDocumentTypeRepository.getOne(e.getFinancialDocumentTypeId()));
+            userPermission.setFinancialDocumentTypeId(e.getFinancialDocumentTypeId() == 0L ? null : financialDocumentTypeRepository.getOne(e.getFinancialDocumentTypeId()));
             userPermission.setFinancialPeriodId(e.getFinancialPeriodId() == 0L ? null : financialPeriodRepository.getOne(e.getFinancialPeriodId()));
             userPermission.setEffectiveDate(e.getEffectiveDate());
             userPermission.setDisableDate(e.getDisableDate() == null ? null : e.getDisableDate());
