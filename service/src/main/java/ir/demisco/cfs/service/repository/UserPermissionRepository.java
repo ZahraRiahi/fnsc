@@ -31,7 +31,7 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission, 
             "  from fnsc.user_permission up" +
             " where up.user_permission_scope_id = :userPermissionScopeId" +
             "   and up.financial_activity_type_id = :financialActivityTypeId" +
-            "  and (:disableDate is null or trunc(up.disable_date) = :disableIdDate)" +
+            "  and up.disable_date = NVL(:disableDate, up.disable_date)  " +
             "   and  (:financialUserIdCreator IS NULL OR " +
             "             up.financial_user_id_creator = :financialUserIdCreatorId )" +
             "   and  (:financialDocumentType IS NULL OR " +
@@ -41,7 +41,7 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission, 
             "   and up.all_document_type_flag = :allDocumentTypeFlag" +
             "   and up.all_financial_priod_flag = :allFinancialPeriodFlag"
             , nativeQuery = true)
-    Long getPermissionByScopeIdAndFlgAndDisableDate(Long userPermissionScopeId, Long financialActivityTypeId, Object disableDate, LocalDateTime disableIdDate, Object financialUserIdCreator, Long financialUserIdCreatorId,
+    Long getPermissionByScopeIdAndFlgAndDisableDate(Long userPermissionScopeId, Long financialActivityTypeId, LocalDateTime disableDate, Object financialUserIdCreator, Long financialUserIdCreatorId,
                                                     Object financialDocumentType, Long financialDocumentTypeId, Object financialPeriod, Long financialPeriodId, Long allDocumentTypeFlag, Long allFinancialPeriodFlag);
 
     @Query(" select up.id from UserPermission up " +
