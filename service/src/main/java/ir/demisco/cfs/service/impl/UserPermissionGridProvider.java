@@ -1,4 +1,4 @@
-package ir.demisco.cfs.service.component;
+package ir.demisco.cfs.service.impl;
 
 import ir.demisco.cfs.model.dto.response.FinancialSecUserPermissionScopeResponse;
 import ir.demisco.cfs.model.entity.UserPermission;
@@ -6,7 +6,12 @@ import ir.demisco.cloud.core.middle.service.business.api.core.GridDataProvider;
 import ir.demisco.core.utils.CommonUtils;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Selection;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +68,7 @@ public class UserPermissionGridProvider implements GridDataProvider {
 
     @Override
     public List<Object> mapToDto(List<Object> resultList) {
-        return resultList.stream().map(object -> {
+        return resultList.stream().map((Object object) -> {
             Object[] array = (Object[]) object;
             return FinancialSecUserPermissionScopeResponse.builder()
                     .userPermissionScopeId((Long) array[0])
@@ -73,8 +78,8 @@ public class UserPermissionGridProvider implements GridDataProvider {
                     .financialPeriodId((Long) array[4])
                     .effectiveDate((LocalDateTime) array[5])
                     .disableDate((LocalDateTime) array[6])
-                    .allDocumentTypeFlag((Long) array[7])
-                    .allFinancialPeriodFlag((Long) array[8])
+                    .allDocumentTypeFlag((Boolean) array[7])
+                    .allFinancialPeriodFlag((Boolean) array[8])
                     .activityTypeCode((String) array[9])
                     .activityTypeDescription((String) array[10])
                     .subSystemCode((String) array[11])

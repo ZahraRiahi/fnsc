@@ -6,7 +6,7 @@ import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.SaveCompletePermissionInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
-import ir.demisco.cfs.service.component.UserPermissionGridProvider;
+import ir.demisco.cfs.service.impl.UserPermissionGridProvider;
 import ir.demisco.cloud.core.middle.model.dto.DataSourceRequest;
 import ir.demisco.cloud.core.middle.model.dto.DataSourceResult;
 import ir.demisco.cloud.core.middle.service.business.api.core.GridFilterService;
