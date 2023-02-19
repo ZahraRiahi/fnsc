@@ -9,33 +9,40 @@ import java.util.List;
 
 public interface UserPermissionRepository extends JpaRepository<UserPermission, Long> {
 
-    @Query(value = " select count(up.id)" +
-            "  from fnsc.user_permission up" +
-            " where up.user_permission_scope_id = :userPermissionScopeId" +
-            "   and up.financial_activity_type_id = :financialActivityTypeId" +
+    @Query(value = " select count(up.id) " +
+            "  from fnsc.user_permission up " +
+            " where up.user_permission_scope_id = :userPermissionScopeId " +
+            "   and up.financial_activity_type_id = :financialActivityTypeId " +
+            " and  (:financialUserIdCreator IS NULL OR " +
+            "          up.financial_user_id_creator = :financialUserIdCreatorId )" +
+            " and  (:financialDocumentType IS NULL OR " +
+            "         up.financial_document_type_id = :financialDocumentTypeId )" +
+            "   and up.all_document_type_flag = :allDocumentTypeFlag " +
+            "   and up.all_financial_priod_flag = :allFinancialPeriodFlag " +
             "   and up.effective_date = trunc(:effectiveDate)" +
-            "   and up.financial_user_id_creator = :financialUserIdCreator" +
-            "   and up.financial_document_type_id = :financialDocumentTypeId" +
-            "   and up.financial_period_id = :financialPeriodId" +
-            "   and up.all_document_type_flag = :allDocumentTypeFlag" +
-            "   and up.all_financial_priod_flag = :allFinancialPeriodFlag"
+            " and  (:financialPeriod IS NULL OR " +
+            "       up.financial_period_id = :financialPeriodId) "
             , nativeQuery = true)
-    Long getPermissionByScopeIdAndFlgAndEffectiveDate(Long userPermissionScopeId, Long financialActivityTypeId, LocalDateTime effectiveDate, Long financialUserIdCreator,
-                                                      Long financialDocumentTypeId, Long financialPeriodId, Boolean allDocumentTypeFlag, Boolean allFinancialPeriodFlag);
+    Long getPermissionByScopeIdAndFlgAndEffectiveDate(Long userPermissionScopeId, Long financialActivityTypeId, Object financialUserIdCreator, Long financialUserIdCreatorId,
+                                                      Object financialDocumentType, Long financialDocumentTypeId, Long allDocumentTypeFlag, Long allFinancialPeriodFlag, LocalDateTime effectiveDate,
+                                                      Object financialPeriod, Long financialPeriodId);
 
     @Query(value = " select count(up.id)" +
             "  from fnsc.user_permission up" +
             " where up.user_permission_scope_id = :userPermissionScopeId" +
             "   and up.financial_activity_type_id = :financialActivityTypeId" +
-            "   and up.disable_date = trunc(:disableDate)" +
-            "   and up.financial_user_id_creator = :financialUserIdCreator" +
-            "   and up.financial_document_type_id = :financialDocumentTypeId" +
-            "   and up.financial_period_id = :financialPeriodId" +
+            "  and (:disableDate is null or trunc(up.disable_date) = :disableIdDate)" +
+            "   and  (:financialUserIdCreator IS NULL OR " +
+            "             up.financial_user_id_creator = :financialUserIdCreatorId )" +
+            "   and  (:financialDocumentType IS NULL OR " +
+            "           up.financial_document_type_id = :financialDocumentTypeId )" +
+            "   and  (:financialPeriod IS NULL OR " +
+            "          up.financial_period_id = :financialPeriodId)" +
             "   and up.all_document_type_flag = :allDocumentTypeFlag" +
             "   and up.all_financial_priod_flag = :allFinancialPeriodFlag"
             , nativeQuery = true)
-    Long getPermissionByScopeIdAndFlgAndDisableDate(Long userPermissionScopeId, Long financialActivityTypeId, LocalDateTime disableDate, Long financialUserIdCreator,
-                                                    Long financialDocumentTypeId, Long financialPeriodId, Boolean allDocumentTypeFlag, Boolean allFinancialPeriodFlag);
+    Long getPermissionByScopeIdAndFlgAndDisableDate(Long userPermissionScopeId, Long financialActivityTypeId, Object disableDate, LocalDateTime disableIdDate, Object financialUserIdCreator, Long financialUserIdCreatorId,
+                                                    Object financialDocumentType, Long financialDocumentTypeId, Object financialPeriod, Long financialPeriodId, Long allDocumentTypeFlag, Long allFinancialPeriodFlag);
 
     @Query(" select up.id from UserPermission up " +
             " join UserPermissionScope ups on ups.id=up.userPermissionScopeId.id " +
