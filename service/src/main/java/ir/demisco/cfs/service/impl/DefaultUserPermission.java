@@ -39,20 +39,46 @@ public class DefaultUserPermission implements UserPermissionService {
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public Boolean saveUserPermission(List<FinancialUserPermissionInputModelRequest> financialUserPermissionInputModelRequest) {
+        Long s1 = financialUserPermissionInputModelRequest.get(0).getAllDocumentTypeFlag() == true ? 1L : 0L;
+        Long s2 = financialUserPermissionInputModelRequest.get(0).getAllFinancialPeriodFlag() == true ? 1L : 0L;
+        Object financialPeriodId = null;
+        if (financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId() != null) {
+            financialPeriodId = "financialPeriodId";
+        } else {
+            financialUserPermissionInputModelRequest.get(0).setFinancialPeriodId(0L);
+        }
+
+        Object financialUserIdCreatorId = null;
+        if (financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator() != null) {
+            financialUserIdCreatorId = "financialUserIdCreatorId";
+        } else {
+            financialUserPermissionInputModelRequest.get(0).setFinancialUserIdCreator(0L);
+        }
+        Object financialDocumentTypeId = null;
+        if (financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId() != null) {
+            financialDocumentTypeId = "financialDocumentTypeId";
+        } else {
+            financialUserPermissionInputModelRequest.get(0).setFinancialDocumentTypeId(0L);
+        }
+        Object disableIdDate = null;
+        if (financialUserPermissionInputModelRequest.get(0).getDisableDate() != null) {
+            disableIdDate = "disableIdDate";
+        } else {
+            financialUserPermissionInputModelRequest.get(0).setDisableDate(null);
+        }
         Long countEffectiveDate = userPermissionRepository.getPermissionByScopeIdAndFlgAndEffectiveDate(financialUserPermissionInputModelRequest.get(0).getUserPermissionScopeId(),
-                financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(), financialUserPermissionInputModelRequest.get(0).getEffectiveDate()
-                , financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
-                financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId(), financialUserPermissionInputModelRequest.get(0).getAllDocumentTypeFlag(),
-                financialUserPermissionInputModelRequest.get(0).getAllFinancialPeriodFlag());
+                financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(),
+                financialUserIdCreatorId, financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialDocumentTypeId, financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
+                s1, s2, financialUserPermissionInputModelRequest.get(0).getEffectiveDate(), financialPeriodId, financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId());
         if (countEffectiveDate != 0) {
             throw new RuleException(" رکوردی با این اطلاعات قبلا ثبت شده است");
         }
 
         Long countDisableDate = userPermissionRepository.getPermissionByScopeIdAndFlgAndDisableDate(financialUserPermissionInputModelRequest.get(0).getUserPermissionScopeId(),
-                financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(), financialUserPermissionInputModelRequest.get(0).getDisableDate()
-                , financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
-                financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId(), financialUserPermissionInputModelRequest.get(0).getAllDocumentTypeFlag(),
-                financialUserPermissionInputModelRequest.get(0).getAllFinancialPeriodFlag());
+                financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(), disableIdDate, financialUserPermissionInputModelRequest.get(0).getDisableDate()
+                , financialUserIdCreatorId, financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialDocumentTypeId, financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
+                financialPeriodId, financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId(), s1,
+                s2);
         if (countDisableDate != 0) {
             throw new RuleException(" رکوردی با این اطلاعات قبلا ثبت شده است");
         }
@@ -62,14 +88,13 @@ public class DefaultUserPermission implements UserPermissionService {
             userPermission.setFinancialUserIdCreator(e.getFinancialUserIdCreator() == null ? null : financialUserRepository.getOne(e.getFinancialUserIdCreator()));
             userPermission.setFinancialTypeActivityId(financialActivityTypeRepository.getOne(e.getFinancialTypeActivityId()));
             userPermission.setFinancialDocumentTypeId(e.getFinancialDocumentTypeId() == null ? null : financialDocumentTypeRepository.getOne(e.getFinancialDocumentTypeId()));
-            userPermission.setFinancialPeriodId(e.getFinancialPeriodId() == null ? null : financialPeriodRepository.getOne(e.getFinancialPeriodId()));
+            userPermission.setFinancialPeriodId(e.getFinancialPeriodId() == 0L ? null : financialPeriodRepository.getOne(e.getFinancialPeriodId()));
             userPermission.setEffectiveDate(e.getEffectiveDate());
-            userPermission.setDisableDate(e.getFinancialPeriodId() == null ? null : e.getDisableDate());
-            userPermission.setAllDocumentTypeFlag(e.getAllDocumentTypeFlag());
-            userPermission.setAllFinancialPeriodFlag(e.getAllFinancialPeriodFlag());
+            userPermission.setDisableDate(e.getDisableDate() == null ? null : e.getDisableDate());
+            userPermission.setAllDocumentTypeFlag(e.getAllDocumentTypeFlag() == true ? 1L : 0L);
+            userPermission.setAllFinancialPeriodFlag(e.getAllFinancialPeriodFlag() == true ? 1L : 0L);
             userPermissionRepository.save(userPermission);
         });
-
         return true;
     }
 
