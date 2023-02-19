@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +20,9 @@ import java.util.List;
 public class FinancialAlternativeUsersController {
     private final FinancialAlternativeUsersService financialAlternativeUsersService;
 
-    public FinancialAlternativeUsersController(FinancialAlternativeUsersService financialAlternativeUsersService) {
+
+    public FinancialAlternativeUsersController(FinancialAlternativeUsersService financialAlternativeUsersService
+    ) {
         this.financialAlternativeUsersService = financialAlternativeUsersService;
     }
 
@@ -39,7 +42,7 @@ public class FinancialAlternativeUsersController {
     }
 
     @PostMapping("/saveFinancialAlternativeUsers")
-    public ResponseEntity<Boolean> saveFinancialAlternativeUsers(@RequestBody FinancialUserAlternativeRequest financialUserAlternativeRequest) {
+    public ResponseEntity<Boolean> saveFinancialAlternativeUsers(@Valid @RequestBody FinancialUserAlternativeRequest financialUserAlternativeRequest) {
         return ResponseEntity.ok(financialAlternativeUsersService.saveFinancialAlternativeUsers(financialUserAlternativeRequest));
     }
 }

@@ -147,6 +147,10 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
         List<Long> applicationUserId = financialUserAlternativeRequest.getApplicationUserId().stream()
                 .filter(item -> !item.equals(financialUserAlternativeRequest.getMainFinancialUserId())).collect(Collectors.toList());
 
+        if (organizationList.isEmpty() || applicationUserId.isEmpty()) {
+            throw new RuleException("برای این کاربر هیچ کاربر جایگزینی  ثبت نشد");
+        }
+
         List<FinancialUserAlternative> financialUserAlternatives = new ArrayList<>();
         for (Long o : organizationList) {
             for (Long a : applicationUserId) {
