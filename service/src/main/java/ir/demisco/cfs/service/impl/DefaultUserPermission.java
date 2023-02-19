@@ -11,9 +11,11 @@ import ir.demisco.cfs.service.repository.FinancialUserRepository;
 import ir.demisco.cfs.service.repository.UserPermissionRepository;
 import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
 import ir.demisco.cloud.core.middle.exception.RuleException;
+import ir.demisco.core.utils.DateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -41,6 +43,8 @@ public class DefaultUserPermission implements UserPermissionService {
     public Boolean saveUserPermission(List<FinancialUserPermissionInputModelRequest> financialUserPermissionInputModelRequest) {
         Long s1 = financialUserPermissionInputModelRequest.get(0).getAllDocumentTypeFlag() == true ? 1L : 0L;
         Long s2 = financialUserPermissionInputModelRequest.get(0).getAllFinancialPeriodFlag() == true ? 1L : 0L;
+        LocalDateTime disableDate = DateUtil.truncate(financialUserPermissionInputModelRequest.get(0).getDisableDate());
+
         Object financialPeriodId = null;
         if (financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId() != null) {
             financialPeriodId = "financialPeriodId";
@@ -60,12 +64,6 @@ public class DefaultUserPermission implements UserPermissionService {
         } else {
             financialUserPermissionInputModelRequest.get(0).setFinancialDocumentTypeId(0L);
         }
-        Object disableIdDate = null;
-        if (financialUserPermissionInputModelRequest.get(0).getDisableDate() != null) {
-            disableIdDate = "disableIdDate";
-        } else {
-            financialUserPermissionInputModelRequest.get(0).setDisableDate(null);
-        }
         Long countEffectiveDate = userPermissionRepository.getPermissionByScopeIdAndFlgAndEffectiveDate(financialUserPermissionInputModelRequest.get(0).getUserPermissionScopeId(),
                 financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(),
                 financialUserIdCreatorId, financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialDocumentTypeId, financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
@@ -75,7 +73,8 @@ public class DefaultUserPermission implements UserPermissionService {
         }
 
         Long countDisableDate = userPermissionRepository.getPermissionByScopeIdAndFlgAndDisableDate(financialUserPermissionInputModelRequest.get(0).getUserPermissionScopeId(),
-                financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(), disableIdDate, financialUserPermissionInputModelRequest.get(0).getDisableDate()
+                financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(),
+                financialUserPermissionInputModelRequest.get(0).getDisableDate() == null ? LocalDateTime.now() : null
                 , financialUserIdCreatorId, financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialDocumentTypeId, financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
                 financialPeriodId, financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId(), s1,
                 s2);
