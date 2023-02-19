@@ -10,8 +10,8 @@ public class FinancialUserPermissionInputModelRequest {
     private Long financialPeriodId;
     private LocalDateTime effectiveDate;
     private LocalDateTime disableDate;
-    private Long allDocumentTypeFlag;
-    private Long allFinancialPeriodFlag;
+    private Boolean allDocumentTypeFlag;
+    private Boolean allFinancialPeriodFlag;
     private Long id;
 
     public Long getUserPermissionScopeId() {
@@ -70,19 +70,19 @@ public class FinancialUserPermissionInputModelRequest {
         this.disableDate = disableDate;
     }
 
-    public Long getAllDocumentTypeFlag() {
+    public Boolean getAllDocumentTypeFlag() {
         return allDocumentTypeFlag;
     }
 
-    public void setAllDocumentTypeFlag(Long allDocumentTypeFlag) {
+    public void setAllDocumentTypeFlag(Boolean allDocumentTypeFlag) {
         this.allDocumentTypeFlag = allDocumentTypeFlag;
     }
 
-    public Long getAllFinancialPeriodFlag() {
+    public Boolean getAllFinancialPeriodFlag() {
         return allFinancialPeriodFlag;
     }
 
-    public void setAllFinancialPeriodFlag(Long allFinancialPeriodFlag) {
+    public void setAllFinancialPeriodFlag(Boolean allFinancialPeriodFlag) {
         this.allFinancialPeriodFlag = allFinancialPeriodFlag;
     }
 
