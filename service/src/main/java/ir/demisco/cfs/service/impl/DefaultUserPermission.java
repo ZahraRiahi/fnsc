@@ -4,7 +4,12 @@ import ir.demisco.cfs.model.dto.request.FinancialSecUserPermissionScopeInputMode
 import ir.demisco.cfs.model.dto.request.FinancialUserPermissionInputModelRequest;
 import ir.demisco.cfs.model.entity.UserPermission;
 import ir.demisco.cfs.service.api.UserPermissionService;
-import ir.demisco.cfs.service.repository.*;
+import ir.demisco.cfs.service.repository.FinancialActivityTypeRepository;
+import ir.demisco.cfs.service.repository.FinancialDocumentTypeRepository;
+import ir.demisco.cfs.service.repository.FinancialUserRepository;
+import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
+import ir.demisco.cfs.service.repository.FinancialPeriodRepository;
+import ir.demisco.cfs.service.repository.UserPermissionRepository;
 import ir.demisco.cloud.core.middle.exception.RuleException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

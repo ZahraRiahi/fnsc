@@ -5,7 +5,6 @@ import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
 import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 
