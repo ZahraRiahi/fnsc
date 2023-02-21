@@ -1,52 +1,38 @@
 package ir.demisco.cfs.service.impl;
 
+
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
-import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeRequest;
 import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
-import ir.demisco.cfs.model.dto.request.SaveCompletePermissionInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
-import ir.demisco.cfs.model.entity.UserPermissionScope;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
-import ir.demisco.cfs.service.repository.FinancialDepartmentRepository;
-import ir.demisco.cfs.service.repository.FinancialLedgerTypeRepository;
-import ir.demisco.cfs.service.repository.FinancialUserRepository;
 import ir.demisco.cfs.service.repository.UserPermissionRepository;
 import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
-import ir.demisco.cloud.basic.organization.repository.jpa.DepartmentRepository;
-import ir.demisco.cloud.basic.organization.repository.jpa.OrganizationRepository;
 import ir.demisco.cloud.core.middle.exception.RuleException;
 import ir.demisco.cloud.core.security.util.SecurityHelper;
 import org.springframework.stereotype.Service;
 
+
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 public class DefaultFinancialSecPermissionScope implements FinancialSecPermissionScopeService {
     private final UserPermissionScopeRepository userPermissionScopeRepository;
     private final EntityManager entityManager;
-    private final FinancialUserRepository financialUserRepository;
-    private final FinancialLedgerTypeRepository financialLedgerTypeRepository;
-    private final FinancialDepartmentRepository financialDepartmentRepository;
-    private final DepartmentRepository departmentRepository;
-    private final OrganizationRepository organizationRepository;
     private final UserPermissionRepository userPermissionRepository;
 
     public DefaultFinancialSecPermissionScope(UserPermissionScopeRepository userPermissionScopeRepository,
-                                              EntityManager entityManager, FinancialUserRepository financialUserRepository, FinancialLedgerTypeRepository financialLedgerTypeRepository, FinancialDepartmentRepository financialDepartmentRepository, DepartmentRepository departmentRepository, OrganizationRepository organizationRepository, UserPermissionRepository userPermissionRepository) {
+                                              EntityManager entityManager,
+                                              UserPermissionRepository userPermissionRepository) {
         this.userPermissionScopeRepository = userPermissionScopeRepository;
         this.entityManager = entityManager;
-        this.financialUserRepository = financialUserRepository;
-        this.financialLedgerTypeRepository = financialLedgerTypeRepository;
-        this.financialDepartmentRepository = financialDepartmentRepository;
-        this.departmentRepository = departmentRepository;
-        this.organizationRepository = organizationRepository;
         this.userPermissionRepository = userPermissionRepository;
+
     }
 
     @Override
@@ -109,54 +95,15 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
     @Transactional(rollbackOn = Throwable.class)
     public Boolean setDisableDate(PermissionScopeInputModelRequest permissionScopeInputModelRequest) {
         entityManager.createNativeQuery(" update FNSC.USER_PERMISSION_SCOPE T " +
-                "   set   T.DISABLE_DATE = :disableDate " +
-                "   WHERE T.DISABLE_DATE IS NULL " +
-                " and  T.ID in (:permissionScopeIdList) ")
+                        "   set   T.DISABLE_DATE = :disableDate " +
+                        "   WHERE T.DISABLE_DATE IS NULL " +
+                        " and  T.ID in (:permissionScopeIdList) ")
                 .setParameter("disableDate", permissionScopeInputModelRequest.getDisableDate())
                 .setParameter("permissionScopeIdList", permissionScopeInputModelRequest.getPermissionScopeIdList()).executeUpdate();
         return true;
     }
 
-    @Override
-    @Transactional(rollbackOn = Throwable.class)
-    public Boolean saveFinancialSecPermissionScope(SaveCompletePermissionInputModelRequest saveCompletePermissionInputModelRequest) {
-        if (saveCompletePermissionInputModelRequest.getFinancialSecPermissionScopeRequestList().get(0).getFinancialUserId() == null &&
-                saveCompletePermissionInputModelRequest.getFinancialSecPermissionScopeRequestList().get(0).getFinancialGroupId() == null) {
-            throw new RuleException("باید یکی از دو شناسه ی گروه یا شناسه ی کاربر مالی پر شده باشد");
-        }
-        userPermissionScopeRepository.getUserPermissionByScopeIdAndFlgAndEffectiveDate(
-                saveCompletePermissionInputModelRequest.getFinancialSecPermissionScopeRequestList().get(0).getFinancialUserId().get(0),
-                saveCompletePermissionInputModelRequest.getFinancialSecPermissionScopeRequestList().get(0).getFinancialGroupId().get(0),
-                saveCompletePermissionInputModelRequest.getFinancialSecPermissionScopeRequestList().get(0).getEffectiveDate(),
-                saveCompletePermissionInputModelRequest.getFinancialSecPermissionScopeRequestList().get(0).getAllFncDepartmentFlag(),
-                saveCompletePermissionInputModelRequest.getFinancialSecPermissionScopeRequestList().get(0).getAllLedgerTypesFlag(),
-                saveCompletePermissionInputModelRequest.getFinancialSecPermissionScopeRequestList().get(0).getDepartmentId(),
-                saveCompletePermissionInputModelRequest.getFinancialSecPermissionScopeRequestList().get(0).getFinancialDepartmentId(),
-                saveCompletePermissionInputModelRequest.getFinancialSecPermissionScopeRequestList().get(0).getFinancialLedgerTypeId(),
-                SecurityHelper.getCurrentUser().getOrganizationId()
-        );
-        List<FinancialSecPermissionScopeRequest> financialSecPermissionScopeRequests = new ArrayList<>();
-        saveCompletePermissionInputModelRequest.getFinancialSecPermissionScopeRequestList().forEach((FinancialSecPermissionScopeRequest e) -> {
-            if (!e.getFinancialUserId().isEmpty()) {
-                UserPermissionScope userPermissionScope = new UserPermissionScope();
-                e.getFinancialUserId().forEach((Long aLong) -> {
-                    userPermissionScope.setFinancialUser(financialUserRepository.getOne(aLong));
-                    userPermissionScope.setFinancialLedgerType(e.getFinancialLedgerTypeId() == null ? null : financialLedgerTypeRepository.getOne(e.getFinancialLedgerTypeId()));
-                    userPermissionScope.setFinancialDepartment(e.getFinancialDepartmentId() == null ? null : financialDepartmentRepository.getOne(e.getFinancialDepartmentId()));
-                    userPermissionScope.setDepartment(departmentRepository.getOne(e.getDepartmentId()));
-                    userPermissionScope.setEffectiveDate(e.getEffectiveDate());
-                    userPermissionScope.setDisableDate(e.getDisableDate());
-                    userPermissionScope.setAllLedgerTypesFlag(e.getAllLedgerTypesFlag());
-                    userPermissionScope.setAllFncDepartmentFlag(e.getAllFncDepartmentFlag());
-                    userPermissionScope.setFinancialGroup(null);
-                    userPermissionScope.setOrganization(organizationRepository.getOne(SecurityHelper.getCurrentUser().getOrganizationId()));
-                    userPermissionScopeRepository.save(userPermissionScope);
-                });
-                financialSecPermissionScopeRequests.add(e);
-            }
-
-        });
-        return true;
-    }
-
 }
+
+
+

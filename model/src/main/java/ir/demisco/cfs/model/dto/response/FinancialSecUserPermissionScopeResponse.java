@@ -10,8 +10,8 @@ public class FinancialSecUserPermissionScopeResponse {
     private Long financialPeriodId;
     private LocalDateTime effectiveDate;
     private LocalDateTime disableDate;
-    private Boolean allDocumentTypeFlag;
-    private Boolean allFinancialPeriodFlag;
+    private Long allDocumentTypeFlag;
+    private Long allFinancialPeriodFlag;
     private Long selfCreatorFlag;
     private Long allCreatorFlag;
     private String activityTypeCode;
@@ -75,19 +75,19 @@ public class FinancialSecUserPermissionScopeResponse {
         this.disableDate = disableDate;
     }
 
-    public Boolean getAllDocumentTypeFlag() {
+    public Long getAllDocumentTypeFlag() {
         return allDocumentTypeFlag;
     }
 
-    public void setAllDocumentTypeFlag(Boolean allDocumentTypeFlag) {
+    public void setAllDocumentTypeFlag(Long allDocumentTypeFlag) {
         this.allDocumentTypeFlag = allDocumentTypeFlag;
     }
 
-    public Boolean getAllFinancialPeriodFlag() {
+    public Long getAllFinancialPeriodFlag() {
         return allFinancialPeriodFlag;
     }
 
-    public void setAllFinancialPeriodFlag(Boolean allFinancialPeriodFlag) {
+    public void setAllFinancialPeriodFlag(Long allFinancialPeriodFlag) {
         this.allFinancialPeriodFlag = allFinancialPeriodFlag;
     }
 
@@ -186,12 +186,12 @@ public class FinancialSecUserPermissionScopeResponse {
             return this;
         }
 
-        public Builder allDocumentTypeFlag(Boolean allDocumentTypeFlag) {
+        public Builder allDocumentTypeFlag(Long allDocumentTypeFlag) {
             financialSecUserPermissionScopeResponse.setAllDocumentTypeFlag(allDocumentTypeFlag);
             return this;
         }
 
-        public Builder allFinancialPeriodFlag(Boolean allFinancialPeriodFlag) {
+        public Builder allFinancialPeriodFlag(Long allFinancialPeriodFlag) {
             financialSecUserPermissionScopeResponse.setAllFinancialPeriodFlag(allFinancialPeriodFlag);
             return this;
         }

@@ -6,6 +6,7 @@ import ir.demisco.cloud.core.middle.service.business.api.core.GridDataProvider;
 import ir.demisco.core.utils.CommonUtils;
 import org.springframework.stereotype.Component;
 
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Selection;
 import javax.persistence.criteria.Join;
@@ -31,9 +32,12 @@ public class UserPermissionGridProvider implements GridDataProvider {
         Join<Object, Object> financialActivityType = root.join("financialTypeActivityId");
         Join<Object, Object> financialSystemSubject = financialActivityType.join("financialSystemSubject");
         Join<Object, Object> financialUserIdCreator = root.join("financialUserIdCreator", JoinType.LEFT);
+        Join<Object, Object> financialPeriod = root.join("financialPeriodId", JoinType.LEFT);
+        Join<Object, Object> financialDocumentType = root.join("financialDocumentTypeId", JoinType.LEFT);
 
         filterContext.getJoins().putAll(CommonUtils.keyValueMap("financialActivityType", financialActivityType,
-                "SystemSubject", financialSystemSubject, "financialUserCreator", financialUserIdCreator));
+                "SystemSubject", financialSystemSubject, "financialUserCreator", financialUserIdCreator, "financialPeriod",
+                financialPeriod, "financialDocumentType", financialDocumentType));
 
         return GridDataProvider.super.getCustomRestriction(filterContext);
     }
@@ -45,13 +49,15 @@ public class UserPermissionGridProvider implements GridDataProvider {
         Join<Object, Object> financialActivityType = (Join) joins.get("financialActivityType");
         Join<Object, Object> financialSystemSubject = (Join) joins.get("SystemSubject");
         Join<Object, Object> financialUserIdCreator = (Join) joins.get("financialUserCreator");
+        Join<Object, Object> financialPeriod = (Join) joins.get("financialPeriod");
+        Join<Object, Object> financialDocumentType = (Join) joins.get("financialDocumentType");
 
         return criteriaBuilder.array(
                 filterContext.getPath("userPermissionScopeId.id"),
                 financialUserIdCreator.get("id"),
                 financialActivityType.get("id"),
-                filterContext.getPath("financialDocumentTypeId.id"),
-                filterContext.getPath("financialPeriodId.id"),
+                financialDocumentType.get("id"),
+                financialPeriod.get("id"),
                 filterContext.getPath("effectiveDate"),
                 filterContext.getPath("disableDate"),
                 filterContext.getPath("allDocumentTypeFlag"),
@@ -78,8 +84,8 @@ public class UserPermissionGridProvider implements GridDataProvider {
                     .financialPeriodId((Long) array[4])
                     .effectiveDate((LocalDateTime) array[5])
                     .disableDate((LocalDateTime) array[6])
-                    .allDocumentTypeFlag((Boolean) array[7])
-                    .allFinancialPeriodFlag((Boolean) array[8])
+                    .allDocumentTypeFlag((Long) array[7])
+                    .allFinancialPeriodFlag((Long) array[8])
                     .activityTypeCode((String) array[9])
                     .activityTypeDescription((String) array[10])
                     .subSystemCode((String) array[11])

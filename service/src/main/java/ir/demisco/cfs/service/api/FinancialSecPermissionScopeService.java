@@ -3,7 +3,6 @@ package ir.demisco.cfs.service.api;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
 import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
-import ir.demisco.cfs.model.dto.request.SaveCompletePermissionInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 
 import java.util.List;
@@ -15,7 +14,4 @@ public interface FinancialSecPermissionScopeService {
     Boolean deleteFinancialSecPermissionScope(FinancialSecPermissionScopeInputModelRequest financialSecPermissionScopeInputModelRequest);
 
     Boolean setDisableDate(PermissionScopeInputModelRequest permissionScopeInputModelRequest);
-
-    Boolean saveFinancialSecPermissionScope(SaveCompletePermissionInputModelRequest saveCompletePermissionInputModelRequest);
-
 }
