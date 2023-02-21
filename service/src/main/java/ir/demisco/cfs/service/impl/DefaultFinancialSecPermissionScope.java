@@ -110,7 +110,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
     @Transactional(rollbackOn = Throwable.class)
     public Boolean deleteFinancialSecPermissionScope(FinancialSecPermissionScopeInputModelRequest financialSecPermissionScopeInputModelRequest) {
         List<Long> userPermissionCount = userPermissionRepository.getUserPermissionByUserPermissionScopeId(financialSecPermissionScopeInputModelRequest.getUserPermissionScopeId().get(0));
-        if (userPermissionCount != null) {
+        if (!userPermissionCount.isEmpty()) {
             throw new RuleException("امکان حذف این محدوده ی دسترسی کاربر وجود ندارد.");
         }
         financialSecPermissionScopeInputModelRequest.getUserPermissionScopeId().forEach(aLong -> userPermissionScopeRepository.deleteById(aLong));

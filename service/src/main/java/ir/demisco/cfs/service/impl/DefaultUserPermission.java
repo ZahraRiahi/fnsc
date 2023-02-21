@@ -66,7 +66,7 @@ public class DefaultUserPermission implements UserPermissionService {
 
         Long countDisableDate = userPermissionRepository.getPermissionByScopeIdAndFlgAndDisableDate(financialUserPermissionInputModelRequest.get(0).getUserPermissionScopeId(),
                 financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(),
-                financialUserPermissionInputModelRequest.get(0).getDisableDate() == null ? LocalDateTime.now() : null
+                financialUserPermissionInputModelRequest.get(0).getDisableDate() == null ? LocalDateTime.now() : financialUserPermissionInputModelRequest.get(0).getDisableDate()
                 , financialUserIdCreatorId, financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialDocumentTypeId, financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
                 financialPeriodId, financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId(), s1,
                 s2);
