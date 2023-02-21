@@ -3,6 +3,7 @@ package ir.demisco.cfs.model.dto.response;
 import java.time.LocalDateTime;
 
 public class FinancialSecUserPermissionScopeResponse {
+    private Long userPermissionId;
     private Long userPermissionScopeId;
     private Long financialUserCreatorId;
     private Long financialActivityTypeId;
@@ -18,6 +19,16 @@ public class FinancialSecUserPermissionScopeResponse {
     private String activityTypeDescription;
     private String subSystemCode;
     private String subSystemDescription;
+    private String documentTypeDescription;
+    private String financialPeriodDescription;
+
+    public Long getUserPermissionId() {
+        return userPermissionId;
+    }
+
+    public void setUserPermissionId(Long userPermissionId) {
+        this.userPermissionId = userPermissionId;
+    }
 
     public Long getUserPermissionScopeId() {
         return userPermissionScopeId;
@@ -139,6 +150,23 @@ public class FinancialSecUserPermissionScopeResponse {
         this.subSystemDescription = subSystemDescription;
     }
 
+    public String getDocumentTypeDescription() {
+        return documentTypeDescription;
+    }
+
+    public void setDocumentTypeDescription(String documentTypeDescription) {
+        this.documentTypeDescription = documentTypeDescription;
+    }
+
+    public String getFinancialPeriodDescription() {
+        return financialPeriodDescription;
+    }
+
+    public void setFinancialPeriodDescription(String financialPeriodDescription) {
+        this.financialPeriodDescription = financialPeriodDescription;
+    }
+
+
     public static Builder builder() {
         return new Builder();
     }
@@ -150,6 +178,11 @@ public class FinancialSecUserPermissionScopeResponse {
             financialSecUserPermissionScopeResponse = new FinancialSecUserPermissionScopeResponse();
         }
 
+
+        public Builder userPermissionId(Long userPermissionId) {
+            financialSecUserPermissionScopeResponse.setUserPermissionId(userPermissionId);
+            return this;
+        }
 
         public Builder userPermissionScopeId(Long userPermissionScopeId) {
             financialSecUserPermissionScopeResponse.setUserPermissionScopeId(userPermissionScopeId);
@@ -223,6 +256,16 @@ public class FinancialSecUserPermissionScopeResponse {
 
         public Builder subSystemDescription(String subSystemDescription) {
             financialSecUserPermissionScopeResponse.setSubSystemDescription(subSystemDescription);
+            return this;
+        }
+
+        public Builder documentTypeDescription(String documentTypeDescription) {
+            financialSecUserPermissionScopeResponse.setDocumentTypeDescription(documentTypeDescription);
+            return this;
+        }
+
+        public Builder financialPeriodDescription(String financialPeriodDescription) {
+            financialSecUserPermissionScopeResponse.setFinancialPeriodDescription(financialPeriodDescription);
             return this;
         }
 
