@@ -1,15 +1,17 @@
 package ir.demisco.cfs.service.impl;
 
-import ir.demisco.cfs.model.dto.request.*;
+
+import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputModelRequest;
+import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
+import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
-import ir.demisco.cfs.model.entity.FinancialDepartment;
-import ir.demisco.cfs.model.entity.FinancialLedgerType;
-import ir.demisco.cfs.model.entity.FinancialUser;
-import ir.demisco.cfs.model.entity.UserPermissionScope;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
 import ir.demisco.cfs.service.api.UserPermissionService;
-import ir.demisco.cfs.service.repository.*;
-import ir.demisco.cloud.basic.model.entity.org.Department;
+import ir.demisco.cfs.service.repository.FinancialDepartmentRepository;
+import ir.demisco.cfs.service.repository.FinancialLedgerTypeRepository;
+import ir.demisco.cfs.service.repository.FinancialUserRepository;
+import ir.demisco.cfs.service.repository.UserPermissionRepository;
+import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
 import ir.demisco.cloud.basic.organization.repository.jpa.DepartmentRepository;
 import ir.demisco.cloud.basic.organization.repository.jpa.OrganizationRepository;
 import ir.demisco.cloud.basic.service.api.DaoService;
@@ -17,15 +19,14 @@ import ir.demisco.cloud.core.middle.exception.RuleException;
 import ir.demisco.cloud.core.security.util.SecurityHelper;
 import org.springframework.stereotype.Service;
 
+
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.apache.coyote.http11.Constants.a;
 
 @Service
 public class DefaultFinancialSecPermissionScope implements FinancialSecPermissionScopeService {
@@ -37,8 +38,6 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
     private final DepartmentRepository departmentRepository;
     private final OrganizationRepository organizationRepository;
     private final UserPermissionRepository userPermissionRepository;
-    private final UserPermissionService userPermissionService;
-    private final DaoService daoService;
 
     public DefaultFinancialSecPermissionScope(UserPermissionScopeRepository userPermissionScopeRepository,
                                               EntityManager entityManager, FinancialUserRepository financialUserRepository,
@@ -46,9 +45,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                                               FinancialDepartmentRepository financialDepartmentRepository,
                                               DepartmentRepository departmentRepository,
                                               OrganizationRepository organizationRepository,
-                                              UserPermissionRepository userPermissionRepository,
-                                              UserPermissionService userPermissionService,
-                                              DaoService daoService) {
+                                              UserPermissionRepository userPermissionRepository) {
         this.userPermissionScopeRepository = userPermissionScopeRepository;
         this.entityManager = entityManager;
         this.financialUserRepository = financialUserRepository;
@@ -57,8 +54,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         this.departmentRepository = departmentRepository;
         this.organizationRepository = organizationRepository;
         this.userPermissionRepository = userPermissionRepository;
-        this.userPermissionService = userPermissionService;
-        this.daoService = daoService;
+
     }
 
     @Override
@@ -152,61 +148,6 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                 allLedgerTypesFlag,
                 allFncDepartmentFlag, financialGroupId);
     }
-
-//    @Override
-//    public Boolean saveFinancialSecPermissionScope(SaveCompletePermissionRequest saveCompletePermissionRequest) {
-//        List<FinancialSecPermissionScopeRequest> financialSecPermissionScopeRequestList = getFinancialSecPermissionScopeRequests(saveCompletePermissionRequest);
-//        List<FinancialSecPermissionScopeRequest> financialSecPermissionScopeRequests = new ArrayList<>();
-//        for (FinancialSecPermissionScopeRequest permissionScopeRequest : financialSecPermissionScopeRequestList) {
-//            if (!permissionScopeRequest.getFinancialUserId().isEmpty()) {
-//                for (Long financialUserId : permissionScopeRequest.getFinancialUserId()) {
-//                    UserPermissionScope userPermissionScope = UserPermissionScope.builder()
-//                            .financialUser(daoService.findById(FinancialUser.class, permissionScopeRequest.getFinancialUserId()))
-//                            .financialLedgerType(daoService.findById(FinancialLedgerType.class, permissionScopeRequest.getFinancialLedgerTypeId()))
-//                            .financialDepartment(daoService.findById(FinancialDepartment.class, permissionScopeRequest.getFinancialDepartmentId()))
-//                            .department(daoService.findById(Department.class, permissionScopeRequest.getFinancialDepartmentId()))
-//                            .effectiveDate(permissionScopeRequest.getEffectiveDate())
-//                            .disableDate(permissionScopeRequest.getDisableDate())
-//                            .allLedgerTypesFlag(permissionScopeRequest.getAllLedgerTypesFlag())
-//                            .allFncDepartmentFlag(permissionScopeRequest.getAllFncDepartmentFlag())
-//                            .financialGroup(permissionScopeRequest.getFinancialGroupId())
-//                            .build();
-//                    Long countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate = getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(permissionScopeRequest.getFinancialUserId(),
-//                            permissionScopeRequest.getFinancialLedgerTypeId(), permissionScopeRequest.getFinancialDepartmentId(),
-//                            permissionScopeRequest.getDepartmentId(),
-//                            permissionScopeRequest.getEffectiveDate(),
-//                            permissionScopeRequest.getOrganizationId(),
-//                            permissionScopeRequest.getAllLedgerTypesFlag(),
-//                            permissionScopeRequest.getAllFncDepartmentFlag(),
-//                            permissionScopeRequest.getFinancialGroupId());
-//                    Long countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate = getUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(permissionScopeRequest.getFinancialUserId(),
-//                            permissionScopeRequest.getFinancialLedgerTypeId(), permissionScopeRequest.getFinancialDepartmentId(),
-//                            permissionScopeRequest.getDepartmentId(),
-//                            permissionScopeRequest.getDisableDate(),
-//                            permissionScopeRequest.getOrganizationId(),
-//                            permissionScopeRequest.getAllLedgerTypesFlag(),
-//                            permissionScopeRequest.getAllFncDepartmentFlag(),
-//                            permissionScopeRequest.getFinancialGroupId());
-//                    if (countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate > 0 || countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate > 0) {
-//                        continue;
-//                    }
-//                }
-//            }
-//            else if(){
-//
-//            }
-//        }
-//        return true;
-//    }
-
-    private List<FinancialSecPermissionScopeRequest> getFinancialSecPermissionScopeRequests(SaveCompletePermissionRequest saveCompletePermissionRequest) {
-        List<FinancialSecPermissionScopeRequest> financialSecPermissionScopeRequestList = saveCompletePermissionRequest.getFinancialSecPermissionScopeRequestList();
-        if (financialSecPermissionScopeRequestList.stream().anyMatch(i -> !i.getFinancialGroupId().isEmpty() && !i.getFinancialUserId().isEmpty())) {
-            throw new RuleException("یکی از دو شناسه گروه و یا شناسه کاربر مالی باید  پر شده باشد ");
-        }
-        return financialSecPermissionScopeRequestList;
-    }
-
 }
 
 

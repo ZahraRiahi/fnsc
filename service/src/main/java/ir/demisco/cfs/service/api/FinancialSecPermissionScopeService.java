@@ -38,5 +38,4 @@ public interface FinancialSecPermissionScopeService {
                                                                   Boolean allFncDepartmentFlag,
                                                                   Long financialGroupId);
 
-//    Boolean saveFinancialSecPermissionScope(SaveCompletePermissionRequest saveCompletePermissionRequest);
 }
