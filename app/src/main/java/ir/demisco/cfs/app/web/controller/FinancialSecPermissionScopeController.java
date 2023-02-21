@@ -3,7 +3,6 @@ package ir.demisco.cfs.app.web.controller;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
 import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
-import ir.demisco.cfs.model.dto.request.SaveCompletePermissionInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
 import ir.demisco.cfs.service.impl.UserPermissionGridProvider;
@@ -46,11 +45,6 @@ public class FinancialSecPermissionScopeController {
     @PostMapping("/setDisableDate")
     public ResponseEntity<Boolean> setDisableDate(@RequestBody PermissionScopeInputModelRequest permissionScopeInputModelRequest) {
         return ResponseEntity.ok(financialSecPermissionScopeService.setDisableDate(permissionScopeInputModelRequest));
-    }
-
-    @PostMapping("/save")
-    public ResponseEntity<Boolean> saveFinancialSecPermissionScope(@RequestBody SaveCompletePermissionInputModelRequest saveCompletePermissionInputModelRequest) {
-        return ResponseEntity.ok(financialSecPermissionScopeService.saveFinancialSecPermissionScope(saveCompletePermissionInputModelRequest));
     }
 
     @PostMapping("/get")
