@@ -4,16 +4,7 @@ import ir.demisco.cloud.basic.model.entity.domain.AuditModel;
 import ir.demisco.cloud.basic.model.entity.org.Department;
 import ir.demisco.cloud.basic.model.entity.org.Organization;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -113,6 +104,7 @@ public class UserPermissionScope extends AuditModel<Long> {
     public void setAllFncDepartmentFlag(Boolean allFncDepartmentFlag) {
         this.allFncDepartmentFlag = allFncDepartmentFlag;
     }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FINANCIAL_GROUP_ID")
     public FinancialGroup getFinancialGroup() {
@@ -131,5 +123,72 @@ public class UserPermissionScope extends AuditModel<Long> {
 
     public void setOrganization(Organization organization) {
         this.organization = organization;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private UserPermissionScope userPermissionScope;
+
+        private Builder() {
+            userPermissionScope = new UserPermissionScope();
+        }
+
+
+        public Builder financialUser(FinancialUser financialUser) {
+            userPermissionScope.setFinancialUser(financialUser);
+            return this;
+        }
+
+        public Builder financialLedgerType(FinancialLedgerType financialLedgerType) {
+            userPermissionScope.setFinancialLedgerType(financialLedgerType);
+            return this;
+        }
+
+        public Builder financialDepartment(FinancialDepartment financialDepartment) {
+            userPermissionScope.setFinancialDepartment(financialDepartment);
+            return this;
+        }
+
+        public Builder department(Department department) {
+            userPermissionScope.setDepartment(department);
+            return this;
+        }
+
+        public Builder disableDate(LocalDateTime disableDate) {
+            userPermissionScope.setDisableDate(disableDate);
+            return this;
+        }
+
+        public Builder effectiveDate(LocalDateTime effectiveDate) {
+            userPermissionScope.setEffectiveDate(effectiveDate);
+            return this;
+        }
+
+        public Builder allLedgerTypesFlag(Boolean allLedgerTypesFlag) {
+            userPermissionScope.setAllLedgerTypesFlag(allLedgerTypesFlag);
+            return this;
+        }
+
+        public Builder allFncDepartmentFlag(Boolean allFncDepartmentFlag) {
+            userPermissionScope.setAllFncDepartmentFlag(allFncDepartmentFlag);
+            return this;
+        }
+
+        public Builder financialGroup(FinancialGroup financialGroup) {
+            userPermissionScope.setFinancialGroup(financialGroup);
+            return this;
+        }
+
+        public Builder organization(Organization organization) {
+            userPermissionScope.setOrganization(organization);
+            return this;
+        }
+
+        public UserPermissionScope build() {
+            return userPermissionScope;
+        }
     }
 }

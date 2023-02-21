@@ -4,12 +4,7 @@ import ir.demisco.cfs.model.dto.request.FinancialSecUserPermissionScopeInputMode
 import ir.demisco.cfs.model.dto.request.FinancialUserPermissionInputModelRequest;
 import ir.demisco.cfs.model.entity.UserPermission;
 import ir.demisco.cfs.service.api.UserPermissionService;
-import ir.demisco.cfs.service.repository.FinancialActivityTypeRepository;
-import ir.demisco.cfs.service.repository.FinancialDocumentTypeRepository;
-import ir.demisco.cfs.service.repository.FinancialPeriodRepository;
-import ir.demisco.cfs.service.repository.FinancialUserRepository;
-import ir.demisco.cfs.service.repository.UserPermissionRepository;
-import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
+import ir.demisco.cfs.service.repository.*;
 import ir.demisco.cloud.core.middle.exception.RuleException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,5 +94,20 @@ public class DefaultUserPermission implements UserPermissionService {
     public Boolean deleteUserPermission(FinancialSecUserPermissionScopeInputModelRequest financialSecUserPermissionScopeInputModelRequest) {
         financialSecUserPermissionScopeInputModelRequest.getUserPermissionId().forEach(aLong -> userPermissionRepository.deleteById(aLong));
         return true;
+    }
+
+    @Override
+    public Long getUserPermissionByAllDocumentTypeFlagAndEffectiveDate(Long userPermissionScopeId, Long financialUserIdCreator, Long financialActivityTypeId, Long financialDocumentTypeId, Long financialPeriodId, LocalDateTime effectiveDate, Boolean allDocumentTypeFlag, Boolean allFinancialPeriodFlag) {
+        return userPermissionRepository.findUserPermissionByAllDocumentTypeFlagAndEffectiveDate(userPermissionScopeId,
+                financialUserIdCreator,
+                financialActivityTypeId, financialDocumentTypeId,
+                financialPeriodId, effectiveDate, allDocumentTypeFlag, allFinancialPeriodFlag);
+    }
+
+    @Override
+    public Long findUserPermissionByAllDocumentTypeFlagAndDisableDate(Long findUserPermissionByAllDocumentTypeFlagAndDisableDate, Long userPermissionScopeId, Long financialUserIdCreator, Long financialActivityTypeId, Long financialDocumentTypeId, Long financialPeriodId, LocalDateTime disableDate, Boolean allDocumentTypeFlag, Boolean allFinancialPeriodFlag) {
+        return userPermissionRepository.findUserPermissionByAllDocumentTypeFlagAndDisableDate(userPermissionScopeId,
+                financialUserIdCreator, financialActivityTypeId, financialDocumentTypeId, financialPeriodId,
+                disableDate, allDocumentTypeFlag, allFinancialPeriodFlag);
     }
 }

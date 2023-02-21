@@ -3,6 +3,7 @@ package ir.demisco.cfs.service.repository;
 import ir.demisco.cfs.model.entity.UserPermissionScope;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -65,23 +66,58 @@ public interface UserPermissionScopeRepository extends JpaRepository<UserPermiss
                                                                             Long financialUserId, Object financialGroup, Long financialGroupId, Boolean allFinancialDepartmentFlg,
                                                                             Boolean allFinancialLedgersFlg);
 
-    @Query(value = " select count(ups.id)" +
-            "  from fnsc.user_permission_scope ups" +
-            " where (ups.financial_user_id = :financialUserId or" +
-            "       ups.financial_user_id is null)" +
-            "   and (ups.financial_group_id = :financialGroupId or" +
-            "       ups.financial_group_id is null)" +
-            "   and trunc(ups.effective_date) = trunc(:effectiveDate)" +
-            "   and ups.all_fnc_department_flag = :allFncDepartmentFlag" +
-            "   and ups.all_ledger_types_flag = :allLedgerTypesFlag" +
-            "   and ups.department_id = :departmentId" +
-            "   and (ups.financial_department_id = :financialDepartmentId or" +
-            "       ups.financial_department_id is null)" +
-            "   and (ups.financial_ledger_type_id = :financialLedgerTypeId or" +
-            "       ups.financial_ledger_type_id is null)" +
-            "   and ups.organization_id = :organizationId"
-            , nativeQuery = true)
-    Long getUserPermissionByScopeIdAndFlgAndEffectiveDate(Long financialUserId, Long financialGroupId, LocalDateTime effectiveDate, Boolean allFncDepartmentFlag,
-                                                          Boolean allLedgerTypesFlag, Long departmentId, Long financialDepartmentId, Long financialLedgerTypeId, Long organizationId);
+    @Query("select count(ups.id) " +
+            "  from UserPermissionScope ups " +
+            "  left join ups.financialUser fu " +
+            "  left join ups.financialLedgerType flt " +
+            "  left join ups.financialDepartment fd " +
+            " inner join ups.department d " +
+            "  left join  ups.financialGroup fg " +
+            " inner join ups.organization o " +
+            " where ups.financialUser.id =  :financialUserId " +
+            "   and ups.financialLedgerType.id =  :financialLedgerTypeId " +
+            "   and ups.financialDepartment.id =  :financialDepartmentId " +
+            "   and ups.department.id =  :departmentId " +
+            "   and trunc(ups.effectiveDate) =  :effectiveDate " +
+            "   and ups.organization.id =  :organizationId " +
+            "   and ups.allLedgerTypesFlag =  :allLedgerTypesFlag " +
+            "   and ups.allFncDepartmentFlag =  :allFncDepartmentFlag " +
+            "   and ups.financialGroup.id =  :financialGroupId ")
+    Long findUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(@Param("financialUserId") Long financialUserId,
+                                                                     @Param("financialLedgerTypeId") Long financialLedgerTypeId,
+                                                                     @Param("financialDepartmentId") Long financialDepartmentId,
+                                                                     @Param("departmentId") Long departmentId,
+                                                                     @Param("effectiveDate") LocalDateTime effectiveDate,
+                                                                     @Param("organizationId") Long organizationId,
+                                                                     @Param("allLedgerTypesFlag") Boolean allLedgerTypesFlag,
+                                                                     @Param("allFncDepartmentFlag") Boolean allFncDepartmentFlag,
+                                                                     @Param("financialGroupId") Long financialGroupId);
+
+    @Query("select count(ups.id) " +
+            "  from UserPermissionScope ups " +
+            "  left join ups.financialUser fu " +
+            "  left join ups.financialLedgerType flt " +
+            "  left join ups.financialDepartment fd " +
+            " inner join ups.department d " +
+            "  left join  ups.financialGroup fg " +
+            " inner join ups.organization o " +
+            " where ups.financialUser.id =  :financialUserId " +
+            "   and ups.financialLedgerType.id =  :financialLedgerTypeId " +
+            "   and ups.financialDepartment.id =  :financialDepartmentId " +
+            "   and ups.department.id =  :departmentId " +
+            "   and trunc(ups.disableDate) =  :disableDate " +
+            "   and ups.organization.id =  :organizationId " +
+            "   and ups.allLedgerTypesFlag =  :allLedgerTypesFlag " +
+            "   and ups.allFncDepartmentFlag =  :allFncDepartmentFlag " +
+            "   and ups.financialGroup.id =  :financialGroupId ")
+    Long findUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(@Param("financialUserId") Long financialUserId,
+                                                                   @Param("financialLedgerTypeId") Long financialLedgerTypeId,
+                                                                   @Param("financialDepartmentId") Long financialDepartmentId,
+                                                                   @Param("departmentId") Long departmentId,
+                                                                   @Param("disableDate") LocalDateTime disableDate,
+                                                                   @Param("organizationId") Long organizationId,
+                                                                   @Param("allLedgerTypesFlag") Boolean allLedgerTypesFlag,
+                                                                   @Param("allFncDepartmentFlag") Boolean allFncDepartmentFlag,
+                                                                   @Param("financialGroupId") Long financialGroupId);
 
 }
