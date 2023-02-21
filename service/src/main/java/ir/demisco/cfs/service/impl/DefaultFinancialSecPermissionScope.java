@@ -6,15 +6,8 @@ import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
 import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
-import ir.demisco.cfs.service.api.UserPermissionService;
-import ir.demisco.cfs.service.repository.FinancialDepartmentRepository;
-import ir.demisco.cfs.service.repository.FinancialLedgerTypeRepository;
-import ir.demisco.cfs.service.repository.FinancialUserRepository;
 import ir.demisco.cfs.service.repository.UserPermissionRepository;
 import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
-import ir.demisco.cloud.basic.organization.repository.jpa.DepartmentRepository;
-import ir.demisco.cloud.basic.organization.repository.jpa.OrganizationRepository;
-import ir.demisco.cloud.basic.service.api.DaoService;
 import ir.demisco.cloud.core.middle.exception.RuleException;
 import ir.demisco.cloud.core.security.util.SecurityHelper;
 import org.springframework.stereotype.Service;
@@ -23,7 +16,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,27 +24,13 @@ import java.util.stream.Collectors;
 public class DefaultFinancialSecPermissionScope implements FinancialSecPermissionScopeService {
     private final UserPermissionScopeRepository userPermissionScopeRepository;
     private final EntityManager entityManager;
-    private final FinancialUserRepository financialUserRepository;
-    private final FinancialLedgerTypeRepository financialLedgerTypeRepository;
-    private final FinancialDepartmentRepository financialDepartmentRepository;
-    private final DepartmentRepository departmentRepository;
-    private final OrganizationRepository organizationRepository;
     private final UserPermissionRepository userPermissionRepository;
 
     public DefaultFinancialSecPermissionScope(UserPermissionScopeRepository userPermissionScopeRepository,
-                                              EntityManager entityManager, FinancialUserRepository financialUserRepository,
-                                              FinancialLedgerTypeRepository financialLedgerTypeRepository,
-                                              FinancialDepartmentRepository financialDepartmentRepository,
-                                              DepartmentRepository departmentRepository,
-                                              OrganizationRepository organizationRepository,
+                                              EntityManager entityManager,
                                               UserPermissionRepository userPermissionRepository) {
         this.userPermissionScopeRepository = userPermissionScopeRepository;
         this.entityManager = entityManager;
-        this.financialUserRepository = financialUserRepository;
-        this.financialLedgerTypeRepository = financialLedgerTypeRepository;
-        this.financialDepartmentRepository = financialDepartmentRepository;
-        this.departmentRepository = departmentRepository;
-        this.organizationRepository = organizationRepository;
         this.userPermissionRepository = userPermissionRepository;
 
     }
@@ -125,29 +103,6 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         return true;
     }
 
-    @Override
-    public Long getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(Long financialUserId, Long financialLedgerTypeId,
-                                                                           Long financialDepartmentId,
-                                                                           Long departmentId, LocalDateTime effectiveDate,
-                                                                           Long organizationId, Boolean allLedgerTypesFlag,
-                                                                           Boolean allFncDepartmentFlag, Long financialGroupId) {
-        return userPermissionScopeRepository.findUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(financialUserId, financialLedgerTypeId,
-                financialDepartmentId,
-                departmentId,
-                effectiveDate,
-                organizationId, allLedgerTypesFlag,
-                allFncDepartmentFlag, financialGroupId);
-    }
-
-    @Override
-    public Long getUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(Long financialUserId, Long financialLedgerTypeId, Long financialDepartmentId, Long departmentId, LocalDateTime disableDate, Long organizationId, Boolean allLedgerTypesFlag, Boolean allFncDepartmentFlag, Long financialGroupId) {
-        return userPermissionScopeRepository.findUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(financialUserId, financialLedgerTypeId,
-                financialDepartmentId,
-                departmentId, disableDate,
-                organizationId,
-                allLedgerTypesFlag,
-                allFncDepartmentFlag, financialGroupId);
-    }
 }
 
 

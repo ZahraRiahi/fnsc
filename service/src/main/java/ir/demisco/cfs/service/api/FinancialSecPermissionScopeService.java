@@ -3,7 +3,6 @@ package ir.demisco.cfs.service.api;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
 import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
-import ir.demisco.cfs.model.dto.request.SaveCompletePermissionRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 
 import java.time.LocalDateTime;
@@ -16,26 +15,4 @@ public interface FinancialSecPermissionScopeService {
     Boolean deleteFinancialSecPermissionScope(FinancialSecPermissionScopeInputModelRequest financialSecPermissionScopeInputModelRequest);
 
     Boolean setDisableDate(PermissionScopeInputModelRequest permissionScopeInputModelRequest);
-
-
-    Long getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(Long financialUserId,
-                                                                    Long financialLedgerTypeId,
-                                                                    Long financialDepartmentId,
-                                                                    Long departmentId,
-                                                                    LocalDateTime effectiveDate,
-                                                                    Long organizationId,
-                                                                    Boolean allLedgerTypesFlag,
-                                                                    Boolean allFncDepartmentFlag,
-                                                                    Long financialGroupId);
-
-    Long getUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(Long financialUserId,
-                                                                  Long financialLedgerTypeId,
-                                                                  Long financialDepartmentId,
-                                                                  Long departmentId,
-                                                                  LocalDateTime disableDate,
-                                                                  Long organizationId,
-                                                                  Boolean allLedgerTypesFlag,
-                                                                  Boolean allFncDepartmentFlag,
-                                                                  Long financialGroupId);
-
 }
