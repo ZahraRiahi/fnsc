@@ -11,8 +11,8 @@ public class FinancialSecUserPermissionScopeResponse {
     private Long financialPeriodId;
     private LocalDateTime effectiveDate;
     private LocalDateTime disableDate;
-    private Long allDocumentTypeFlag;
-    private Long allFinancialPeriodFlag;
+    private Boolean allDocumentTypeFlag;
+    private Boolean allFinancialPeriodFlag;
     private Long selfCreatorFlag;
     private Long allCreatorFlag;
     private String activityTypeCode;
@@ -86,19 +86,19 @@ public class FinancialSecUserPermissionScopeResponse {
         this.disableDate = disableDate;
     }
 
-    public Long getAllDocumentTypeFlag() {
+    public Boolean getAllDocumentTypeFlag() {
         return allDocumentTypeFlag;
     }
 
-    public void setAllDocumentTypeFlag(Long allDocumentTypeFlag) {
+    public void setAllDocumentTypeFlag(Boolean allDocumentTypeFlag) {
         this.allDocumentTypeFlag = allDocumentTypeFlag;
     }
 
-    public Long getAllFinancialPeriodFlag() {
+    public Boolean getAllFinancialPeriodFlag() {
         return allFinancialPeriodFlag;
     }
 
-    public void setAllFinancialPeriodFlag(Long allFinancialPeriodFlag) {
+    public void setAllFinancialPeriodFlag(Boolean allFinancialPeriodFlag) {
         this.allFinancialPeriodFlag = allFinancialPeriodFlag;
     }
 
@@ -166,7 +166,6 @@ public class FinancialSecUserPermissionScopeResponse {
         this.financialPeriodDescription = financialPeriodDescription;
     }
 
-
     public static Builder builder() {
         return new Builder();
     }
@@ -219,12 +218,12 @@ public class FinancialSecUserPermissionScopeResponse {
             return this;
         }
 
-        public Builder allDocumentTypeFlag(Long allDocumentTypeFlag) {
+        public Builder allDocumentTypeFlag(Boolean allDocumentTypeFlag) {
             financialSecUserPermissionScopeResponse.setAllDocumentTypeFlag(allDocumentTypeFlag);
             return this;
         }
 
-        public Builder allFinancialPeriodFlag(Long allFinancialPeriodFlag) {
+        public Builder allFinancialPeriodFlag(Boolean allFinancialPeriodFlag) {
             financialSecUserPermissionScopeResponse.setAllFinancialPeriodFlag(allFinancialPeriodFlag);
             return this;
         }
