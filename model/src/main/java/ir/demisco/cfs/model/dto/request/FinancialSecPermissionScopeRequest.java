@@ -66,7 +66,6 @@ public class FinancialSecPermissionScopeRequest {
         this.disableDate = disableDate;
     }
 
-    @NotNull(message = "لطفا وضعیت فلگ دسترسی به همه انواع سند را مشخص کنید.")
     public Boolean getAllLedgerTypesFlag() {
         return allLedgerTypesFlag;
     }
@@ -75,7 +74,6 @@ public class FinancialSecPermissionScopeRequest {
         this.allLedgerTypesFlag = allLedgerTypesFlag;
     }
 
-    @NotNull(message = "لطفا وضعیت فلگ دسترسی به همه دوره های مالی  را مشخص کنید.")
     public Boolean getAllFncDepartmentFlag() {
         return allFncDepartmentFlag;
     }
@@ -92,7 +90,6 @@ public class FinancialSecPermissionScopeRequest {
         this.financialGroupId = financialGroupId;
     }
 
-    @NotNull(message = "لطفا شناسه سازمان را وارد کنید.")
     public Long getOrganizationId() {
         return organizationId;
     }
@@ -100,6 +97,7 @@ public class FinancialSecPermissionScopeRequest {
     public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
     }
+
 
     public static Builder builder() {
         return new Builder();
@@ -113,52 +111,52 @@ public class FinancialSecPermissionScopeRequest {
         }
 
 
-        public Builder withFinancialUserId(List<Long> financialUserId) {
+        public Builder financialUserId(List<Long> financialUserId) {
             financialSecPermissionScopeRequest.setFinancialUserId(financialUserId);
             return this;
         }
 
-        public Builder withFinancialLedgerTypeId(Long financialLedgerTypeId) {
+        public Builder financialLedgerTypeId(Long financialLedgerTypeId) {
             financialSecPermissionScopeRequest.setFinancialLedgerTypeId(financialLedgerTypeId);
             return this;
         }
 
-        public Builder withFinancialDepartmentId(Long financialDepartmentId) {
+        public Builder financialDepartmentId(Long financialDepartmentId) {
             financialSecPermissionScopeRequest.setFinancialDepartmentId(financialDepartmentId);
             return this;
         }
 
-        public Builder withDepartmentId(Long departmentId) {
+        public Builder departmentId(Long departmentId) {
             financialSecPermissionScopeRequest.setDepartmentId(departmentId);
             return this;
         }
 
-        public Builder withEffectiveDate(LocalDateTime effectiveDate) {
+        public Builder effectiveDate(LocalDateTime effectiveDate) {
             financialSecPermissionScopeRequest.setEffectiveDate(effectiveDate);
             return this;
         }
 
-        public Builder withDisableDate(LocalDateTime disableDate) {
+        public Builder disableDate(LocalDateTime disableDate) {
             financialSecPermissionScopeRequest.setDisableDate(disableDate);
             return this;
         }
 
-        public Builder withAllLedgerTypesFlag(Boolean allLedgerTypesFlag) {
+        public Builder allLedgerTypesFlag(Boolean allLedgerTypesFlag) {
             financialSecPermissionScopeRequest.setAllLedgerTypesFlag(allLedgerTypesFlag);
             return this;
         }
 
-        public Builder withAllFncDepartmentFlag(Boolean allFncDepartmentFlag) {
+        public Builder allFncDepartmentFlag(Boolean allFncDepartmentFlag) {
             financialSecPermissionScopeRequest.setAllFncDepartmentFlag(allFncDepartmentFlag);
             return this;
         }
 
-        public Builder withFinancialGroupId(List<Long> financialGroupId) {
+        public Builder financialGroupId(List<Long> financialGroupId) {
             financialSecPermissionScopeRequest.setFinancialGroupId(financialGroupId);
             return this;
         }
 
-        public Builder withOrganizationId(Long organizationId) {
+        public Builder organizationId(Long organizationId) {
             financialSecPermissionScopeRequest.setOrganizationId(organizationId);
             return this;
         }
@@ -167,4 +165,5 @@ public class FinancialSecPermissionScopeRequest {
             return financialSecPermissionScopeRequest;
         }
     }
+
 }

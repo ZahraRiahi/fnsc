@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -140,18 +139,15 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
                     .map(OrganizationResponse::getId).collect(Collectors.toList()));
 
         }
+        List<Long> applicationUserId = financialUserAlternativeRequest.getApplicationUserId();
         List<Long> organizationList = financialUserAlternativeRequest.getOrganizationId().stream().filter(o ->
                 !getFinancialUserAlternativeByOrganizationId(financialUserAlternativeRequest.getMainFinancialUserId(),
                         effectiveDate, o).isPresent()).collect(Collectors.toList());
 
-        List<Long> applicationUserId = financialUserAlternativeRequest.getApplicationUserId().stream()
-                .filter(item -> !item.equals(financialUserAlternativeRequest.getMainFinancialUserId())).collect(Collectors.toList());
-
-        if (organizationList.isEmpty() || applicationUserId.isEmpty()) {
-            throw new RuleException("برای این کاربر هیچ کاربر جایگزینی  ثبت نشد");
+        if (organizationList.isEmpty()) {
+            throw new RuleException("کاربر/کاربران جایگزین در بازه ی زمانی مورد نظر نمی توانند  به عنوان جایگزین کاربر اصلی درج شوند.");
         }
 
-        List<FinancialUserAlternative> financialUserAlternatives = new ArrayList<>();
         for (Long o : organizationList) {
             for (Long a : applicationUserId) {
                 FinancialUserAlternative userAlternative = FinancialUserAlternative.builder()
@@ -167,10 +163,10 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
                 if (countByFinancialUserAndOrganizationAndDisableDate > 0 || countByFinancialUserAndOrganizationAndEffectiveDate > 0) {
                     continue;
                 }
-                financialUserAlternatives.add(userAlternative);
+                financialUsersAlternativeRepository.save(userAlternative);
+
             }
         }
-        financialUsersAlternativeRepository.saveAll(financialUserAlternatives);
         return true;
     }
 }
