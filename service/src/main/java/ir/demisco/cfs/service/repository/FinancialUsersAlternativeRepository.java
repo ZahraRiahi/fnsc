@@ -127,7 +127,7 @@ public interface FinancialUsersAlternativeRepository extends JpaRepository<Finan
             "  FROM FinancialUserAlternative IN_AL " +
             " WHERE IN_AL.financialUser.id =  :mainFinancialUserId " +
             "   AND IN_AL.organization.id = :organizationId " +
-            "   AND (IN_AL.disableDate IS NULL OR " +
+            "   AND (IN_AL.disableDate is null or " +
             "       (trunc(IN_AL.effectiveDate) =  :effectiveDate OR " +
             "       trunc(IN_AL.disableDate) =  :effectiveDate) OR " +
             "       ( :effectiveDate BETWEEN trunc(IN_AL.effectiveDate)" +

@@ -87,8 +87,8 @@ public class DefaultUserPermission implements UserPermissionService {
             userPermission.setFinancialPeriodId(e.getFinancialPeriodId() == 0L ? null : financialPeriodRepository.getOne(e.getFinancialPeriodId()));
             userPermission.setEffectiveDate(e.getEffectiveDate());
             userPermission.setDisableDate(e.getDisableDate() == null ? null : e.getDisableDate());
-            userPermission.setAllDocumentTypeFlag(e.getAllDocumentTypeFlag() == true ? 1L : 0L);
-            userPermission.setAllFinancialPeriodFlag(e.getAllFinancialPeriodFlag() == true ? 1L : 0L);
+            userPermission.setAllDocumentTypeFlag(e.getAllDocumentTypeFlag() == true ? true : false);
+            userPermission.setAllFinancialPeriodFlag(e.getAllFinancialPeriodFlag() == true ? true : false);
             userPermissionRepository.save(userPermission);
         });
         return true;
@@ -110,9 +110,11 @@ public class DefaultUserPermission implements UserPermissionService {
     }
 
     @Override
-    public Long findUserPermissionByAllDocumentTypeFlagAndDisableDate(Long findUserPermissionByAllDocumentTypeFlagAndDisableDate, Long userPermissionScopeId, Long financialUserIdCreator, Long financialActivityTypeId, Long financialDocumentTypeId, Long financialPeriodId, LocalDateTime disableDate, Boolean allDocumentTypeFlag, Boolean allFinancialPeriodFlag) {
+    public Long getUserPermissionByAllDocumentTypeFlagAndDisableDate(Long userPermissionScopeId, Long financialUserIdCreator, Long financialActivityTypeId, Long financialDocumentTypeId, Long financialPeriodId, LocalDateTime disableDate, Boolean allDocumentTypeFlag, Boolean allFinancialPeriodFlag) {
         return userPermissionRepository.findUserPermissionByAllDocumentTypeFlagAndDisableDate(userPermissionScopeId,
                 financialUserIdCreator, financialActivityTypeId, financialDocumentTypeId, financialPeriodId,
                 disableDate, allDocumentTypeFlag, allFinancialPeriodFlag);
     }
+
+
 }

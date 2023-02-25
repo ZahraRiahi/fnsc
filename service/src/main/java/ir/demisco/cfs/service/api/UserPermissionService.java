@@ -19,14 +19,13 @@ public interface UserPermissionService {
                                                                 LocalDateTime effectiveDate,
                                                                 Boolean allDocumentTypeFlag,
                                                                 Boolean allFinancialPeriodFlag);
-
-    Long findUserPermissionByAllDocumentTypeFlagAndDisableDate(Long findUserPermissionByAllDocumentTypeFlagAndDisableDate,
-                                                               Long userPermissionScopeId,
-                                                               Long financialUserIdCreator,
-                                                               Long financialActivityTypeId,
-                                                               Long financialDocumentTypeId,
-                                                               Long financialPeriodId,
-                                                               LocalDateTime disableDate,
-                                                               Boolean allDocumentTypeFlag,
-                                                               Boolean allFinancialPeriodFlag);
+    Long getUserPermissionByAllDocumentTypeFlagAndDisableDate(
+            Long userPermissionScopeId,
+            Long financialUserIdCreator,
+            Long financialActivityTypeId,
+            Long financialDocumentTypeId,
+            Long financialPeriodId,
+            LocalDateTime disableDate,
+            Boolean allDocumentTypeFlag,
+            Boolean allFinancialPeriodFlag);
 }

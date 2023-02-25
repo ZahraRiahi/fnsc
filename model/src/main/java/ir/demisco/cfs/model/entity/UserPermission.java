@@ -24,8 +24,8 @@ public class UserPermission extends AuditModel<Long> {
     private FinancialPeriod financialPeriodId;
     private LocalDateTime effectiveDate;
     private LocalDateTime disableDate;
-    private Long allDocumentTypeFlag;
-    private Long allFinancialPeriodFlag;
+    private Boolean allDocumentTypeFlag;
+    private Boolean allFinancialPeriodFlag;
 
     @Override
     @Id
@@ -104,20 +104,82 @@ public class UserPermission extends AuditModel<Long> {
     }
 
     @Column(name = "ALL_DOCUMENT_TYPE_FLAG")
-    public Long getAllDocumentTypeFlag() {
+    public Boolean getAllDocumentTypeFlag() {
         return allDocumentTypeFlag;
     }
 
-    public void setAllDocumentTypeFlag(Long allDocumentTypeFlag) {
+    public void setAllDocumentTypeFlag(Boolean allDocumentTypeFlag) {
         this.allDocumentTypeFlag = allDocumentTypeFlag;
     }
 
     @Column(name = "ALL_FINANCIAL_PRIOD_FLAG")
-    public Long getAllFinancialPeriodFlag() {
+    public Boolean getAllFinancialPeriodFlag() {
         return allFinancialPeriodFlag;
     }
 
-    public void setAllFinancialPeriodFlag(Long allFinancialPeriodFlag) {
+    public void setAllFinancialPeriodFlag(Boolean allFinancialPeriodFlag) {
         this.allFinancialPeriodFlag = allFinancialPeriodFlag;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private UserPermission userPermission;
+
+        private Builder() {
+            userPermission = new UserPermission();
+        }
+
+
+        public Builder userPermissionScopeId(UserPermissionScope userPermissionScopeId) {
+            userPermission.setUserPermissionScopeId(userPermissionScopeId);
+            return this;
+        }
+
+        public Builder financialUserIdCreator(FinancialUser financialUserIdCreator) {
+            userPermission.setFinancialUserIdCreator(financialUserIdCreator);
+            return this;
+        }
+
+        public Builder financialTypeActivityId(FinancialActivityType financialTypeActivityId) {
+            userPermission.setFinancialTypeActivityId(financialTypeActivityId);
+            return this;
+        }
+
+        public Builder financialDocumentTypeId(FinancialDocumentType financialDocumentTypeId) {
+            userPermission.setFinancialDocumentTypeId(financialDocumentTypeId);
+            return this;
+        }
+
+        public Builder financialPeriodId(FinancialPeriod financialPeriodId) {
+            userPermission.setFinancialPeriodId(financialPeriodId);
+            return this;
+        }
+
+        public Builder effectiveDate(LocalDateTime effectiveDate) {
+            userPermission.setEffectiveDate(effectiveDate);
+            return this;
+        }
+
+        public Builder disableDate(LocalDateTime disableDate) {
+            userPermission.setDisableDate(disableDate);
+            return this;
+        }
+
+        public Builder allDocumentTypeFlag(Boolean allDocumentTypeFlag) {
+            userPermission.setAllDocumentTypeFlag(allDocumentTypeFlag);
+            return this;
+        }
+
+        public Builder allFinancialPeriodFlag(Boolean allFinancialPeriodFlag) {
+            userPermission.setAllFinancialPeriodFlag(allFinancialPeriodFlag);
+            return this;
+        }
+
+        public UserPermission build() {
+            return userPermission;
+        }
     }
 }
