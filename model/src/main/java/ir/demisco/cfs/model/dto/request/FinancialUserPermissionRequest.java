@@ -11,10 +11,10 @@ public class FinancialUserPermissionRequest {
     private Long financialPeriodId;
     private LocalDateTime effectiveDate;
     private LocalDateTime disableDate;
-    private Long allDocumentTypeFlag;
-    private Long allFinancialPeriodFlag;
+    private Boolean allDocumentTypeFlag;
+    private Boolean allFinancialPeriodFlag;
 
-    @NotNull(message = "لطفا شناسه محدوده دسترسی کاربر راوارد کنید.")
+
     public Long getUserPermissionScopeId() {
         return userPermissionScopeId;
     }
@@ -73,21 +73,19 @@ public class FinancialUserPermissionRequest {
         this.disableDate = disableDate;
     }
 
-    @NotNull(message = "لطفا وضعیت فلگ دسترسی به همه انواع سند را مشخص کنید.")
-    public Long getAllDocumentTypeFlag() {
+    public Boolean getAllDocumentTypeFlag() {
         return allDocumentTypeFlag;
     }
 
-    public void setAllDocumentTypeFlag(Long allDocumentTypeFlag) {
+    public void setAllDocumentTypeFlag(Boolean allDocumentTypeFlag) {
         this.allDocumentTypeFlag = allDocumentTypeFlag;
     }
 
-    @NotNull(message = "لطفا وضعیت فلگ دسترسی به همه دوره های مالی را مشخص کنید.")
-    public Long getAllFinancialPeriodFlag() {
+    public Boolean getAllFinancialPeriodFlag() {
         return allFinancialPeriodFlag;
     }
 
-    public void setAllFinancialPeriodFlag(Long allFinancialPeriodFlag) {
+    public void setAllFinancialPeriodFlag(Boolean allFinancialPeriodFlag) {
         this.allFinancialPeriodFlag = allFinancialPeriodFlag;
     }
 
@@ -103,47 +101,47 @@ public class FinancialUserPermissionRequest {
         }
 
 
-        public Builder withUserPermissionScopeId(Long userPermissionScopeId) {
+        public Builder userPermissionScopeId(Long userPermissionScopeId) {
             financialUserPermissionRequest.setUserPermissionScopeId(userPermissionScopeId);
             return this;
         }
 
-        public Builder withFinancialUserIdCreator(Long financialUserIdCreator) {
+        public Builder financialUserIdCreator(Long financialUserIdCreator) {
             financialUserPermissionRequest.setFinancialUserIdCreator(financialUserIdCreator);
             return this;
         }
 
-        public Builder withFinancialTypeActivityId(Long financialTypeActivityId) {
+        public Builder financialTypeActivityId(Long financialTypeActivityId) {
             financialUserPermissionRequest.setFinancialTypeActivityId(financialTypeActivityId);
             return this;
         }
 
-        public Builder withFinancialDocumentTypeId(Long financialDocumentTypeId) {
+        public Builder financialDocumentTypeId(Long financialDocumentTypeId) {
             financialUserPermissionRequest.setFinancialDocumentTypeId(financialDocumentTypeId);
             return this;
         }
 
-        public Builder withFinancialPeriodId(Long financialPeriodId) {
+        public Builder financialPeriodId(Long financialPeriodId) {
             financialUserPermissionRequest.setFinancialPeriodId(financialPeriodId);
             return this;
         }
 
-        public Builder withEffectiveDate(LocalDateTime effectiveDate) {
+        public Builder effectiveDate(LocalDateTime effectiveDate) {
             financialUserPermissionRequest.setEffectiveDate(effectiveDate);
             return this;
         }
 
-        public Builder withDisableDate(LocalDateTime disableDate) {
+        public Builder disableDate(LocalDateTime disableDate) {
             financialUserPermissionRequest.setDisableDate(disableDate);
             return this;
         }
 
-        public Builder withAllDocumentTypeFlag(Long allDocumentTypeFlag) {
+        public Builder allDocumentTypeFlag(Boolean allDocumentTypeFlag) {
             financialUserPermissionRequest.setAllDocumentTypeFlag(allDocumentTypeFlag);
             return this;
         }
 
-        public Builder withAllFinancialPeriodFlag(Long allFinancialPeriodFlag) {
+        public Builder allFinancialPeriodFlag(Boolean allFinancialPeriodFlag) {
             financialUserPermissionRequest.setAllFinancialPeriodFlag(allFinancialPeriodFlag);
             return this;
         }

@@ -120,4 +120,66 @@ public class UserPermission extends AuditModel<Long> {
     public void setAllFinancialPeriodFlag(Boolean allFinancialPeriodFlag) {
         this.allFinancialPeriodFlag = allFinancialPeriodFlag;
     }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private UserPermission userPermission;
+
+        private Builder() {
+            userPermission = new UserPermission();
+        }
+
+
+        public Builder userPermissionScopeId(UserPermissionScope userPermissionScopeId) {
+            userPermission.setUserPermissionScopeId(userPermissionScopeId);
+            return this;
+        }
+
+        public Builder financialUserIdCreator(FinancialUser financialUserIdCreator) {
+            userPermission.setFinancialUserIdCreator(financialUserIdCreator);
+            return this;
+        }
+
+        public Builder financialTypeActivityId(FinancialActivityType financialTypeActivityId) {
+            userPermission.setFinancialTypeActivityId(financialTypeActivityId);
+            return this;
+        }
+
+        public Builder financialDocumentTypeId(FinancialDocumentType financialDocumentTypeId) {
+            userPermission.setFinancialDocumentTypeId(financialDocumentTypeId);
+            return this;
+        }
+
+        public Builder financialPeriodId(FinancialPeriod financialPeriodId) {
+            userPermission.setFinancialPeriodId(financialPeriodId);
+            return this;
+        }
+
+        public Builder effectiveDate(LocalDateTime effectiveDate) {
+            userPermission.setEffectiveDate(effectiveDate);
+            return this;
+        }
+
+        public Builder disableDate(LocalDateTime disableDate) {
+            userPermission.setDisableDate(disableDate);
+            return this;
+        }
+
+        public Builder allDocumentTypeFlag(Boolean allDocumentTypeFlag) {
+            userPermission.setAllDocumentTypeFlag(allDocumentTypeFlag);
+            return this;
+        }
+
+        public Builder allFinancialPeriodFlag(Boolean allFinancialPeriodFlag) {
+            userPermission.setAllFinancialPeriodFlag(allFinancialPeriodFlag);
+            return this;
+        }
+
+        public UserPermission build() {
+            return userPermission;
+        }
+    }
 }

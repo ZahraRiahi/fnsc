@@ -3,6 +3,7 @@ package ir.demisco.cfs.app.web.controller;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
 import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
+import ir.demisco.cfs.model.dto.request.SaveCompletePermissionRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
 import ir.demisco.cfs.service.impl.UserPermissionGridProvider;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -50,5 +52,10 @@ public class FinancialSecPermissionScopeController {
     @PostMapping("/get")
     public ResponseEntity<DataSourceResult> getUserPermission(@RequestBody DataSourceRequest dataSourceRequest) {
         return ResponseEntity.ok(gridFilterService.filter(dataSourceRequest, userPermissionGridProvider));
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<Boolean> saveFinancialSecPermissionScope(@Valid @RequestBody SaveCompletePermissionRequest saveCompletePermissionRequest) {
+        return ResponseEntity.ok(financialSecPermissionScopeService.saveFinancialSecPermissionScope(saveCompletePermissionRequest));
     }
 }

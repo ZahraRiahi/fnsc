@@ -110,9 +110,11 @@ public class DefaultUserPermission implements UserPermissionService {
     }
 
     @Override
-    public Long findUserPermissionByAllDocumentTypeFlagAndDisableDate(Long findUserPermissionByAllDocumentTypeFlagAndDisableDate, Long userPermissionScopeId, Long financialUserIdCreator, Long financialActivityTypeId, Long financialDocumentTypeId, Long financialPeriodId, LocalDateTime disableDate, Boolean allDocumentTypeFlag, Boolean allFinancialPeriodFlag) {
+    public Long getUserPermissionByAllDocumentTypeFlagAndDisableDate(Long userPermissionScopeId, Long financialUserIdCreator, Long financialActivityTypeId, Long financialDocumentTypeId, Long financialPeriodId, LocalDateTime disableDate, Boolean allDocumentTypeFlag, Boolean allFinancialPeriodFlag) {
         return userPermissionRepository.findUserPermissionByAllDocumentTypeFlagAndDisableDate(userPermissionScopeId,
                 financialUserIdCreator, financialActivityTypeId, financialDocumentTypeId, financialPeriodId,
                 disableDate, allDocumentTypeFlag, allFinancialPeriodFlag);
     }
+
+
 }
