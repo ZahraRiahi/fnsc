@@ -115,15 +115,15 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
             if (!permissionScopeRequest.getFinancialUserId().isEmpty()) {
                 checkNotEmptyFinancialUser(saveCompletePermissionRequest, organizationId, permissionScopeRequest);
 
-            } else if (!permissionScopeRequest.getFinancialGroupId().isEmpty()) {
-                checkNotEmptyFinacialGroup(saveCompletePermissionRequest, organizationId, permissionScopeRequest);
+            } else {
+                checkNotEmptyFinancialGroup(saveCompletePermissionRequest, organizationId, permissionScopeRequest);
             }
 
         }
         return true;
     }
 
-    private void checkNotEmptyFinacialGroup(SaveCompletePermissionRequest saveCompletePermissionRequest, Long organizationId, FinancialSecPermissionScopeRequest permissionScopeRequest) {
+    private void checkNotEmptyFinancialGroup(SaveCompletePermissionRequest saveCompletePermissionRequest, Long organizationId, FinancialSecPermissionScopeRequest permissionScopeRequest) {
         for (Long financialGroupId : permissionScopeRequest.getFinancialGroupId()) {
             UserPermissionScope userPermissionScope = UserPermissionScope.builder()
                     .financialLedgerType(permissionScopeRequest.getFinancialLedgerTypeId() != null ?
