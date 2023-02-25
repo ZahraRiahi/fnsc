@@ -24,8 +24,8 @@ public class UserPermission extends AuditModel<Long> {
     private FinancialPeriod financialPeriodId;
     private LocalDateTime effectiveDate;
     private LocalDateTime disableDate;
-    private Long allDocumentTypeFlag;
-    private Long allFinancialPeriodFlag;
+    private Boolean allDocumentTypeFlag;
+    private Boolean allFinancialPeriodFlag;
 
     @Override
     @Id
@@ -104,20 +104,20 @@ public class UserPermission extends AuditModel<Long> {
     }
 
     @Column(name = "ALL_DOCUMENT_TYPE_FLAG")
-    public Long getAllDocumentTypeFlag() {
+    public Boolean getAllDocumentTypeFlag() {
         return allDocumentTypeFlag;
     }
 
-    public void setAllDocumentTypeFlag(Long allDocumentTypeFlag) {
+    public void setAllDocumentTypeFlag(Boolean allDocumentTypeFlag) {
         this.allDocumentTypeFlag = allDocumentTypeFlag;
     }
 
     @Column(name = "ALL_FINANCIAL_PRIOD_FLAG")
-    public Long getAllFinancialPeriodFlag() {
+    public Boolean getAllFinancialPeriodFlag() {
         return allFinancialPeriodFlag;
     }
 
-    public void setAllFinancialPeriodFlag(Long allFinancialPeriodFlag) {
+    public void setAllFinancialPeriodFlag(Boolean allFinancialPeriodFlag) {
         this.allFinancialPeriodFlag = allFinancialPeriodFlag;
     }
 }
