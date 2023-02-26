@@ -65,5 +65,4 @@ public class FinancialGroupGridProvider implements GridDataProvider {
                     .build();
         }).collect(Collectors.toList());
     }
-
 }
