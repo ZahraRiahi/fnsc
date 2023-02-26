@@ -14,14 +14,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "FINANCIAL_USER_GROUP", schema = "fnsc")
 public class FinancialUserGroup extends AuditModel<Long> {
     private FinancialGroup financialGroupId;
     private FinancialUser financialUserId;
-    private Date effectiveDate;
+    private LocalDateTime effectiveDate;
     private LocalDateTime disableDate;
     private Organization organizationId;
 
@@ -54,11 +53,11 @@ public class FinancialUserGroup extends AuditModel<Long> {
     }
 
     @Column(name = "EFFECTIVE_DATE")
-    public Date getEffectiveDate() {
+    public LocalDateTime getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(Date effectiveDate) {
+    public void setEffectiveDate(LocalDateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
 
@@ -79,5 +78,47 @@ public class FinancialUserGroup extends AuditModel<Long> {
 
     public void setOrganizationId(Organization organizationId) {
         this.organizationId = organizationId;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private FinancialUserGroup financialUserGroup;
+
+        private Builder() {
+            financialUserGroup = new FinancialUserGroup();
+        }
+
+
+        public Builder financialGroupId(FinancialGroup financialGroupId) {
+            financialUserGroup.setFinancialGroupId(financialGroupId);
+            return this;
+        }
+
+        public Builder financialUserId(FinancialUser financialUserId) {
+            financialUserGroup.setFinancialUserId(financialUserId);
+            return this;
+        }
+
+        public Builder effectiveDate(LocalDateTime effectiveDate) {
+            financialUserGroup.setEffectiveDate(effectiveDate);
+            return this;
+        }
+
+        public Builder disableDate(LocalDateTime disableDate) {
+            financialUserGroup.setDisableDate(disableDate);
+            return this;
+        }
+
+        public Builder organizationId(Organization organizationId) {
+            financialUserGroup.setOrganizationId(organizationId);
+            return this;
+        }
+
+        public FinancialUserGroup build() {
+            return financialUserGroup;
+        }
     }
 }
