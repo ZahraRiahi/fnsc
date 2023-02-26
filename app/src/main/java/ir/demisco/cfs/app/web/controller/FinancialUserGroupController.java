@@ -2,6 +2,7 @@ package ir.demisco.cfs.app.web.controller;
 
 import ir.demisco.cfs.model.dto.request.FinancialUserGroupInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserGroupInputRequest;
+import ir.demisco.cfs.model.dto.request.FinancialUserGroupRequest;
 import ir.demisco.cfs.model.dto.response.FinancialUserGroupOutputModelResponse;
 import ir.demisco.cfs.service.api.FinancialUserGroupService;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,5 +31,10 @@ public class FinancialUserGroupController {
     @PostMapping("/get")
     public ResponseEntity<List<FinancialUserGroupOutputModelResponse>> responseEntityFinancialUserGroup(@RequestBody FinancialUserGroupInputModelRequest financialUserGroupInputModelRequest) {
         return ResponseEntity.ok(financialUserGroupService.getFinancialUserGroup(financialUserGroupInputModelRequest));
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<Boolean> saveFinancialUserGroup(@Valid @RequestBody FinancialUserGroupRequest financialUserGroupRequest) {
+        return ResponseEntity.ok(financialUserGroupService.saveFinancialUserGroup(financialUserGroupRequest));
     }
 }
