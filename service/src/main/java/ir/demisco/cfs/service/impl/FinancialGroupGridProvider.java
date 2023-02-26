@@ -51,7 +51,6 @@ public class FinancialGroupGridProvider implements GridDataProvider {
         );
 
     }
-
     @Override
     public List<Object> mapToDto(List<Object> resultList) {
         return resultList.stream().map((Object object) -> {
