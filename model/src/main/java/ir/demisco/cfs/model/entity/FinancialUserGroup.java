@@ -21,7 +21,7 @@ import java.util.Date;
 public class FinancialUserGroup extends AuditModel<Long> {
     private FinancialGroup financialGroupId;
     private FinancialUser financialUserId;
-    private Date effectiveDate;
+    private LocalDateTime effectiveDate;
     private LocalDateTime disableDate;
     private Organization organizationId;
 
@@ -54,11 +54,11 @@ public class FinancialUserGroup extends AuditModel<Long> {
     }
 
     @Column(name = "EFFECTIVE_DATE")
-    public Date getEffectiveDate() {
+    public LocalDateTime getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(Date effectiveDate) {
+    public void setEffectiveDate(LocalDateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
 
