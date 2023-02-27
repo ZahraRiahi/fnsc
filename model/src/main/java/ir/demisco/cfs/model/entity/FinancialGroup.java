@@ -24,7 +24,7 @@ public class FinancialGroup extends AuditModel<Long> {
 
     @Override
     @Id
-    @SequenceGenerator(schema = "fnsc", name = "financial_group_generator", sequenceName = "Sq_Financial_group")
+    @SequenceGenerator(schema = "fnsc", name = "financial_group_generator", sequenceName = "sq_financial_groups")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "financial_group_generator")
     public Long getId() {
         return super.getId();
@@ -66,5 +66,42 @@ public class FinancialGroup extends AuditModel<Long> {
 
     public void setParentFinancialGroup(FinancialGroup parentFinancialGroup) {
         this.parentFinancialGroup = parentFinancialGroup;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private FinancialGroup financialGroup;
+
+        private Builder() {
+            financialGroup = new FinancialGroup();
+        }
+
+
+        public Builder code(String code) {
+            financialGroup.setCode(code);
+            return this;
+        }
+
+        public Builder description(String description) {
+            financialGroup.setDescription(description);
+            return this;
+        }
+
+        public Builder organization(Organization organization) {
+            financialGroup.setOrganization(organization);
+            return this;
+        }
+
+        public Builder parentFinancialGroup(FinancialGroup parentFinancialGroup) {
+            financialGroup.setParentFinancialGroup(parentFinancialGroup);
+            return this;
+        }
+
+        public FinancialGroup build() {
+            return financialGroup;
+        }
     }
 }
