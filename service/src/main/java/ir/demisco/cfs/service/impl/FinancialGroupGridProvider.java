@@ -3,17 +3,15 @@ package ir.demisco.cfs.service.impl;
 import ir.demisco.cfs.model.dto.response.FinancialGroupResponse;
 import ir.demisco.cfs.model.entity.FinancialGroup;
 import ir.demisco.cloud.core.middle.service.business.api.core.GridDataProvider;
-import ir.demisco.cloud.core.model.security.JwtSecurityPayloadKeys;
-import ir.demisco.cloud.core.security.util.SecurityHelper;
 import ir.demisco.core.utils.CommonUtils;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
-
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,13 +25,10 @@ public class FinancialGroupGridProvider implements GridDataProvider {
 
     @Override
     public Predicate getCustomRestriction(FilterContext filterContext) {
-        CriteriaBuilder criteriaBuilder = filterContext.getCriteriaBuilder();
         Root<Object> root = filterContext.getRoot();
         Join<Object, Object> organization = root.join("organization");
         filterContext.getJoins().putAll(CommonUtils.keyValueMap("organization", organization));
-        Predicate organizationId = criteriaBuilder.equal(organization.get("id"),
-                (Long) SecurityHelper.getCurrentUser().getAdditionalInformation().get(JwtSecurityPayloadKeys.ORGANIZATION_USER_ID.getValue()));
-        return criteriaBuilder.and(organizationId);
+        return GridDataProvider.super.getCustomRestriction(filterContext);
     }
 
     @Override
@@ -51,6 +46,7 @@ public class FinancialGroupGridProvider implements GridDataProvider {
         );
 
     }
+
     @Override
     public List<Object> mapToDto(List<Object> resultList) {
         return resultList.stream().map((Object object) -> {
@@ -63,5 +59,12 @@ public class FinancialGroupGridProvider implements GridDataProvider {
                     .organizationName((String) array[4])
                     .build();
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, String> getFullPaths() {
+        Map<String, String> fullPaths = new HashMap<>();
+        fullPaths.put("organizationId", "organization.id");
+        return fullPaths;
     }
 }
