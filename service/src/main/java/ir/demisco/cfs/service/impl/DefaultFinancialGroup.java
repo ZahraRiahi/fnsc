@@ -9,6 +9,7 @@ import ir.demisco.cfs.service.repository.FinancialGroupRepository;
 import ir.demisco.cfs.service.repository.FinancialUserGroupRepository;
 import ir.demisco.cloud.basic.model.entity.org.Organization;
 import ir.demisco.cloud.basic.service.api.DaoService;
+import ir.demisco.cloud.core.middle.exception.RuleException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -31,6 +32,9 @@ public class DefaultFinancialGroup implements FinancialGroupService {
     @Transactional(rollbackOn = Throwable.class)
     public Boolean deleteFinancialGroup(FinancialGroupInputModelRequest financialGroupInputModelRequest) {
         List<FinancialUserGroup> financialUserGroupList = financialUserGroupRepository.findByFinancialGroupId(financialGroupInputModelRequest.getGroupId());
+        if(!financialUserGroupList.isEmpty()){
+            throw new RuleException("امکان حذف این گروه/گروهها وجود ندارد");
+        }
         financialUserGroupList.forEach(along1 -> financialUserGroupRepository.deleteById(along1.getFinancialGroupId().getId()));
         financialGroupInputModelRequest.getGroupId().forEach(aLong -> financialGroupRepository.deleteById(aLong));
         return true;
