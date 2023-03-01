@@ -6,10 +6,6 @@ import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.SaveCompletePermissionRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
-import ir.demisco.cfs.service.impl.UserPermissionGridProvider;
-import ir.demisco.cloud.core.middle.model.dto.DataSourceRequest;
-import ir.demisco.cloud.core.middle.model.dto.DataSourceResult;
-import ir.demisco.cloud.core.middle.service.business.api.core.GridFilterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,15 +19,10 @@ import java.util.List;
 @RequestMapping("/api-financialSecPermissionScope")
 public class FinancialSecPermissionScopeController {
     private final FinancialSecPermissionScopeService financialSecPermissionScopeService;
-    private final GridFilterService gridFilterService;
-    private final UserPermissionGridProvider userPermissionGridProvider;
 
-    public FinancialSecPermissionScopeController(FinancialSecPermissionScopeService financialSecPermissionScopeService,
-                                                 GridFilterService gridFilterService,
-                                                 UserPermissionGridProvider userPermissionGridProvider) {
+
+    public FinancialSecPermissionScopeController(FinancialSecPermissionScopeService financialSecPermissionScopeService) {
         this.financialSecPermissionScopeService = financialSecPermissionScopeService;
-        this.gridFilterService = gridFilterService;
-        this.userPermissionGridProvider = userPermissionGridProvider;
     }
 
     @PostMapping("/Get")
@@ -49,10 +40,6 @@ public class FinancialSecPermissionScopeController {
         return ResponseEntity.ok(financialSecPermissionScopeService.setDisableDate(permissionScopeInputModelRequest));
     }
 
-    @PostMapping("/get")
-    public ResponseEntity<DataSourceResult> getUserPermission(@RequestBody DataSourceRequest dataSourceRequest) {
-        return ResponseEntity.ok(gridFilterService.filter(dataSourceRequest, userPermissionGridProvider));
-    }
 
     @PostMapping("/save")
     public ResponseEntity<Boolean> saveFinancialSecPermissionScope(@Valid @RequestBody SaveCompletePermissionRequest saveCompletePermissionRequest) {
