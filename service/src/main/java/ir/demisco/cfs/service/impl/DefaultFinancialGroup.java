@@ -9,8 +9,6 @@ import ir.demisco.cfs.service.repository.FinancialGroupRepository;
 import ir.demisco.cfs.service.repository.FinancialUserGroupRepository;
 import ir.demisco.cloud.basic.model.entity.org.Organization;
 import ir.demisco.cloud.basic.service.api.DaoService;
-import ir.demisco.cloud.core.model.security.JwtSecurityPayloadKeys;
-import ir.demisco.cloud.core.security.util.SecurityHelper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -41,16 +39,15 @@ public class DefaultFinancialGroup implements FinancialGroupService {
 
     @Override
     public Boolean saveFinancialGroup(List<FinancialGroupRequest> financialGroupRequestList) {
-        Long organizationId = (Long) SecurityHelper.getCurrentUser().getAdditionalInformation().get(JwtSecurityPayloadKeys.ORGANIZATION_USER_ID.getValue());
         for (FinancialGroupRequest groupRequest : financialGroupRequestList) {
             if (groupRequest.getFinancialGroupId() == null) {
                 FinancialGroup financialGroup = FinancialGroup.builder()
                         .code(groupRequest.getFinancialGroupCode())
                         .description(groupRequest.getFinancialGroupDescription())
-                        .organization(daoService.findById(Organization.class, organizationId))
+                        .organization(groupRequest.getOrganizationId() != null ? daoService.findById(Organization.class, groupRequest.getOrganizationId()) : null)
                         .build();
-                Long countByFinancialGroupByCode = getFinancialGroupByCode(organizationId, groupRequest.getFinancialGroupCode());
-                Long countByFinancialGroupByDescription = getFinancialGroupByDescription(organizationId, groupRequest.getFinancialGroupDescription());
+                Long countByFinancialGroupByCode = getFinancialGroupByCode(groupRequest.getOrganizationId() != null ? groupRequest.getOrganizationId() : null, groupRequest.getFinancialGroupCode());
+                Long countByFinancialGroupByDescription = getFinancialGroupByDescription(groupRequest.getOrganizationId() != null ? groupRequest.getOrganizationId() : null, groupRequest.getFinancialGroupDescription());
                 if (countByFinancialGroupByCode > 0 || countByFinancialGroupByDescription > 0) {
                     continue;
                 }
@@ -74,17 +71,16 @@ public class DefaultFinancialGroup implements FinancialGroupService {
     }
 
     private Boolean updateFinancialGroup(List<FinancialGroupRequest> financialGroupRequestList) {
-         for (FinancialGroupRequest groupRequest : financialGroupRequestList) {
-            Long organizationId = (Long) SecurityHelper.getCurrentUser().getAdditionalInformation().get(JwtSecurityPayloadKeys.ORGANIZATION_USER_ID.getValue());
+        for (FinancialGroupRequest groupRequest : financialGroupRequestList) {
             FinancialGroup oldFinancialGroup = financialGroupRepository.getOne(groupRequest.getFinancialGroupId());
             oldFinancialGroup.setCode(groupRequest.getFinancialGroupCode());
             oldFinancialGroup.setDescription(groupRequest.getFinancialGroupDescription());
-            oldFinancialGroup.setOrganization(daoService.findById(Organization.class, organizationId));
-            Long countByFinancialGroupByCode = getFinancialGroupByCode(organizationId, groupRequest.getFinancialGroupCode());
-            Long countByFinancialGroupByDescription = getFinancialGroupByDescription(organizationId, groupRequest.getFinancialGroupDescription());
-             if (countByFinancialGroupByCode > 0 || countByFinancialGroupByDescription > 0) {
-                 continue;
-             }
+            oldFinancialGroup.setOrganization(groupRequest.getOrganizationId() != null ? daoService.findById(Organization.class, groupRequest.getOrganizationId()) : null);
+            Long countByFinancialGroupByCode = getFinancialGroupByCode(groupRequest.getOrganizationId() != null ? groupRequest.getOrganizationId() : null, groupRequest.getFinancialGroupCode());
+            Long countByFinancialGroupByDescription = getFinancialGroupByDescription(groupRequest.getOrganizationId() != null ? groupRequest.getOrganizationId() : null, groupRequest.getFinancialGroupDescription());
+            if (countByFinancialGroupByCode > 0 || countByFinancialGroupByDescription > 0) {
+                continue;
+            }
             financialGroupRepository.save(oldFinancialGroup);
         }
         return true;
