@@ -32,7 +32,7 @@ public class FinancialSecurityUserController {
     }
 
 
-    @PostMapping("/getApplicationUsers")
+    @PostMapping("/GetApplicationUsers")
     public ResponseEntity<DataSourceResult> getApplicationUsers(@RequestBody DataSourceRequest dataSourceRequest) {
         return ResponseEntity.ok(gridFilterService.filter(dataSourceRequest, applicationUsersGridProvider));
 
