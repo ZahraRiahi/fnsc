@@ -1,6 +1,6 @@
 package ir.demisco.cfs.model.dto.response;
 
-public class ApplicationUsersOutputResponse {
+public class ApplicationUsersResponse {
     private Long applicationUserId;
     private String userName;
     private String nickName;
@@ -29,38 +29,35 @@ public class ApplicationUsersOutputResponse {
         this.nickName = nickName;
     }
 
-    public static ApplicationUsersOutputResponse.Builder builder() {
-        return new ApplicationUsersOutputResponse.Builder();
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static final class Builder {
-        private ApplicationUsersOutputResponse applicationUsersOutputResponse;
+        private ApplicationUsersResponse applicationUsersResponse;
 
         private Builder() {
-            applicationUsersOutputResponse = new ApplicationUsersOutputResponse();
+            applicationUsersResponse = new ApplicationUsersResponse();
         }
 
-        public static Builder applicationUsersOutputResponse() {
-            return new Builder();
-        }
 
         public Builder applicationUserId(Long applicationUserId) {
-            applicationUsersOutputResponse.setApplicationUserId(applicationUserId);
+            applicationUsersResponse.setApplicationUserId(applicationUserId);
             return this;
         }
 
         public Builder userName(String userName) {
-            applicationUsersOutputResponse.setUserName(userName);
+            applicationUsersResponse.setUserName(userName);
             return this;
         }
 
         public Builder nickName(String nickName) {
-            applicationUsersOutputResponse.setNickName(nickName);
+            applicationUsersResponse.setNickName(nickName);
             return this;
         }
 
-        public ApplicationUsersOutputResponse build() {
-            return applicationUsersOutputResponse;
+        public ApplicationUsersResponse build() {
+            return applicationUsersResponse;
         }
     }
 }
