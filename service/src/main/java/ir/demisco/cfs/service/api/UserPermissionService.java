@@ -2,6 +2,7 @@ package ir.demisco.cfs.service.api;
 
 import ir.demisco.cfs.model.dto.request.FinancialSecUserPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserPermissionInputModelRequest;
+import ir.demisco.cfs.model.dto.request.UserPermissionRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +20,7 @@ public interface UserPermissionService {
                                                                 LocalDateTime effectiveDate,
                                                                 Boolean allDocumentTypeFlag,
                                                                 Boolean allFinancialPeriodFlag);
+
     Long getUserPermissionByAllDocumentTypeFlagAndDisableDate(
             Long userPermissionScopeId,
             Long financialUserIdCreator,
@@ -28,4 +30,6 @@ public interface UserPermissionService {
             LocalDateTime disableDate,
             Boolean allDocumentTypeFlag,
             Boolean allFinancialPeriodFlag);
+
+    Boolean setUserPermissionDisableDate(List<UserPermissionRequest> userPermissionRequestList);
 }

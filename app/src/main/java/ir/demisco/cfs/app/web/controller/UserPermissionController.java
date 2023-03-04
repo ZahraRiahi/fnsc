@@ -2,6 +2,7 @@ package ir.demisco.cfs.app.web.controller;
 
 import ir.demisco.cfs.model.dto.request.FinancialSecUserPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserPermissionInputModelRequest;
+import ir.demisco.cfs.model.dto.request.UserPermissionRequest;
 import ir.demisco.cfs.service.api.UserPermissionService;
 import ir.demisco.cfs.service.impl.UserPermissionGridProvider;
 import ir.demisco.cloud.core.middle.model.dto.DataSourceRequest;
@@ -42,4 +43,10 @@ public class UserPermissionController {
     public ResponseEntity<DataSourceResult> getUserPermission(@RequestBody DataSourceRequest dataSourceRequest) {
         return ResponseEntity.ok(gridFilterService.filter(dataSourceRequest, userPermissionGridProvider));
     }
+
+    @PostMapping("/setDisableDate")
+    public ResponseEntity<Boolean> setUserPermissionDisableDate(@RequestBody List<UserPermissionRequest> userPermissionRequestList) {
+        return ResponseEntity.ok(userPermissionService.setUserPermissionDisableDate(userPermissionRequestList));
+    }
+
 }
