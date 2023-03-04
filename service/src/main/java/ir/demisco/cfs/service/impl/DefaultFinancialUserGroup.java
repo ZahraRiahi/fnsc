@@ -1,9 +1,7 @@
 package ir.demisco.cfs.service.impl;
 
-import ir.demisco.cfs.model.dto.request.FinancialUserGroupInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserGroupInputRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserGroupRequest;
-import ir.demisco.cfs.model.dto.response.FinancialUserGroupOutputModelResponse;
 import ir.demisco.cfs.model.entity.FinancialGroup;
 import ir.demisco.cfs.model.entity.FinancialUser;
 import ir.demisco.cfs.model.entity.FinancialUserGroup;
@@ -44,23 +42,11 @@ public class DefaultFinancialUserGroup implements FinancialUserGroupService {
             throw new RuleException("تاریخ پایان قبلا پر شده و یا با تاریخ شروع هماهنگی ندارد");
         }
         entityManager.createNativeQuery(" update FNSC.FINANCIAL_USER_GROUP T " +
-                        "   set   T.DISABLE_DATE = :disableDate " +
-                        "   WHERE T.ID = :financialUserGroupId ")
+                "   set   T.DISABLE_DATE = :disableDate " +
+                "   WHERE T.ID = :financialUserGroupId ")
                 .setParameter("disableDate", financialUserGroupInputRequest.getDisableDate())
                 .setParameter("financialUserGroupId", financialUserGroupInputRequest.getUserGroupId()).executeUpdate();
         return true;
-    }
-
-    @Override
-    @Transactional(rollbackFor = Throwable.class)
-    public List<FinancialUserGroupOutputModelResponse> getFinancialUserGroup(FinancialUserGroupInputModelRequest financialUserGroupInputModelRequest) {
-        List<Object[]> financialUserGroupList = financialUserGroupRepository.getFinancialUserGroupByOrganizationId(SecurityHelper.getCurrentUser().getOrganizationId()
-                , financialUserGroupInputModelRequest.getFinancialGroupId());
-        return financialUserGroupList.stream().map(objects -> FinancialUserGroupOutputModelResponse.builder().applicationUserId(objects[0] == null ? null : Long.parseLong(objects[0].toString()))
-                .financialUserId(objects[1] == null ? null : Long.parseLong(objects[1].toString()))
-                .userName(objects[2] == null ? null : (objects[2].toString()))
-                .nickName(objects[3] == null ? null : objects[3].toString())
-                .build()).collect(Collectors.toList());
     }
 
     @Override
