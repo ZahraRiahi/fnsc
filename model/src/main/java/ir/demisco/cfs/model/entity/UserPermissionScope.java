@@ -5,6 +5,8 @@ import ir.demisco.cloud.basic.model.entity.org.Department;
 import ir.demisco.cloud.basic.model.entity.org.Organization;
 
 
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,10 +14,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Entity
 @Table(name = "USER_PERMISSION_SCOPE", schema = "fnsc")
@@ -30,6 +32,8 @@ public class UserPermissionScope extends AuditModel<Long> {
     private Boolean allFncDepartmentFlag;
     private FinancialGroup financialGroup;
     private Organization organization;
+
+    private Collection<UserPermission> userPermissions;
 
     @Override
     @Id
@@ -133,6 +137,15 @@ public class UserPermissionScope extends AuditModel<Long> {
 
     public void setOrganization(Organization organization) {
         this.organization = organization;
+    }
+
+    @OneToMany(mappedBy = "userPermissionScopeId")
+    public Collection<UserPermission> getUserPermissions() {
+        return userPermissions;
+    }
+
+    public void setUserPermissions(Collection<UserPermission> userPermissions) {
+        this.userPermissions = userPermissions;
     }
 
     public static Builder builder() {

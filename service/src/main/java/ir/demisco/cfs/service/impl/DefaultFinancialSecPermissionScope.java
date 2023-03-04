@@ -1,23 +1,22 @@
 package ir.demisco.cfs.service.impl;
 
 
-
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputModelRequest;
+import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
+import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeRequest;
 import ir.demisco.cfs.model.dto.request.SaveCompletePermissionRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserPermissionRequest;
-import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeRequest;
-import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
-import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
+import ir.demisco.cfs.model.dto.request.UserPermissionScopeRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 import ir.demisco.cfs.model.entity.FinancialDepartment;
 import ir.demisco.cfs.model.entity.FinancialLedgerType;
-import ir.demisco.cfs.model.entity.FinancialUser;
 import ir.demisco.cfs.model.entity.UserPermissionScope;
-import ir.demisco.cfs.model.entity.FinancialDocumentType;
-import ir.demisco.cfs.model.entity.FinancialPeriod;
-import ir.demisco.cfs.model.entity.UserPermission;
 import ir.demisco.cfs.model.entity.FinancialGroup;
 import ir.demisco.cfs.model.entity.FinancialActivityType;
+import ir.demisco.cfs.model.entity.FinancialUser;
+import ir.demisco.cfs.model.entity.UserPermission;
+import ir.demisco.cfs.model.entity.FinancialPeriod;
+import ir.demisco.cfs.model.entity.FinancialDocumentType;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
 import ir.demisco.cfs.service.api.UserPermissionService;
 import ir.demisco.cfs.service.repository.UserPermissionRepository;
@@ -41,14 +40,13 @@ import java.util.stream.Collectors;
 @Service
 public class DefaultFinancialSecPermissionScope implements FinancialSecPermissionScopeService {
     private final UserPermissionScopeRepository userPermissionScopeRepository;
-    private final EntityManager entityManager;
     private final UserPermissionRepository userPermissionRepository;
     private final DaoService daoService;
     private final UserPermissionService userPermissionService;
 
-    public DefaultFinancialSecPermissionScope(UserPermissionScopeRepository userPermissionScopeRepository, EntityManager entityManager, UserPermissionRepository userPermissionRepository, DaoService daoService, UserPermissionService userPermissionService) {
+    public DefaultFinancialSecPermissionScope(UserPermissionScopeRepository userPermissionScopeRepository,
+                                              UserPermissionRepository userPermissionRepository, DaoService daoService, UserPermissionService userPermissionService) {
         this.userPermissionScopeRepository = userPermissionScopeRepository;
-        this.entityManager = entityManager;
         this.userPermissionRepository = userPermissionRepository;
 
         this.daoService = daoService;
@@ -90,12 +88,6 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         return true;
     }
 
-    @Override
-    @Transactional(rollbackOn = Throwable.class)
-    public Boolean setDisableDate(PermissionScopeInputModelRequest permissionScopeInputModelRequest) {
-        entityManager.createNativeQuery(" update FNSC.USER_PERMISSION_SCOPE T " + "   set   T.DISABLE_DATE = :disableDate " + "   WHERE T.DISABLE_DATE IS NULL " + " and  T.ID in (:permissionScopeIdList) ").setParameter("disableDate", permissionScopeInputModelRequest.getDisableDate()).setParameter("permissionScopeIdList", permissionScopeInputModelRequest.getPermissionScopeIdList()).executeUpdate();
-        return true;
-    }
 
     @Override
     public Long getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(Long financialUserId, Long financialLedgerTypeId, Long financialDepartmentId, Long departmentId, LocalDateTime effectiveDate, Long organizationId, Boolean allLedgerTypesFlag, Boolean allFncDepartmentFlag, Long financialGroupId) {
@@ -238,6 +230,25 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         }
 
         return financialSecPermissionScopeRequestList;
+    }
+
+    @Override
+    public Boolean setUserPermissionScopeDisableDate(List<UserPermissionScopeRequest> userPermissionScopeRequestList) {
+        for (UserPermissionScopeRequest userPermissionScopeRequest : userPermissionScopeRequestList) {
+            UserPermissionScope oldUserPermissionScope = userPermissionScopeRepository.getOne(userPermissionScopeRequest.getUserPermissionScopeId());
+            if (oldUserPermissionScope.getDisableDate() == null) {
+                oldUserPermissionScope.setDisableDate(userPermissionScopeRequest.getDisableDate());
+                UserPermissionScope userPermissionScope = userPermissionScopeRepository.save(oldUserPermissionScope);
+                for (UserPermission userPermission : userPermissionScope.getUserPermissions()) {
+                    UserPermission oldUserPermission = userPermissionRepository.getOne(userPermission.getId());
+                    if (oldUserPermission.getDisableDate() == null) {
+                        oldUserPermission.setDisableDate(userPermissionScopeRequest.getDisableDate());
+                        userPermissionRepository.save(oldUserPermission);
+                    }
+                }
+            }
+        }
+        return true;
     }
 
 }

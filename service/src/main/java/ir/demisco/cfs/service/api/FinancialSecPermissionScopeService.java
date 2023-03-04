@@ -2,7 +2,7 @@ package ir.demisco.cfs.service.api;
 
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
-import ir.demisco.cfs.model.dto.request.PermissionScopeInputModelRequest;
+import ir.demisco.cfs.model.dto.request.UserPermissionScopeRequest;
 import ir.demisco.cfs.model.dto.request.SaveCompletePermissionRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 
@@ -14,8 +14,6 @@ public interface FinancialSecPermissionScopeService {
     List<FinancialSecPermissionScopeOutputResponse> getFinancialSecPermissionScope(FinancialSecPermissionScopeInputRequest financialSecPermissionScopeInputRequest);
 
     Boolean deleteFinancialSecPermissionScope(FinancialSecPermissionScopeInputModelRequest financialSecPermissionScopeInputModelRequest);
-
-    Boolean setDisableDate(PermissionScopeInputModelRequest permissionScopeInputModelRequest);
 
     Long getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(Long financialUserId,
                                                                     Long financialLedgerTypeId,
@@ -38,4 +36,6 @@ public interface FinancialSecPermissionScopeService {
                                                                   Long financialGroupId);
 
     Boolean saveFinancialSecPermissionScope(SaveCompletePermissionRequest saveCompletePermissionRequest);
+
+    Boolean setUserPermissionScopeDisableDate(List<UserPermissionScopeRequest> userPermissionScopeRequestList);
 }
