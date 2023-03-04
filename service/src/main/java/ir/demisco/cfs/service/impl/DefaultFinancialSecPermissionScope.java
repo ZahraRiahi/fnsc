@@ -29,7 +29,6 @@ import ir.demisco.cloud.core.model.security.JwtSecurityPayloadKeys;
 import ir.demisco.cloud.core.security.util.SecurityHelper;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -239,16 +238,20 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
             if (oldUserPermissionScope.getDisableDate() == null) {
                 oldUserPermissionScope.setDisableDate(userPermissionScopeRequest.getDisableDate());
                 UserPermissionScope userPermissionScope = userPermissionScopeRepository.save(oldUserPermissionScope);
-                for (UserPermission userPermission : userPermissionScope.getUserPermissions()) {
-                    UserPermission oldUserPermission = userPermissionRepository.getOne(userPermission.getId());
-                    if (oldUserPermission.getDisableDate() == null) {
-                        oldUserPermission.setDisableDate(userPermissionScopeRequest.getDisableDate());
-                        userPermissionRepository.save(oldUserPermission);
-                    }
-                }
+                updateUserPermission(userPermissionScopeRequest, userPermissionScope);
             }
         }
         return true;
+    }
+
+    private void updateUserPermission(UserPermissionScopeRequest userPermissionScopeRequest, UserPermissionScope userPermissionScope) {
+        for (UserPermission userPermission : userPermissionScope.getUserPermissions()) {
+            UserPermission oldUserPermission = userPermissionRepository.getOne(userPermission.getId());
+            if (oldUserPermission.getDisableDate() == null) {
+                oldUserPermission.setDisableDate(userPermissionScopeRequest.getDisableDate());
+                userPermissionRepository.save(oldUserPermission);
+            }
+        }
     }
 
 }
