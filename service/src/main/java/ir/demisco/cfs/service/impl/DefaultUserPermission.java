@@ -2,14 +2,15 @@ package ir.demisco.cfs.service.impl;
 
 import ir.demisco.cfs.model.dto.request.FinancialSecUserPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserPermissionInputModelRequest;
+import ir.demisco.cfs.model.dto.request.UserPermissionRequest;
 import ir.demisco.cfs.model.entity.UserPermission;
 import ir.demisco.cfs.service.api.UserPermissionService;
 import ir.demisco.cfs.service.repository.FinancialActivityTypeRepository;
 import ir.demisco.cfs.service.repository.FinancialDocumentTypeRepository;
 import ir.demisco.cfs.service.repository.FinancialUserRepository;
 import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
-import ir.demisco.cfs.service.repository.FinancialPeriodRepository;
 import ir.demisco.cfs.service.repository.UserPermissionRepository;
+import ir.demisco.cfs.service.repository.FinancialPeriodRepository;
 import ir.demisco.cloud.core.middle.exception.RuleException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -116,5 +117,16 @@ public class DefaultUserPermission implements UserPermissionService {
                 disableDate, allDocumentTypeFlag, allFinancialPeriodFlag);
     }
 
+    @Override
+    public Boolean setUserPermissionDisableDate(List<UserPermissionRequest> userPermissionRequestList) {
+        for (UserPermissionRequest userPermissionRequest : userPermissionRequestList) {
+            UserPermission oldUserPermission = userPermissionRepository.getOne(userPermissionRequest.getUserPermissionId());
+            if (oldUserPermission.getDisableDate() == null) {
+                oldUserPermission.setDisableDate(userPermissionRequest.getDisableDate());
+                userPermissionRepository.save(oldUserPermission);
+            }
+        }
+        return true;
+    }
 
 }
