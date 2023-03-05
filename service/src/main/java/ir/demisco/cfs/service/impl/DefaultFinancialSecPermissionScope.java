@@ -3,19 +3,19 @@ package ir.demisco.cfs.service.impl;
 
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeInputRequest;
-import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeRequest;
 import ir.demisco.cfs.model.dto.request.SaveCompletePermissionRequest;
-import ir.demisco.cfs.model.dto.request.FinancialUserPermissionRequest;
 import ir.demisco.cfs.model.dto.request.UserPermissionScopeRequest;
+import ir.demisco.cfs.model.dto.request.FinancialSecPermissionScopeRequest;
+import ir.demisco.cfs.model.dto.request.FinancialUserPermissionRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecPermissionScopeOutputResponse;
 import ir.demisco.cfs.model.entity.FinancialDepartment;
 import ir.demisco.cfs.model.entity.FinancialLedgerType;
-import ir.demisco.cfs.model.entity.UserPermissionScope;
-import ir.demisco.cfs.model.entity.FinancialGroup;
-import ir.demisco.cfs.model.entity.FinancialActivityType;
-import ir.demisco.cfs.model.entity.FinancialUser;
 import ir.demisco.cfs.model.entity.UserPermission;
+import ir.demisco.cfs.model.entity.UserPermissionScope;
+import ir.demisco.cfs.model.entity.FinancialActivityType;
+import ir.demisco.cfs.model.entity.FinancialGroup;
 import ir.demisco.cfs.model.entity.FinancialPeriod;
+import ir.demisco.cfs.model.entity.FinancialUser;
 import ir.demisco.cfs.model.entity.FinancialDocumentType;
 import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
 import ir.demisco.cfs.service.api.UserPermissionService;
@@ -25,7 +25,6 @@ import ir.demisco.cloud.basic.model.entity.org.Department;
 import ir.demisco.cloud.basic.model.entity.org.Organization;
 import ir.demisco.cloud.basic.service.api.DaoService;
 import ir.demisco.cloud.core.middle.exception.RuleException;
-import ir.demisco.cloud.core.model.security.JwtSecurityPayloadKeys;
 import ir.demisco.cloud.core.security.util.SecurityHelper;
 import org.springframework.stereotype.Service;
 
@@ -98,23 +97,46 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         return userPermissionScopeRepository.findUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(financialUserId, financialLedgerTypeId, financialDepartmentId, departmentId, disableDate, organizationId, allLedgerTypesFlag, allFncDepartmentFlag, financialGroupId);
     }
 
+
+    @Override
+    public Boolean setUserPermissionScopeDisableDate(List<UserPermissionScopeRequest> userPermissionScopeRequestList) {
+        for (UserPermissionScopeRequest userPermissionScopeRequest : userPermissionScopeRequestList) {
+            UserPermissionScope oldUserPermissionScope = userPermissionScopeRepository.getOne(userPermissionScopeRequest.getUserPermissionScopeId());
+            if (oldUserPermissionScope.getDisableDate() == null) {
+                oldUserPermissionScope.setDisableDate(userPermissionScopeRequest.getDisableDate());
+                UserPermissionScope userPermissionScope = userPermissionScopeRepository.save(oldUserPermissionScope);
+                updateUserPermission(userPermissionScopeRequest, userPermissionScope);
+            }
+        }
+        return true;
+    }
+
+    private void updateUserPermission(UserPermissionScopeRequest userPermissionScopeRequest, UserPermissionScope userPermissionScope) {
+        for (UserPermission userPermission : userPermissionScope.getUserPermissions()) {
+            UserPermission oldUserPermission = userPermissionRepository.getOne(userPermission.getId());
+            if (oldUserPermission.getDisableDate() == null) {
+                oldUserPermission.setDisableDate(userPermissionScopeRequest.getDisableDate());
+                userPermissionRepository.save(oldUserPermission);
+            }
+        }
+    }
+
     @Override
     public Boolean saveFinancialSecPermissionScope(SaveCompletePermissionRequest saveCompletePermissionRequest) {
         List<FinancialSecPermissionScopeRequest> financialSecPermissionScopeRequestList = checkFinancialSecPermissionScopeRequest(saveCompletePermissionRequest);
-        Long organizationId = (Long) SecurityHelper.getCurrentUser().getAdditionalInformation(JwtSecurityPayloadKeys.ORGANIZATION_USER_ID.getValue());
         for (FinancialSecPermissionScopeRequest permissionScopeRequest : financialSecPermissionScopeRequestList) {
             if (!permissionScopeRequest.getFinancialUserId().isEmpty()) {
-                checkNotEmptyFinancialUser(saveCompletePermissionRequest, organizationId, permissionScopeRequest);
+                checkNotEmptyFinancialUser(saveCompletePermissionRequest, permissionScopeRequest);
 
             } else {
-                checkNotEmptyFinancialGroup(saveCompletePermissionRequest, organizationId, permissionScopeRequest);
+                checkNotEmptyFinancialGroup(saveCompletePermissionRequest, permissionScopeRequest);
             }
 
         }
         return true;
     }
 
-    private void checkNotEmptyFinancialGroup(SaveCompletePermissionRequest saveCompletePermissionRequest, Long organizationId, FinancialSecPermissionScopeRequest permissionScopeRequest) {
+    private void checkNotEmptyFinancialGroup(SaveCompletePermissionRequest saveCompletePermissionRequest, FinancialSecPermissionScopeRequest permissionScopeRequest) {
         for (Long financialGroupId : permissionScopeRequest.getFinancialGroupId()) {
             UserPermissionScope userPermissionScope = UserPermissionScope.builder()
                     .financialLedgerType(permissionScopeRequest.getFinancialLedgerTypeId() != null ?
@@ -127,10 +149,10 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                     .allLedgerTypesFlag(permissionScopeRequest.getAllLedgerTypesFlag())
                     .allFncDepartmentFlag(permissionScopeRequest.getAllFncDepartmentFlag())
                     .financialGroup(daoService.findById(FinancialGroup.class, financialGroupId))
-                    .organization(daoService.findById(Organization.class, organizationId))
+                    .organization(daoService.findById(Organization.class, permissionScopeRequest.getOrganizationId()))
                     .build();
-            Long countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate = getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(null, permissionScopeRequest.getFinancialLedgerTypeId(), permissionScopeRequest.getFinancialDepartmentId(), permissionScopeRequest.getDepartmentId(), permissionScopeRequest.getEffectiveDate(), organizationId, permissionScopeRequest.getAllLedgerTypesFlag(), permissionScopeRequest.getAllFncDepartmentFlag(), financialGroupId);
-            Long countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate = getUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(null, permissionScopeRequest.getFinancialLedgerTypeId(), permissionScopeRequest.getFinancialDepartmentId(), permissionScopeRequest.getDepartmentId(), permissionScopeRequest.getDisableDate(), organizationId, permissionScopeRequest.getAllLedgerTypesFlag(), permissionScopeRequest.getAllFncDepartmentFlag(), financialGroupId);
+            Long countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate = getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(null, permissionScopeRequest.getFinancialLedgerTypeId(), permissionScopeRequest.getFinancialDepartmentId(), permissionScopeRequest.getDepartmentId(), permissionScopeRequest.getEffectiveDate(), permissionScopeRequest.getOrganizationId(), permissionScopeRequest.getAllLedgerTypesFlag(), permissionScopeRequest.getAllFncDepartmentFlag(), financialGroupId);
+            Long countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate = getUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(null, permissionScopeRequest.getFinancialLedgerTypeId(), permissionScopeRequest.getFinancialDepartmentId(), permissionScopeRequest.getDepartmentId(), permissionScopeRequest.getDisableDate(), permissionScopeRequest.getOrganizationId(), permissionScopeRequest.getAllLedgerTypesFlag(), permissionScopeRequest.getAllFncDepartmentFlag(), financialGroupId);
             if (countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate > 0 || countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate > 0) {
                 continue;
             }
@@ -140,7 +162,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         }
     }
 
-    private void checkNotEmptyFinancialUser(SaveCompletePermissionRequest saveCompletePermissionRequest, Long organizationId, FinancialSecPermissionScopeRequest permissionScopeRequest) {
+    private void checkNotEmptyFinancialUser(SaveCompletePermissionRequest saveCompletePermissionRequest, FinancialSecPermissionScopeRequest permissionScopeRequest) {
         for (Long financialUserId : permissionScopeRequest.getFinancialUserId()) {
             UserPermissionScope userPermissionScope = UserPermissionScope.builder()
                     .financialUser(daoService.findById(FinancialUser.class, financialUserId))
@@ -153,10 +175,10 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                     .disableDate(permissionScopeRequest.getDisableDate() == null ? null : permissionScopeRequest.getDisableDate())
                     .allLedgerTypesFlag(permissionScopeRequest.getAllLedgerTypesFlag())
                     .allFncDepartmentFlag(permissionScopeRequest.getAllFncDepartmentFlag())
-                    .organization(daoService.findById(Organization.class, organizationId))
+                    .organization(daoService.findById(Organization.class, permissionScopeRequest.getOrganizationId()))
                     .build();
-            Long countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate = getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(financialUserId, permissionScopeRequest.getFinancialLedgerTypeId(), permissionScopeRequest.getFinancialDepartmentId(), permissionScopeRequest.getDepartmentId(), permissionScopeRequest.getEffectiveDate(), organizationId, permissionScopeRequest.getAllLedgerTypesFlag(), permissionScopeRequest.getAllFncDepartmentFlag(), null);
-            Long countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate = getUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(financialUserId, permissionScopeRequest.getFinancialLedgerTypeId(), permissionScopeRequest.getFinancialDepartmentId(), permissionScopeRequest.getDepartmentId(), permissionScopeRequest.getDisableDate(), organizationId, permissionScopeRequest.getAllLedgerTypesFlag(), permissionScopeRequest.getAllFncDepartmentFlag(), null);
+            Long countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate = getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(financialUserId, permissionScopeRequest.getFinancialLedgerTypeId(), permissionScopeRequest.getFinancialDepartmentId(), permissionScopeRequest.getDepartmentId(), permissionScopeRequest.getEffectiveDate(), permissionScopeRequest.getOrganizationId(), permissionScopeRequest.getAllLedgerTypesFlag(), permissionScopeRequest.getAllFncDepartmentFlag(), null);
+            Long countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate = getUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(financialUserId, permissionScopeRequest.getFinancialLedgerTypeId(), permissionScopeRequest.getFinancialDepartmentId(), permissionScopeRequest.getDepartmentId(), permissionScopeRequest.getDisableDate(), permissionScopeRequest.getOrganizationId(), permissionScopeRequest.getAllLedgerTypesFlag(), permissionScopeRequest.getAllFncDepartmentFlag(), null);
             if (countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate > 0 || countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate > 0) {
                 continue;
             }
@@ -165,6 +187,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
             saveUserPermission(saveCompletePermissionRequest, userPermissionScopeId);
         }
     }
+
 
     private void saveUserPermission(SaveCompletePermissionRequest saveCompletePermissionRequest, Long userPermissionScopeId) {
         for (FinancialUserPermissionRequest financialUserPermissionRequest : saveCompletePermissionRequest.getFinancialUserPermissionRequestList()) {
@@ -229,29 +252,6 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         }
 
         return financialSecPermissionScopeRequestList;
-    }
-
-    @Override
-    public Boolean setUserPermissionScopeDisableDate(List<UserPermissionScopeRequest> userPermissionScopeRequestList) {
-        for (UserPermissionScopeRequest userPermissionScopeRequest : userPermissionScopeRequestList) {
-            UserPermissionScope oldUserPermissionScope = userPermissionScopeRepository.getOne(userPermissionScopeRequest.getUserPermissionScopeId());
-            if (oldUserPermissionScope.getDisableDate() == null) {
-                oldUserPermissionScope.setDisableDate(userPermissionScopeRequest.getDisableDate());
-                UserPermissionScope userPermissionScope = userPermissionScopeRepository.save(oldUserPermissionScope);
-                updateUserPermission(userPermissionScopeRequest, userPermissionScope);
-            }
-        }
-        return true;
-    }
-
-    private void updateUserPermission(UserPermissionScopeRequest userPermissionScopeRequest, UserPermissionScope userPermissionScope) {
-        for (UserPermission userPermission : userPermissionScope.getUserPermissions()) {
-            UserPermission oldUserPermission = userPermissionRepository.getOne(userPermission.getId());
-            if (oldUserPermission.getDisableDate() == null) {
-                oldUserPermission.setDisableDate(userPermissionScopeRequest.getDisableDate());
-                userPermissionRepository.save(oldUserPermission);
-            }
-        }
     }
 
 }
