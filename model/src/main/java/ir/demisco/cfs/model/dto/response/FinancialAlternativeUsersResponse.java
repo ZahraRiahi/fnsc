@@ -1,8 +1,8 @@
 package ir.demisco.cfs.model.dto.response;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
-public class FinancialAlternativeUsersOutputResponse {
+public class FinancialAlternativeUsersResponse {
     private Long financialAlternativeId;
     private Long mainUserId;
     private String mainUserName;
@@ -12,8 +12,8 @@ public class FinancialAlternativeUsersOutputResponse {
     private String alternativeNickName;
     private Long organizationId;
     private String organizationName;
-    private Date effectiveDate;
-    private Date disableDate;
+    private LocalDateTime effectiveDate;
+    private LocalDateTime disableDate;
 
     public Long getFinancialAlternativeId() {
         return financialAlternativeId;
@@ -87,92 +87,91 @@ public class FinancialAlternativeUsersOutputResponse {
         this.organizationName = organizationName;
     }
 
-    public Date getEffectiveDate() {
+    public LocalDateTime getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(Date effectiveDate) {
+    public void setEffectiveDate(LocalDateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
 
-    public Date getDisableDate() {
+    public LocalDateTime getDisableDate() {
         return disableDate;
     }
 
-    public void setDisableDate(Date disableDate) {
+    public void setDisableDate(LocalDateTime disableDate) {
         this.disableDate = disableDate;
     }
-    public static FinancialAlternativeUsersOutputResponse.Builder builder() {
-        return new FinancialAlternativeUsersOutputResponse.Builder();
+
+    public static Builder builder() {
+        return new Builder();
     }
+
     public static final class Builder {
-        private FinancialAlternativeUsersOutputResponse financialAlternativeUsersOutputResponse;
+        private FinancialAlternativeUsersResponse financialAlternativeUsersResponse;
 
         private Builder() {
-            financialAlternativeUsersOutputResponse = new FinancialAlternativeUsersOutputResponse();
+            financialAlternativeUsersResponse = new FinancialAlternativeUsersResponse();
         }
 
-        public static Builder financialAlternativeUsersOutputResponse() {
-            return new Builder();
-        }
 
         public Builder financialAlternativeId(Long financialAlternativeId) {
-            financialAlternativeUsersOutputResponse.setFinancialAlternativeId(financialAlternativeId);
+            financialAlternativeUsersResponse.setFinancialAlternativeId(financialAlternativeId);
             return this;
         }
 
         public Builder mainUserId(Long mainUserId) {
-            financialAlternativeUsersOutputResponse.setMainUserId(mainUserId);
+            financialAlternativeUsersResponse.setMainUserId(mainUserId);
             return this;
         }
 
         public Builder mainUserName(String mainUserName) {
-            financialAlternativeUsersOutputResponse.setMainUserName(mainUserName);
+            financialAlternativeUsersResponse.setMainUserName(mainUserName);
             return this;
         }
 
         public Builder mainNickName(String mainNickName) {
-            financialAlternativeUsersOutputResponse.setMainNickName(mainNickName);
+            financialAlternativeUsersResponse.setMainNickName(mainNickName);
             return this;
         }
 
         public Builder financialUserIdAlternative(Long financialUserIdAlternative) {
-            financialAlternativeUsersOutputResponse.setFinancialUserIdAlternative(financialUserIdAlternative);
+            financialAlternativeUsersResponse.setFinancialUserIdAlternative(financialUserIdAlternative);
             return this;
         }
 
         public Builder alternativeUserName(String alternativeUserName) {
-            financialAlternativeUsersOutputResponse.setAlternativeUserName(alternativeUserName);
+            financialAlternativeUsersResponse.setAlternativeUserName(alternativeUserName);
             return this;
         }
 
         public Builder alternativeNickName(String alternativeNickName) {
-            financialAlternativeUsersOutputResponse.setAlternativeNickName(alternativeNickName);
+            financialAlternativeUsersResponse.setAlternativeNickName(alternativeNickName);
             return this;
         }
 
         public Builder organizationId(Long organizationId) {
-            financialAlternativeUsersOutputResponse.setOrganizationId(organizationId);
+            financialAlternativeUsersResponse.setOrganizationId(organizationId);
             return this;
         }
 
         public Builder organizationName(String organizationName) {
-            financialAlternativeUsersOutputResponse.setOrganizationName(organizationName);
+            financialAlternativeUsersResponse.setOrganizationName(organizationName);
             return this;
         }
 
-        public Builder effectiveDate(Date effectiveDate) {
-            financialAlternativeUsersOutputResponse.setEffectiveDate(effectiveDate);
+        public Builder effectiveDate(LocalDateTime effectiveDate) {
+            financialAlternativeUsersResponse.setEffectiveDate(effectiveDate);
             return this;
         }
 
-        public Builder disableDate(Date disableDate) {
-            financialAlternativeUsersOutputResponse.setDisableDate(disableDate);
+        public Builder disableDate(LocalDateTime disableDate) {
+            financialAlternativeUsersResponse.setDisableDate(disableDate);
             return this;
         }
 
-        public FinancialAlternativeUsersOutputResponse build() {
-            return financialAlternativeUsersOutputResponse;
+        public FinancialAlternativeUsersResponse build() {
+            return financialAlternativeUsersResponse;
         }
     }
 }

@@ -1,10 +1,8 @@
 package ir.demisco.cfs.service.impl;
 
-import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersInputRequest;
 import ir.demisco.cfs.model.dto.request.FinancialAlternativeUsersListRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserAlternativeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserAlternativeRequest;
-import ir.demisco.cfs.model.dto.response.FinancialAlternativeUsersOutputResponse;
 import ir.demisco.cfs.model.entity.FinancialUser;
 import ir.demisco.cfs.model.entity.FinancialUserAlternative;
 import ir.demisco.cfs.service.api.FinancialAlternativeUsersService;
@@ -22,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,30 +39,7 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
         this.entityManager = entityManager;
     }
 
-    @Override
-    @Transactional(rollbackFor = Throwable.class)
-    public List<FinancialAlternativeUsersOutputResponse> getFinancialAlternativeUsers(FinancialAlternativeUsersInputRequest financialAlternativeUsersInputRequest) {
-        Object mainFinancialUserId = null;
-        if (financialAlternativeUsersInputRequest.getMainFinancialUserId() != null) {
-            mainFinancialUserId = "mainFinancialUserId";
-        } else {
-            financialAlternativeUsersInputRequest.setMainFinancialUserId(0L);
-        }
-        List<Object[]> financialUsersAlternativeList = financialUsersAlternativeRepository.getFinancialUserAlternativeByUserIdAndFlgAndOrgan(mainFinancialUserId, financialAlternativeUsersInputRequest.getMainFinancialUserId()
-                , financialAlternativeUsersInputRequest.getFlgAllOrganizations(), SecurityHelper.getCurrentUser().getOrganizationId());
-        return financialUsersAlternativeList.stream().map(objects -> FinancialAlternativeUsersOutputResponse.builder().financialAlternativeId(Long.parseLong(objects[0].toString()))
-                .mainUserId(Long.parseLong(objects[1].toString()))
-                .mainUserName(objects[2].toString())
-                .mainNickName(objects[3].toString())
-                .financialUserIdAlternative(Long.parseLong(objects[4].toString()))
-                .alternativeUserName(objects[5].toString())
-                .alternativeNickName(objects[6].toString())
-                .effectiveDate((Date) objects[7])
-                .disableDate((Date) objects[8])
-                .organizationId(Long.parseLong(objects[9].toString()))
-                .organizationName(objects[10].toString())
-                .build()).collect(Collectors.toList());
-    }
+
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
