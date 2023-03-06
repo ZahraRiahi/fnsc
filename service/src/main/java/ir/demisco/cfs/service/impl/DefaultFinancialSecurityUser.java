@@ -51,5 +51,11 @@ public class DefaultFinancialSecurityUser implements FinancialSecurityUserServic
         return true;
     }
 
+    @Override
+    public Boolean deleteFinancialUser(Long financialUserId) {
+        financialUserRepository.deleteById(financialUserId);
+        return true;
+    }
+
 }
 
