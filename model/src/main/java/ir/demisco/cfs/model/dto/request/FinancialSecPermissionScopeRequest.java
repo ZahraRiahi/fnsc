@@ -90,6 +90,7 @@ public class FinancialSecPermissionScopeRequest {
         this.financialGroupId = financialGroupId;
     }
 
+    @NotNull(message = "لطفا شناسه سازمان  را وارد کنید.")
     public Long getOrganizationId() {
         return organizationId;
     }
