@@ -33,6 +33,7 @@ public class FinancialActivityType extends AuditModel<Long> {
     public Long getId() {
         return id;
     }
+
     @Override
     public void setId(Long id) {
         this.id = id;
@@ -110,5 +111,67 @@ public class FinancialActivityType extends AuditModel<Long> {
 
     public void setFinancialSystemSubject(FinancialSystemSubject financialSystemSubject) {
         this.financialSystemSubject = financialSystemSubject;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private FinancialActivityType financialActivityType;
+
+        private Builder() {
+            financialActivityType = new FinancialActivityType();
+        }
+
+
+        public Builder id(Long id) {
+            financialActivityType.setId(id);
+            return this;
+        }
+
+        public Builder code(String code) {
+            financialActivityType.setCode(code);
+            return this;
+        }
+
+        public Builder description(String description) {
+            financialActivityType.setDescription(description);
+            return this;
+        }
+
+        public Builder insertFlag(Boolean insertFlag) {
+            financialActivityType.setInsertFlag(insertFlag);
+            return this;
+        }
+
+        public Builder updateFlag(Boolean updateFlag) {
+            financialActivityType.setUpdateFlag(updateFlag);
+            return this;
+        }
+
+        public Builder deleteFlag(Boolean deleteFlag) {
+            financialActivityType.setDeleteFlag(deleteFlag);
+            return this;
+        }
+
+        public Builder queryFlag(Boolean queryFlag) {
+            financialActivityType.setQueryFlag(queryFlag);
+            return this;
+        }
+
+        public Builder financialSystem(FinancialSystem financialSystem) {
+            financialActivityType.setFinancialSystem(financialSystem);
+            return this;
+        }
+
+        public Builder financialSystemSubject(FinancialSystemSubject financialSystemSubject) {
+            financialActivityType.setFinancialSystemSubject(financialSystemSubject);
+            return this;
+        }
+
+        public FinancialActivityType build() {
+            return financialActivityType;
+        }
     }
 }
