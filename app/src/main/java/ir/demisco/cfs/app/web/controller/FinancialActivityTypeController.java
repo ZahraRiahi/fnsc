@@ -2,6 +2,10 @@ package ir.demisco.cfs.app.web.controller;
 
 import ir.demisco.cfs.model.dto.request.FinancialActivityTypeRequest;
 import ir.demisco.cfs.service.api.FinancialActivityTypeService;
+import ir.demisco.cfs.service.impl.FinancialActivityTypeGridProvider;
+import ir.demisco.cloud.core.middle.model.dto.DataSourceRequest;
+import ir.demisco.cloud.core.middle.model.dto.DataSourceResult;
+import ir.demisco.cloud.core.middle.service.business.api.core.GridFilterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,14 +19,25 @@ import java.util.List;
 @RequestMapping("/api-financialActivityType")
 public class FinancialActivityTypeController {
     private final FinancialActivityTypeService financialActivityTypeService;
+    private final GridFilterService gridFilterService;
+    private final FinancialActivityTypeGridProvider financialActivityTypeGridProvider;
 
-    public FinancialActivityTypeController(FinancialActivityTypeService financialActivityTypeService) {
+    public FinancialActivityTypeController(FinancialActivityTypeService financialActivityTypeService,
+                                           GridFilterService gridFilterService,
+                                           FinancialActivityTypeGridProvider financialActivityTypeGridProvider) {
         this.financialActivityTypeService = financialActivityTypeService;
+        this.gridFilterService = gridFilterService;
+        this.financialActivityTypeGridProvider = financialActivityTypeGridProvider;
     }
 
     @PostMapping("/save")
     public ResponseEntity<Boolean> saveActivityType(@Valid @RequestBody List<FinancialActivityTypeRequest> financialActivityTypeRequestList) {
         return ResponseEntity.ok(financialActivityTypeService.saveActivityType(financialActivityTypeRequestList));
+    }
+
+    @PostMapping("/get")
+    public ResponseEntity<DataSourceResult> getUserPermission(@RequestBody DataSourceRequest dataSourceRequest) {
+        return ResponseEntity.ok(gridFilterService.filter(dataSourceRequest, financialActivityTypeGridProvider));
     }
 
 }
