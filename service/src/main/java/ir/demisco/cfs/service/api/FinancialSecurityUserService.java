@@ -10,4 +10,7 @@ public interface FinancialSecurityUserService {
     List<FinancialSecurityUserResponse> getGetFinancialUsersList();
 
     Boolean saveFinancialUsers(FinancialUsersInputModelRequest financialUsersInputModelRequest);
+
+    Boolean deleteFinancialUser(Long financialUserId);
+
 }
