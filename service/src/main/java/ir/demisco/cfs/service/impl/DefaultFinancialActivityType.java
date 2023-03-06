@@ -25,19 +25,23 @@ public class DefaultFinancialActivityType implements FinancialActivityTypeServic
 
     @Override
     public Boolean saveActivityType(List<FinancialActivityTypeRequest> financialActivityTypeRequestList) {
-        financialActivityTypeRequestList.forEach(i -> {
-                    if (getFinancialActivityTypeByFinancialSystem(i.getFinancialSystemId(), i.getFinancialSystemSubjectId(), i.getCode()).isPresent()) {
+        financialActivityTypeRequestList.forEach((FinancialActivityTypeRequest financialActivityTypeObject) -> {
+                    if (getFinancialActivityTypeByFinancialSystem(financialActivityTypeObject.getFinancialSystemId(),
+                            financialActivityTypeObject.getFinancialSystemSubjectId(),
+                            financialActivityTypeObject.getCode()).isPresent()) {
                         throw new RuleException("کد تکراری است ");
                     } else {
                         FinancialActivityType financialActivityType = FinancialActivityType.builder()
-                                .code(i.getCode())
-                                .description(i.getDescription())
-                                .insertFlag(i.getInsertFlag())
-                                .updateFlag(i.getUpdateFlag())
-                                .deleteFlag(i.getDeleteFlag())
-                                .queryFlag(i.getQueryFlag())
-                                .financialSystemSubject(daoService.findById(FinancialSystemSubject.class, i.getFinancialSystemSubjectId()))
-                                .financialSystem(daoService.findById(FinancialSystem.class, i.getFinancialSystemId()))
+                                .code(financialActivityTypeObject.getCode())
+                                .description(financialActivityTypeObject.getDescription())
+                                .insertFlag(financialActivityTypeObject.getInsertFlag())
+                                .updateFlag(financialActivityTypeObject.getUpdateFlag())
+                                .deleteFlag(financialActivityTypeObject.getDeleteFlag())
+                                .queryFlag(financialActivityTypeObject.getQueryFlag())
+                                .financialSystemSubject(daoService.findById(FinancialSystemSubject.class,
+                                        financialActivityTypeObject.getFinancialSystemSubjectId()))
+                                .financialSystem(daoService.findById(FinancialSystem.class,
+                                        financialActivityTypeObject.getFinancialSystemId()))
                                 .build();
                         financialActivityTypeRepository.save(financialActivityType);
 
