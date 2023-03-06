@@ -9,6 +9,7 @@ public class FinancialUserGroupRequest {
     private List<Long> financialUserId;
     private LocalDateTime effectiveDate;
     private LocalDateTime disableDate;
+    private Long organizationId;
 
     @NotNull(message = "لطفا شناسه گروه را وارد کنید.")
     public Long getGroupId() {
@@ -45,6 +46,14 @@ public class FinancialUserGroupRequest {
         this.disableDate = disableDate;
     }
 
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -74,6 +83,11 @@ public class FinancialUserGroupRequest {
 
         public Builder disableDate(LocalDateTime disableDate) {
             financialUserGroupRequest.setDisableDate(disableDate);
+            return this;
+        }
+
+        public Builder organizationId(Long organizationId) {
+            financialUserGroupRequest.setOrganizationId(organizationId);
             return this;
         }
 
