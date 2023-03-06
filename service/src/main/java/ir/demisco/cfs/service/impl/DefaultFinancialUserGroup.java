@@ -10,8 +10,6 @@ import ir.demisco.cfs.service.repository.FinancialUserGroupRepository;
 import ir.demisco.cloud.basic.model.entity.org.Organization;
 import ir.demisco.cloud.basic.service.api.DaoService;
 import ir.demisco.cloud.core.middle.exception.RuleException;
-import ir.demisco.cloud.core.model.security.JwtSecurityPayloadKeys;
-import ir.demisco.cloud.core.security.util.SecurityHelper;
 import ir.demisco.core.utils.DateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,8 +40,8 @@ public class DefaultFinancialUserGroup implements FinancialUserGroupService {
             throw new RuleException("تاریخ پایان قبلا پر شده و یا با تاریخ شروع هماهنگی ندارد");
         }
         entityManager.createNativeQuery(" update FNSC.FINANCIAL_USER_GROUP T " +
-                "   set   T.DISABLE_DATE = :disableDate " +
-                "   WHERE T.ID = :financialUserGroupId ")
+                        "   set   T.DISABLE_DATE = :disableDate " +
+                        "   WHERE T.ID = :financialUserGroupId ")
                 .setParameter("disableDate", financialUserGroupInputRequest.getDisableDate())
                 .setParameter("financialUserGroupId", financialUserGroupInputRequest.getUserGroupId()).executeUpdate();
         return true;
@@ -68,8 +66,6 @@ public class DefaultFinancialUserGroup implements FinancialUserGroupService {
     public Boolean saveFinancialUserGroup(FinancialUserGroupRequest financialUserGroupRequest) {
         LocalDateTime effectiveDate = DateUtil.truncate(financialUserGroupRequest.getEffectiveDate());
         LocalDateTime disableDate = DateUtil.truncate(financialUserGroupRequest.getDisableDate());
-        Long organizationId = (Long) SecurityHelper.getCurrentUser().getAdditionalInformation().get(JwtSecurityPayloadKeys.ORGANIZATION_USER_ID.getValue());
-
         List<Long> financialUserId = financialUserGroupRequest.getFinancialUserId().stream().filter(financialUser ->
                 !getFinancialUserGroupByEffectiveDateAndDisableDate(financialUserGroupRequest.getGroupId(), financialUser,
                         effectiveDate, disableDate).isPresent()).collect(Collectors.toList());
@@ -83,10 +79,10 @@ public class DefaultFinancialUserGroup implements FinancialUserGroupService {
                     .financialUserId(daoService.findById(FinancialUser.class, userId))
                     .effectiveDate(financialUserGroupRequest.getEffectiveDate())
                     .disableDate(financialUserGroupRequest.getDisableDate() == null ? null : financialUserGroupRequest.getDisableDate())
-                    .organizationId(daoService.findById(Organization.class, organizationId))
+                    .organizationId(daoService.findById(Organization.class, financialUserGroupRequest.getOrganizationId()))
                     .build();
-            Long countByFinancialUserGroupByEffectiveDate = getFinancialUserGroupByEffectiveDate(userId, financialUserGroupRequest.getGroupId(), financialUserGroupRequest.getEffectiveDate(), organizationId);
-            Long countByFinancialUserGroupByDisableDate = getFinancialUserGroupByDisableDate(userId, financialUserGroupRequest.getGroupId(), financialUserGroupRequest.getDisableDate(), organizationId);
+            Long countByFinancialUserGroupByEffectiveDate = getFinancialUserGroupByEffectiveDate(userId, financialUserGroupRequest.getGroupId(), financialUserGroupRequest.getEffectiveDate(), financialUserGroupRequest.getOrganizationId());
+            Long countByFinancialUserGroupByDisableDate = getFinancialUserGroupByDisableDate(userId, financialUserGroupRequest.getGroupId(), financialUserGroupRequest.getDisableDate(), financialUserGroupRequest.getOrganizationId());
 
 
             if (countByFinancialUserGroupByEffectiveDate > 0 || countByFinancialUserGroupByDisableDate > 0) {
