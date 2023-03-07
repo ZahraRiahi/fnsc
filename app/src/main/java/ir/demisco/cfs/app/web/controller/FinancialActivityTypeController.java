@@ -7,10 +7,13 @@ import ir.demisco.cloud.core.middle.model.dto.DataSourceRequest;
 import ir.demisco.cloud.core.middle.model.dto.DataSourceResult;
 import ir.demisco.cloud.core.middle.service.business.api.core.GridFilterService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import javax.validation.Valid;
 import java.util.List;
@@ -36,8 +39,14 @@ public class FinancialActivityTypeController {
     }
 
     @PostMapping("/get")
-    public ResponseEntity<DataSourceResult> getUserPermission(@RequestBody DataSourceRequest dataSourceRequest) {
+    public ResponseEntity<DataSourceResult> getFinancialActivityType(@RequestBody DataSourceRequest dataSourceRequest) {
         return ResponseEntity.ok(gridFilterService.filter(dataSourceRequest, financialActivityTypeGridProvider));
+    }
+
+    @GetMapping("/delete/{id}")
+    public ResponseEntity<Boolean> deleteFinancialActivityType(@PathVariable("id") Long financialActivityTypeId) {
+        Boolean deleteFinancialActivityType = financialActivityTypeService.deleteFinancialActivityType(financialActivityTypeId);
+        return ResponseEntity.ok(deleteFinancialActivityType);
     }
 
 }

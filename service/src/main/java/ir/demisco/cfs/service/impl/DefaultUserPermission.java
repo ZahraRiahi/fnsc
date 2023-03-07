@@ -129,4 +129,9 @@ public class DefaultUserPermission implements UserPermissionService {
         return true;
     }
 
+    @Override
+    public Long getUserPermissionByFinancialActivityTypeId(Long financialActivityTypeId) {
+        return userPermissionRepository.findUserPermissionByFinancialActivityTypeId(financialActivityTypeId);
+    }
+
 }
