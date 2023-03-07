@@ -5,11 +5,13 @@ import ir.demisco.cfs.model.entity.FinancialActivityType;
 import ir.demisco.cfs.model.entity.FinancialSystem;
 import ir.demisco.cfs.model.entity.FinancialSystemSubject;
 import ir.demisco.cfs.service.api.FinancialActivityTypeService;
+import ir.demisco.cfs.service.api.UserPermissionService;
 import ir.demisco.cfs.service.repository.FinancialActivityTypeRepository;
 import ir.demisco.cloud.basic.service.api.DaoService;
 import ir.demisco.cloud.core.middle.exception.RuleException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +19,14 @@ import java.util.Optional;
 public class DefaultFinancialActivityType implements FinancialActivityTypeService {
     private final FinancialActivityTypeRepository financialActivityTypeRepository;
     private final DaoService daoService;
+    private final UserPermissionService userPermissionService;
 
-    public DefaultFinancialActivityType(FinancialActivityTypeRepository financialActivityTypeRepository, DaoService daoService) {
+
+    public DefaultFinancialActivityType(FinancialActivityTypeRepository financialActivityTypeRepository, DaoService daoService,
+                                        UserPermissionService userPermissionService) {
         this.financialActivityTypeRepository = financialActivityTypeRepository;
         this.daoService = daoService;
+        this.userPermissionService = userPermissionService;
     }
 
     @Override
@@ -55,5 +61,17 @@ public class DefaultFinancialActivityType implements FinancialActivityTypeServic
     @Override
     public Optional<FinancialActivityType> getFinancialActivityTypeByFinancialSystem(Long financialSystemId, Long financialSystemSubjectId, String code) {
         return financialActivityTypeRepository.findFinancialActivityTypeByFinancialSystem(financialSystemId, financialSystemSubjectId, code);
+    }
+
+    @Override
+    @Transactional(rollbackOn = Throwable.class)
+    public Boolean deleteFinancialActivityType(Long financialActivityTypeId) {
+        Long userPermissionByFinancialActivityTypeId = userPermissionService.getUserPermissionByFinancialActivityTypeId(financialActivityTypeId);
+        if (userPermissionByFinancialActivityTypeId > 0L) {
+            throw new RuleException("فعالیت  مورد نظر در دسترسی های کاربران استفاده شده است");
+        } else {
+            financialActivityTypeRepository.deleteById(financialActivityTypeId);
+        }
+        return true;
     }
 }

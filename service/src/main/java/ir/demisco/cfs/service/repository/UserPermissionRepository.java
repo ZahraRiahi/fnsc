@@ -97,4 +97,10 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission, 
                                                                @Param("disableDate") LocalDateTime disableDate,
                                                                @Param("allDocumentTypeFlag") Boolean allDocumentTypeFlag,
                                                                @Param("allFinancialPeriodFlag") Boolean allFinancialPeriodFlag);
+
+    @Query("select count(u.id)   " +
+            "  from UserPermission u   " +
+            " where u.financialTypeActivityId.id = :financialActivityTypeId")
+    Long findUserPermissionByFinancialActivityTypeId(@Param("financialActivityTypeId") Long financialActivityTypeId);
+
 }
