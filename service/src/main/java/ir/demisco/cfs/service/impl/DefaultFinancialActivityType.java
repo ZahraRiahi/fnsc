@@ -7,7 +7,6 @@ import ir.demisco.cfs.model.entity.FinancialSystemSubject;
 import ir.demisco.cfs.service.api.FinancialActivityTypeService;
 import ir.demisco.cfs.service.api.UserPermissionService;
 import ir.demisco.cfs.service.repository.FinancialActivityTypeRepository;
-import ir.demisco.cfs.service.repository.UserPermissionRepository;
 import ir.demisco.cloud.basic.service.api.DaoService;
 import ir.demisco.cloud.core.middle.exception.RuleException;
 import org.springframework.stereotype.Service;
