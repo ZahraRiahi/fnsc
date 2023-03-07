@@ -34,4 +34,7 @@ public interface UserPermissionService {
     Boolean setUserPermissionDisableDate(List<UserPermissionRequest> userPermissionRequestList);
 
     Long getUserPermissionByFinancialActivityTypeId(Long financialActivityTypeId);
+
+    Long getUserPermissionByFinancialUserId(Long financialUserIdCreator);
+
 }

@@ -120,4 +120,10 @@ public interface UserPermissionScopeRepository extends JpaRepository<UserPermiss
                                                                    @Param("allFncDepartmentFlag") Boolean allFncDepartmentFlag,
                                                                    @Param("financialGroupId") Long financialGroupId);
 
+    @Query("select count(us.id)  " +
+            "  from UserPermissionScope us  " +
+            " where us.financialUser.id = :financialUserId  ")
+    Long findUserPermissionScopeByFinancialUserId(Long financialUserId);
+
+
 }

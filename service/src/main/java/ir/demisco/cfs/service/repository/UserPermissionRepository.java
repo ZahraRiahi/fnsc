@@ -103,4 +103,10 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission, 
             " where u.financialTypeActivityId.id = :financialActivityTypeId")
     Long findUserPermissionByFinancialActivityTypeId(@Param("financialActivityTypeId") Long financialActivityTypeId);
 
+    @Query("select count(u.id) " +
+            "  from  UserPermission u " +
+            " where u.financialUserIdCreator.id= :financialUserIdCreator")
+    Long findUserPermissionByFinancialUserId(@Param("financialUserIdCreator") Long financialUserIdCreator);
+
+
 }
