@@ -10,6 +10,8 @@ public interface FinancialActivityTypeService {
     Boolean saveActivityType(List<FinancialActivityTypeRequest> financialActivityTypeRequestList);
 
     Optional<FinancialActivityType> getFinancialActivityTypeByFinancialSystem(Long financialSystemId,
-                                                                               Long financialSystemSubjectId,
-                                                                               String code);
+                                                                              Long financialSystemSubjectId,
+                                                                              String code);
+
+    Boolean deleteFinancialActivityType(Long financialActivityTypeId);
 }
