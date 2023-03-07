@@ -111,6 +111,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         return true;
     }
 
+
     private void updateUserPermission(UserPermissionScopeRequest userPermissionScopeRequest, UserPermissionScope userPermissionScope) {
         for (UserPermission userPermission : userPermissionScope.getUserPermissions()) {
             UserPermission oldUserPermission = userPermissionRepository.getOne(userPermission.getId());
@@ -253,6 +254,12 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
 
         return financialSecPermissionScopeRequestList;
     }
+
+    @Override
+    public Long findUserPermissionScopeByFinancialUserId(Long financialUserId) {
+        return userPermissionScopeRepository.findUserPermissionScopeByFinancialUserId(financialUserId);
+    }
+
 
 }
 

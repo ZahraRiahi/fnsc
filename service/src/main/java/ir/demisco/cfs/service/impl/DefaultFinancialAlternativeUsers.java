@@ -40,7 +40,6 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
     }
 
 
-
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public Boolean setAlternativeUserEndDate(FinancialAlternativeUsersListRequest financialAlternativeUsersListRequest) {
@@ -142,5 +141,10 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
             }
         }
         return true;
+    }
+
+    @Override
+    public Long getFinancialUserAlternativeByFinancialUserId(Long financialUserId) {
+        return financialUsersAlternativeRepository.findFinancialUserAlternativeByFinancialUserId(financialUserId);
     }
 }

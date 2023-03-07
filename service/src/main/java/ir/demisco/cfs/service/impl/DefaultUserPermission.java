@@ -9,8 +9,8 @@ import ir.demisco.cfs.service.repository.FinancialActivityTypeRepository;
 import ir.demisco.cfs.service.repository.FinancialDocumentTypeRepository;
 import ir.demisco.cfs.service.repository.FinancialUserRepository;
 import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
-import ir.demisco.cfs.service.repository.UserPermissionRepository;
 import ir.demisco.cfs.service.repository.FinancialPeriodRepository;
+import ir.demisco.cfs.service.repository.UserPermissionRepository;
 import ir.demisco.cloud.core.middle.exception.RuleException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -132,6 +132,11 @@ public class DefaultUserPermission implements UserPermissionService {
     @Override
     public Long getUserPermissionByFinancialActivityTypeId(Long financialActivityTypeId) {
         return userPermissionRepository.findUserPermissionByFinancialActivityTypeId(financialActivityTypeId);
+    }
+
+    @Override
+    public Long getUserPermissionByFinancialUserId(Long financialUserIdCreator) {
+        return userPermissionRepository.findUserPermissionByFinancialUserId(financialUserIdCreator);
     }
 
 }

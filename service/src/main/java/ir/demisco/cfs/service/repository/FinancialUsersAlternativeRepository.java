@@ -107,4 +107,9 @@ public interface FinancialUsersAlternativeRepository extends JpaRepository<Finan
                                                                                     @Param("effectiveDate") LocalDateTime effectiveDate,
                                                                                     @Param("organizationId") Long organizationId);
 
+    @Query("  select count(fua.id)    " +
+            "    from FinancialUserAlternative fua    " +
+            "    where fua.financialUser.id = :financialUserId")
+    Long findFinancialUserAlternativeByFinancialUserId(@Param("financialUserId") Long financialUserId);
+
 }
