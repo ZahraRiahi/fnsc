@@ -23,7 +23,8 @@ public class DefaultFinancialActivityType implements FinancialActivityTypeServic
     private final UserPermissionService userPermissionService;
 
 
-    public DefaultFinancialActivityType(FinancialActivityTypeRepository financialActivityTypeRepository, DaoService daoService, UserPermissionService userPermissionService, UserPermissionRepository userPermissionRepository) {
+    public DefaultFinancialActivityType(FinancialActivityTypeRepository financialActivityTypeRepository, DaoService daoService,
+                                        UserPermissionService userPermissionService) {
         this.financialActivityTypeRepository = financialActivityTypeRepository;
         this.daoService = daoService;
         this.userPermissionService = userPermissionService;
