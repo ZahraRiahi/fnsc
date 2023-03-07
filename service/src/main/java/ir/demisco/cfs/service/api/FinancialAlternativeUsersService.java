@@ -30,5 +30,7 @@ public interface FinancialAlternativeUsersService {
 
     Boolean saveFinancialAlternativeUsers(FinancialUserAlternativeRequest financialUserAlternativeRequest);
 
+    Long getFinancialUserAlternativeByFinancialUserId(Long financialUserId);
+
 
 }

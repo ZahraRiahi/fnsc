@@ -38,4 +38,7 @@ public interface FinancialSecPermissionScopeService {
     Boolean saveFinancialSecPermissionScope(SaveCompletePermissionRequest saveCompletePermissionRequest);
 
     Boolean setUserPermissionScopeDisableDate(List<UserPermissionScopeRequest> userPermissionScopeRequestList);
+
+    Long findUserPermissionScopeByFinancialUserId(Long financialUserId);
+
 }

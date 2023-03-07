@@ -68,7 +68,7 @@ public class DefaultFinancialActivityType implements FinancialActivityTypeServic
     public Boolean deleteFinancialActivityType(Long financialActivityTypeId) {
         Long userPermissionByFinancialActivityTypeId = userPermissionService.getUserPermissionByFinancialActivityTypeId(financialActivityTypeId);
         if (userPermissionByFinancialActivityTypeId > 0L) {
-            throw new RuleException("فعالیت  مورد نظر در دسترسی های کاربران استفاده شده است");
+            throw new RuleException("امکان حذف فعالیت مورد نظر  وجود ندارد.");
         } else {
             financialActivityTypeRepository.deleteById(financialActivityTypeId);
         }
