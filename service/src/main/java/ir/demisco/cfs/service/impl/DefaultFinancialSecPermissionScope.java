@@ -25,6 +25,7 @@ import ir.demisco.cloud.basic.model.entity.org.Department;
 import ir.demisco.cloud.basic.model.entity.org.Organization;
 import ir.demisco.cloud.basic.service.api.DaoService;
 import ir.demisco.cloud.core.middle.exception.RuleException;
+import ir.demisco.core.utils.DateUtil;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -79,26 +80,26 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                 financialSecPermissionScopeInputRequest.getAllFinancialDepartmentFlg(),
                 financialSecPermissionScopeInputRequest.getAllFinancialLedgersFlg());
         return controlFinancialAccountObject.stream().map(objects -> FinancialSecPermissionScopeOutputResponse
-                .builder()
-                .userPermissionScopeId(objects[0] == null ? null : Long.parseLong(objects[0].toString()))
-                .financialUserId(objects[1] == null ? null : Long.parseLong(objects[1].toString()))
-                .financialGroupId(objects[2] == null ? null : Long.parseLong(objects[2].toString()))
-                .financialDepartmentId(objects[3] == null ? null : Long.parseLong(objects[3].toString()))
-                .departmentId(objects[4] == null ? null : Long.parseLong(objects[4].toString()))
-                .financialLedgerTypeId(objects[5] == null ? null : Long.parseLong(objects[5].toString()))
-                .allLedgerTypesFlag(objects[6] == null ? null : ((Integer.parseInt(objects[6].toString())) == 1))
-                .allFncDepartmentFlag(objects[7] == null ? null : ((Integer.parseInt(objects[7].toString())) == 1))
-                .effectiveDate(objects[8] == null ? null : ((Timestamp) objects[8]).toLocalDateTime())
-                .disableDate(objects[9] == null ? null : ((Timestamp) objects[9]).toLocalDateTime())
-                .applicationUserId(objects[10] == null ? null : Long.parseLong(objects[10].toString()))
-                .financialUserName(objects[11] == null ? null : objects[11].toString())
-                .financialGroupCode(objects[12] == null ? null : objects[12].toString())
-                .financialGroupDescription(objects[13] == null ? null : objects[13].toString())
-                .departmentCode(objects[14] == null ? null : objects[14].toString())
-                .departmentName(objects[15] == null ? null : objects[15].toString())
-                .financialDepartmentCode(objects[16] == null ? null : objects[16].toString())
-                .financialDepartmentName(objects[17] == null ? null : objects[17].toString())
-                .ledgerTypeDescription(objects[18] == null ? null : objects[18].toString()).build())
+                        .builder()
+                        .userPermissionScopeId(objects[0] == null ? null : Long.parseLong(objects[0].toString()))
+                        .financialUserId(objects[1] == null ? null : Long.parseLong(objects[1].toString()))
+                        .financialGroupId(objects[2] == null ? null : Long.parseLong(objects[2].toString()))
+                        .financialDepartmentId(objects[3] == null ? null : Long.parseLong(objects[3].toString()))
+                        .departmentId(objects[4] == null ? null : Long.parseLong(objects[4].toString()))
+                        .financialLedgerTypeId(objects[5] == null ? null : Long.parseLong(objects[5].toString()))
+                        .allLedgerTypesFlag(objects[6] == null ? null : ((Integer.parseInt(objects[6].toString())) == 1))
+                        .allFncDepartmentFlag(objects[7] == null ? null : ((Integer.parseInt(objects[7].toString())) == 1))
+                        .effectiveDate(objects[8] == null ? null : ((Timestamp) objects[8]).toLocalDateTime())
+                        .disableDate(objects[9] == null ? null : ((Timestamp) objects[9]).toLocalDateTime())
+                        .applicationUserId(objects[10] == null ? null : Long.parseLong(objects[10].toString()))
+                        .financialUserName(objects[11] == null ? null : objects[11].toString())
+                        .financialGroupCode(objects[12] == null ? null : objects[12].toString())
+                        .financialGroupDescription(objects[13] == null ? null : objects[13].toString())
+                        .departmentCode(objects[14] == null ? null : objects[14].toString())
+                        .departmentName(objects[15] == null ? null : objects[15].toString())
+                        .financialDepartmentCode(objects[16] == null ? null : objects[16].toString())
+                        .financialDepartmentName(objects[17] == null ? null : objects[17].toString())
+                        .ledgerTypeDescription(objects[18] == null ? null : objects[18].toString()).build())
                 .collect(Collectors.toList());
     }
 
@@ -115,13 +116,27 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
 
 
     @Override
-    public Long getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(Long financialUserId, Long financialLedgerTypeId, Long financialDepartmentId, Long departmentId, LocalDateTime effectiveDate, Long organizationId, Boolean allLedgerTypesFlag, Boolean allFncDepartmentFlag, Long financialGroupId) {
-        return userPermissionScopeRepository.findUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(financialUserId, financialLedgerTypeId, financialDepartmentId, departmentId, effectiveDate, organizationId, allLedgerTypesFlag, allFncDepartmentFlag, financialGroupId);
+    public Long getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(Long financialUserId, Long financialLedgerTypeId,
+                                                                           Long financialDepartmentId, Long departmentId,
+                                                                           LocalDateTime effectiveDate, Long organizationId,
+                                                                           Boolean allLedgerTypesFlag, Boolean allFncDepartmentFlag,
+                                                                           Long financialGroupId) {
+        return userPermissionScopeRepository.findUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(financialUserId,
+                financialLedgerTypeId, financialDepartmentId,
+                departmentId, DateUtil.truncate(effectiveDate),
+                organizationId, allLedgerTypesFlag,
+                allFncDepartmentFlag, financialGroupId);
     }
 
     @Override
-    public Long getUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(Long financialUserId, Long financialLedgerTypeId, Long financialDepartmentId, Long departmentId, LocalDateTime disableDate, Long organizationId, Boolean allLedgerTypesFlag, Boolean allFncDepartmentFlag, Long financialGroupId) {
-        return userPermissionScopeRepository.findUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(financialUserId, financialLedgerTypeId, financialDepartmentId, departmentId, disableDate, organizationId, allLedgerTypesFlag, allFncDepartmentFlag, financialGroupId);
+    public Long getUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(Long financialUserId, Long financialLedgerTypeId,
+                                                                         Long financialDepartmentId,
+                                                                         Long departmentId, LocalDateTime disableDate,
+                                                                         Long organizationId, Boolean allLedgerTypesFlag,
+                                                                         Boolean allFncDepartmentFlag, Long financialGroupId) {
+        return userPermissionScopeRepository.findUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(financialUserId, financialLedgerTypeId,
+                financialDepartmentId, departmentId, DateUtil.truncate(disableDate), organizationId, allLedgerTypesFlag,
+                allFncDepartmentFlag, financialGroupId);
     }
 
 
@@ -179,8 +194,23 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                     .financialGroup(daoService.findById(FinancialGroup.class, financialGroupId))
                     .organization(daoService.findById(Organization.class, permissionScopeRequest.getOrganizationId()))
                     .build();
-            Long countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate = getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(null, permissionScopeRequest.getFinancialLedgerTypeId(), permissionScopeRequest.getFinancialDepartmentId(), permissionScopeRequest.getDepartmentId(), permissionScopeRequest.getEffectiveDate(), permissionScopeRequest.getOrganizationId(), permissionScopeRequest.getAllLedgerTypesFlag(), permissionScopeRequest.getAllFncDepartmentFlag(), financialGroupId);
-            Long countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate = getUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(null, permissionScopeRequest.getFinancialLedgerTypeId(), permissionScopeRequest.getFinancialDepartmentId(), permissionScopeRequest.getDepartmentId(), permissionScopeRequest.getDisableDate(), permissionScopeRequest.getOrganizationId(), permissionScopeRequest.getAllLedgerTypesFlag(), permissionScopeRequest.getAllFncDepartmentFlag(), financialGroupId);
+            Long countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate = getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(null,
+                    permissionScopeRequest.getFinancialLedgerTypeId(),
+                    permissionScopeRequest.getFinancialDepartmentId(),
+                    permissionScopeRequest.getDepartmentId(),
+                    DateUtil.truncate(permissionScopeRequest.getEffectiveDate()),
+                    permissionScopeRequest.getOrganizationId(),
+                    permissionScopeRequest.getAllLedgerTypesFlag(),
+                    permissionScopeRequest.getAllFncDepartmentFlag(),
+                    financialGroupId);
+            Long countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate = getUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(null,
+                    permissionScopeRequest.getFinancialLedgerTypeId(),
+                    permissionScopeRequest.getFinancialDepartmentId(),
+                    permissionScopeRequest.getDepartmentId(),
+                    DateUtil.truncate(permissionScopeRequest.getDisableDate()),
+                    permissionScopeRequest.getOrganizationId(),
+                    permissionScopeRequest.getAllLedgerTypesFlag(),
+                    permissionScopeRequest.getAllFncDepartmentFlag(), financialGroupId);
             if (countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate > 0 || countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate > 0) {
                 continue;
             }
@@ -190,7 +220,8 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         }
     }
 
-    private void checkNotEmptyFinancialUser(SaveCompletePermissionRequest saveCompletePermissionRequest, FinancialSecPermissionScopeRequest permissionScopeRequest) {
+    private void checkNotEmptyFinancialUser(SaveCompletePermissionRequest saveCompletePermissionRequest,
+                                            FinancialSecPermissionScopeRequest permissionScopeRequest) {
         for (Long financialUserId : permissionScopeRequest.getFinancialUserId()) {
             UserPermissionScope userPermissionScope = UserPermissionScope.builder()
                     .financialUser(daoService.findById(FinancialUser.class, financialUserId))
@@ -209,7 +240,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                     permissionScopeRequest.getFinancialLedgerTypeId() == null ? null : permissionScopeRequest.getFinancialLedgerTypeId(),
                     permissionScopeRequest.getFinancialDepartmentId(),
                     permissionScopeRequest.getDepartmentId(),
-                    permissionScopeRequest.getEffectiveDate(),
+                    DateUtil.truncate(permissionScopeRequest.getEffectiveDate()),
                     permissionScopeRequest.getOrganizationId(),
                     permissionScopeRequest.getAllLedgerTypesFlag(),
                     permissionScopeRequest.getAllFncDepartmentFlag(), null);
@@ -217,7 +248,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                     permissionScopeRequest.getFinancialLedgerTypeId() == null ? null : permissionScopeRequest.getFinancialLedgerTypeId(),
                     permissionScopeRequest.getFinancialDepartmentId(),
                     permissionScopeRequest.getDepartmentId(),
-                    permissionScopeRequest.getDisableDate(),
+                    DateUtil.truncate(permissionScopeRequest.getDisableDate()),
                     permissionScopeRequest.getOrganizationId(),
                     permissionScopeRequest.getAllLedgerTypesFlag(),
                     permissionScopeRequest.getAllFncDepartmentFlag(), null);
@@ -238,26 +269,38 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
 
                 UserPermission userPermission = UserPermission.builder()
                         .userPermissionScopeId(daoService.findById(UserPermissionScope.class, userPermissionScopeId))
-                        .financialUserIdCreator(financialUserPermissionRequest.getFinancialUserIdCreator() != null ? daoService.findById(FinancialUser.class, financialUserPermissionRequest.getFinancialUserIdCreator()) : null)
-                        .financialTypeActivityId(daoService.findById(FinancialActivityType.class, financialUserPermissionRequest.getFinancialTypeActivityId()))
-                        .financialDocumentTypeId(financialUserPermissionRequest.getFinancialDocumentTypeId() != null ? daoService.findById(FinancialDocumentType.class, financialUserPermissionRequest.getFinancialDocumentTypeId()) : null)
-                        .financialPeriodId(financialUserPermissionRequest.getFinancialPeriodId() != null ? daoService.findById(FinancialPeriod.class, financialUserPermissionRequest.getFinancialPeriodId()) : null)
+                        .financialUserIdCreator(financialUserPermissionRequest.getFinancialUserIdCreator() != null ? daoService.findById(FinancialUser.class,
+                                financialUserPermissionRequest.getFinancialUserIdCreator()) : null)
+                        .financialTypeActivityId(daoService.findById(FinancialActivityType.class,
+                                financialUserPermissionRequest.getFinancialTypeActivityId()))
+                        .financialDocumentTypeId(financialUserPermissionRequest.getFinancialDocumentTypeId() != null ?
+                                daoService.findById(FinancialDocumentType.class, financialUserPermissionRequest.getFinancialDocumentTypeId()) : null)
+                        .financialPeriodId(financialUserPermissionRequest.getFinancialPeriodId() != null ?
+                                daoService.findById(FinancialPeriod.class, financialUserPermissionRequest.getFinancialPeriodId()) : null)
                         .effectiveDate(financialUserPermissionRequest.getEffectiveDate())
                         .disableDate(financialUserPermissionRequest.getDisableDate() == null ? null : financialUserPermissionRequest.getDisableDate())
                         .allDocumentTypeFlag(financialUserPermissionRequest.getAllDocumentTypeFlag())
                         .allFinancialPeriodFlag(financialUserPermissionRequest.getAllFinancialPeriodFlag())
                         .build();
-                Long countByUserPermissionByAllDocumentTypeFlagAndEffectiveDate = userPermissionService.getUserPermissionByAllDocumentTypeFlagAndEffectiveDate(
-                        financialUserPermissionRequest.getUserPermissionScopeId(), financialUserPermissionRequest.getFinancialUserIdCreator(),
-                        financialUserPermissionRequest.getFinancialDocumentTypeId(), financialUserPermissionRequest.getFinancialDocumentTypeId(),
-                        financialUserPermissionRequest.getFinancialPeriodId(), financialUserPermissionRequest.getEffectiveDate(),
-                        financialUserPermissionRequest.getAllDocumentTypeFlag(), financialUserPermissionRequest.getAllFinancialPeriodFlag());
+                Long countByUserPermissionByAllDocumentTypeFlagAndEffectiveDate = userPermissionService
+                        .getUserPermissionByAllDocumentTypeFlagAndEffectiveDate(
+                        financialUserPermissionRequest.getUserPermissionScopeId(),
+                        financialUserPermissionRequest.getFinancialUserIdCreator(),
+                        financialUserPermissionRequest.getFinancialDocumentTypeId(),
+                        financialUserPermissionRequest.getFinancialDocumentTypeId(),
+                        financialUserPermissionRequest.getFinancialPeriodId(),
+                        DateUtil.truncate(financialUserPermissionRequest.getEffectiveDate()),
+                        financialUserPermissionRequest.getAllDocumentTypeFlag(),
+                        financialUserPermissionRequest.getAllFinancialPeriodFlag());
                 Long countByUserPermissionByAllDocumentTypeFlagAndDisableDate = userPermissionService
                         .getUserPermissionByAllDocumentTypeFlagAndDisableDate(financialUserPermissionRequest.getUserPermissionScopeId(),
                                 financialUserPermissionRequest.getFinancialUserIdCreator(),
-                                financialUserPermissionRequest.getFinancialDocumentTypeId(), financialUserPermissionRequest.getFinancialDocumentTypeId(),
-                                financialUserPermissionRequest.getFinancialPeriodId(), financialUserPermissionRequest.getDisableDate(),
-                                financialUserPermissionRequest.getAllDocumentTypeFlag(), financialUserPermissionRequest.getAllFinancialPeriodFlag());
+                                financialUserPermissionRequest.getFinancialDocumentTypeId(),
+                                financialUserPermissionRequest.getFinancialDocumentTypeId(),
+                                financialUserPermissionRequest.getFinancialPeriodId(),
+                                DateUtil.truncate(financialUserPermissionRequest.getDisableDate()),
+                                financialUserPermissionRequest.getAllDocumentTypeFlag(),
+                                financialUserPermissionRequest.getAllFinancialPeriodFlag());
                 if (countByUserPermissionByAllDocumentTypeFlagAndEffectiveDate > 0 || countByUserPermissionByAllDocumentTypeFlagAndDisableDate > 0) {
                     continue;
                 }

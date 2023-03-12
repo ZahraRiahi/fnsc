@@ -75,8 +75,8 @@ public interface UserPermissionScopeRepository extends JpaRepository<UserPermiss
             "  left join  ups.financialGroup fg " +
             " inner join ups.organization o " +
             " where (ups.financialUser.id is null or ups.financialUser.id =  :financialUserId) " +
-            "   and ups.financialLedgerType.id =  :financialLedgerTypeId " +
-            "   and ups.financialDepartment.id =  :financialDepartmentId " +
+            "   and (ups.financialLedgerType.id is null or ups.financialLedgerType.id =  :financialLedgerTypeId )" +
+            "   and (ups.financialDepartment.id  is null or ups.financialDepartment.id =  :financialDepartmentId) " +
             "   and ups.department.id =  :departmentId " +
             "   and trunc(ups.effectiveDate) =  :effectiveDate " +
             "   and ups.organization.id =  :organizationId " +
@@ -102,8 +102,8 @@ public interface UserPermissionScopeRepository extends JpaRepository<UserPermiss
             "  left join  ups.financialGroup fg " +
             " inner join ups.organization o " +
             " where (ups.financialUser.id is null or ups.financialUser.id =  :financialUserId) " +
-            "   and ups.financialLedgerType.id =  :financialLedgerTypeId " +
-            "   and ups.financialDepartment.id =  :financialDepartmentId " +
+            "   and ( ups.financialLedgerType.id is null or ups.financialLedgerType.id =  :financialLedgerTypeId) " +
+            "   and (ups.financialDepartment.id is null or ups.financialDepartment.id =  :financialDepartmentId )" +
             "   and ups.department.id =  :departmentId " +
             "   and trunc(ups.disableDate) =  :disableDate " +
             "   and ups.organization.id =  :organizationId " +
