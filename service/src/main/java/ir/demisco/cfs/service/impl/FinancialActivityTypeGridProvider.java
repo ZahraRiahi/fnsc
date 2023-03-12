@@ -6,9 +6,9 @@ import ir.demisco.cloud.core.middle.service.business.api.core.GridDataProvider;
 import ir.demisco.core.utils.CommonUtils;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 import java.util.HashMap;
@@ -84,6 +84,7 @@ public class FinancialActivityTypeGridProvider implements GridDataProvider {
     public Map<String, String> getFullPaths() {
         Map<String, String> fullPaths = new HashMap<>();
         fullPaths.put("financialSystemId", "financialSystem.id");
+        fullPaths.put("financialSystemSubjectId", "financialSystemSubject.id");
         return fullPaths;
     }
 }
