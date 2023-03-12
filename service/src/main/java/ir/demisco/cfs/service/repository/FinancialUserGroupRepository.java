@@ -64,5 +64,9 @@ public interface FinancialUserGroupRepository extends JpaRepository<FinancialUse
                                                                                      @Param("effectiveDate") LocalDateTime effectiveDate,
                                                                                      @Param("disableDate") LocalDateTime disableDate);
 
+    @Query("select count(fu.id) " +
+            "from FinancialUserGroup fu " +
+            "where fu.financialUserId.id= :financialUserId")
+    Long findFinancialUserGroupByFinancialUserId(@Param("financialUserId") Long financialUserId);
 
 }

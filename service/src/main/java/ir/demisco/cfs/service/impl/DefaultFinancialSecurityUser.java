@@ -4,9 +4,10 @@ import ir.demisco.cfs.model.dto.request.FinancialUsersInputModelRequest;
 import ir.demisco.cfs.model.dto.response.FinancialSecurityUserResponse;
 import ir.demisco.cfs.model.entity.FinancialUser;
 import ir.demisco.cfs.service.api.FinancialAlternativeUsersService;
-import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
 import ir.demisco.cfs.service.api.FinancialSecurityUserService;
+import ir.demisco.cfs.service.api.FinancialUserGroupService;
 import ir.demisco.cfs.service.api.UserPermissionService;
+import ir.demisco.cfs.service.api.FinancialSecPermissionScopeService;
 import ir.demisco.cfs.service.repository.ApplicationUserRepository;
 import ir.demisco.cfs.service.repository.FinancialUserRepository;
 import ir.demisco.cloud.core.middle.exception.RuleException;
@@ -22,15 +23,18 @@ public class DefaultFinancialSecurityUser implements FinancialSecurityUserServic
     private final FinancialUserRepository financialUserRepository;
     private final FinancialAlternativeUsersService financialAlternativeUsersService;
     private final UserPermissionService userPermissionService;
+    private final FinancialUserGroupService financialUserGroupService;
     private final FinancialSecPermissionScopeService financialSecPermissionScopeService;
 
     public DefaultFinancialSecurityUser(ApplicationUserRepository applicationUserRepository, FinancialUserRepository financialUserRepository,
                                         FinancialAlternativeUsersService financialAlternativeUsersService, UserPermissionService userPermissionService,
+                                        FinancialUserGroupService financialUserGroupService,
                                         FinancialSecPermissionScopeService financialSecPermissionScopeService) {
         this.applicationUserRepository = applicationUserRepository;
         this.financialUserRepository = financialUserRepository;
         this.financialAlternativeUsersService = financialAlternativeUsersService;
         this.userPermissionService = userPermissionService;
+        this.financialUserGroupService = financialUserGroupService;
         this.financialSecPermissionScopeService = financialSecPermissionScopeService;
     }
 
@@ -75,6 +79,10 @@ public class DefaultFinancialSecurityUser implements FinancialSecurityUserServic
         }
         Long userPermissionScopeByFinancialUserId = financialSecPermissionScopeService.findUserPermissionScopeByFinancialUserId(financialUserId);
         if (userPermissionScopeByFinancialUserId > 0L) {
+            throw new RuleException("امکان حذف این کاربر مالی وجود ندارد.");
+        }
+        Long financialUserGroupByFinancialUserId = financialUserGroupService.getFinancialUserGroupByFinancialUserId(financialUserId);
+        if (financialUserGroupByFinancialUserId > 0L) {
             throw new RuleException("امکان حذف این کاربر مالی وجود ندارد.");
         }
         financialUserRepository.deleteById(financialUserId);
