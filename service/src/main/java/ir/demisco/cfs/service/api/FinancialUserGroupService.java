@@ -28,5 +28,7 @@ public interface FinancialUserGroupService {
 
     Boolean saveFinancialUserGroup(FinancialUserGroupRequest financialUserGroupRequest);
 
+    Long getFinancialUserGroupByFinancialUserId(Long financialUserId);
+
 
 }

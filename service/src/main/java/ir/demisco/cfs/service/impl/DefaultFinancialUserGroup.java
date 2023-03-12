@@ -94,4 +94,9 @@ public class DefaultFinancialUserGroup implements FinancialUserGroupService {
 
         return true;
     }
+
+    @Override
+    public Long getFinancialUserGroupByFinancialUserId(Long financialUserId) {
+        return financialUserGroupRepository.findFinancialUserGroupByFinancialUserId(financialUserId);
+    }
 }
