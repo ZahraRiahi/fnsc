@@ -58,10 +58,10 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission, 
             "    left join up.financialDocumentTypeId fdt " +
             "    left join up.financialPeriodId fp " +
             "   where up.userPermissionScopeId =  :userPermissionScopeId " +
-            "     and up.financialUserIdCreator =  :financialUserIdCreator " +
+            "     and (up.financialUserIdCreator is null or up.financialUserIdCreator =  :financialUserIdCreator )" +
             "     and up.financialTypeActivityId =  :financialActivityTypeId " +
-            "     and up.financialDocumentTypeId =  :financialDocumentTypeId " +
-            "     and up.financialPeriodId =  :financialPeriodId " +
+            "     and (up.financialDocumentTypeId is null or up.financialDocumentTypeId =  :financialDocumentTypeId) " +
+            "     and (up.financialPeriodId is null or up.financialPeriodId =  :financialPeriodId) " +
             "     and trunc(up.effectiveDate) =  :effectiveDate " +
             "     and up.allDocumentTypeFlag =  :allDocumentTypeFlag " +
             "     and up.allFinancialPeriodFlag =  :allFinancialPeriodFlag")
@@ -82,11 +82,11 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission, 
             "    left join up.financialDocumentTypeId fdt " +
             "    left join up.financialPeriodId fp " +
             "   where up.userPermissionScopeId =  :userPermissionScopeId " +
-            "     and up.financialUserIdCreator =  :financialUserIdCreator " +
+            "     and (up.financialUserIdCreator is null or up.financialUserIdCreator =  :financialUserIdCreator )" +
             "     and up.financialTypeActivityId =  :financialActivityTypeId " +
-            "     and up.financialDocumentTypeId =  :financialDocumentTypeId " +
-            "     and up.financialPeriodId =  :financialPeriodId " +
-            "     and trunc(up.disableDate) =  :disableDate " +
+            "     and (up.financialDocumentTypeId is null or up.financialDocumentTypeId =  :financialDocumentTypeId) " +
+            "     and (up.financialPeriodId is null or up.financialPeriodId =  :financialPeriodId) " +
+            "     and (up.disableDate is null or trunc(up.disableDate) =  :disableDate )" +
             "     and up.allDocumentTypeFlag =  :allDocumentTypeFlag " +
             "     and up.allFinancialPeriodFlag =  :allFinancialPeriodFlag")
     Long findUserPermissionByAllDocumentTypeFlagAndDisableDate(@Param("userPermissionScopeId") Long userPermissionScopeId,

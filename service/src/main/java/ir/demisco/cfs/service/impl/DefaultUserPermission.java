@@ -12,6 +12,7 @@ import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
 import ir.demisco.cfs.service.repository.FinancialPeriodRepository;
 import ir.demisco.cfs.service.repository.UserPermissionRepository;
 import ir.demisco.cloud.core.middle.exception.RuleException;
+import ir.demisco.core.utils.DateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -107,14 +108,14 @@ public class DefaultUserPermission implements UserPermissionService {
         return userPermissionRepository.findUserPermissionByAllDocumentTypeFlagAndEffectiveDate(userPermissionScopeId,
                 financialUserIdCreator,
                 financialActivityTypeId, financialDocumentTypeId,
-                financialPeriodId, effectiveDate, allDocumentTypeFlag, allFinancialPeriodFlag);
+                financialPeriodId, DateUtil.truncate(effectiveDate), allDocumentTypeFlag, allFinancialPeriodFlag);
     }
 
     @Override
     public Long getUserPermissionByAllDocumentTypeFlagAndDisableDate(Long userPermissionScopeId, Long financialUserIdCreator, Long financialActivityTypeId, Long financialDocumentTypeId, Long financialPeriodId, LocalDateTime disableDate, Boolean allDocumentTypeFlag, Boolean allFinancialPeriodFlag) {
         return userPermissionRepository.findUserPermissionByAllDocumentTypeFlagAndDisableDate(userPermissionScopeId,
                 financialUserIdCreator, financialActivityTypeId, financialDocumentTypeId, financialPeriodId,
-                disableDate, allDocumentTypeFlag, allFinancialPeriodFlag);
+                DateUtil.truncate(disableDate), allDocumentTypeFlag, allFinancialPeriodFlag);
     }
 
     @Override
