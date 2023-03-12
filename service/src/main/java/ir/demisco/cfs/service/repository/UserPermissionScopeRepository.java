@@ -74,15 +74,15 @@ public interface UserPermissionScopeRepository extends JpaRepository<UserPermiss
             " inner join ups.department d " +
             "  left join  ups.financialGroup fg " +
             " inner join ups.organization o " +
-            " where (ups.financialUser.id is null or ups.financialUser.id =  :financialUserId) " +
-            "   and (ups.financialLedgerType.id is null or ups.financialLedgerType.id =  :financialLedgerTypeId )" +
-            "   and (ups.financialDepartment.id  is null or ups.financialDepartment.id =  :financialDepartmentId) " +
+            " where (:financialUserId is null or ups.financialUser.id =  :financialUserId) " +
+            "   and (:financialLedgerTypeId is null or ups.financialLedgerType.id =  :financialLedgerTypeId )" +
+            "   and (:financialDepartmentId is null or ups.financialDepartment.id =  :financialDepartmentId) " +
             "   and ups.department.id =  :departmentId " +
             "   and trunc(ups.effectiveDate) =  :effectiveDate " +
             "   and ups.organization.id =  :organizationId " +
             "   and ups.allLedgerTypesFlag =  :allLedgerTypesFlag " +
             "   and ups.allFncDepartmentFlag =  :allFncDepartmentFlag " +
-            "   and (ups.financialGroup.id is null or ups.financialGroup.id =  :financialGroupId )")
+            "   and (:financialGroupId is null or ups.financialGroup.id =  :financialGroupId )")
     Long findUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(@Param("financialUserId") Long financialUserId,
                                                                      @Param("financialLedgerTypeId") Long financialLedgerTypeId,
                                                                      @Param("financialDepartmentId") Long financialDepartmentId,
@@ -101,15 +101,15 @@ public interface UserPermissionScopeRepository extends JpaRepository<UserPermiss
             " inner join ups.department d " +
             "  left join  ups.financialGroup fg " +
             " inner join ups.organization o " +
-            " where (ups.financialUser.id is null or ups.financialUser.id =  :financialUserId) " +
-            "   and ( ups.financialLedgerType.id is null or ups.financialLedgerType.id =  :financialLedgerTypeId) " +
-            "   and (ups.financialDepartment.id is null or ups.financialDepartment.id =  :financialDepartmentId )" +
+            " where (:financialUserId is null or ups.financialUser.id =  :financialUserId) " +
+            "   and ( :financialLedgerTypeId is null or ups.financialLedgerType.id =  :financialLedgerTypeId) " +
+            "   and (:financialDepartmentId is null or ups.financialDepartment.id =  :financialDepartmentId )" +
             "   and ups.department.id =  :departmentId " +
             "   and trunc(ups.disableDate) =  :disableDate " +
             "   and ups.organization.id =  :organizationId " +
             "   and ups.allLedgerTypesFlag =  :allLedgerTypesFlag " +
             "   and ups.allFncDepartmentFlag =  :allFncDepartmentFlag " +
-            "   and (ups.financialGroup.id is null or ups.financialGroup.id =  :financialGroupId) ")
+            "   and (:financialGroupId is null or ups.financialGroup.id =  :financialGroupId) ")
     Long findUserPermissionScopeByAllLedgerTypesFlagAndDisableDate(@Param("financialUserId") Long financialUserId,
                                                                    @Param("financialLedgerTypeId") Long financialLedgerTypeId,
                                                                    @Param("financialDepartmentId") Long financialDepartmentId,
