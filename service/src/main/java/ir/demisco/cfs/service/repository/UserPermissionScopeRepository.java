@@ -124,4 +124,5 @@ public interface UserPermissionScopeRepository extends JpaRepository<UserPermiss
             "  from UserPermissionScope us  " +
             " where us.financialUser.id = :financialUserId  ")
     Long findUserPermissionScopeByFinancialUserId(Long financialUserId);
+
 }
