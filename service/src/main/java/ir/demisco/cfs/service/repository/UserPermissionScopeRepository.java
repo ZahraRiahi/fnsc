@@ -105,7 +105,7 @@ public interface UserPermissionScopeRepository extends JpaRepository<UserPermiss
             "   and ( :financialLedgerTypeId is null or ups.financialLedgerType.id =  :financialLedgerTypeId) " +
             "   and (:financialDepartmentId is null or ups.financialDepartment.id =  :financialDepartmentId )" +
             "   and ups.department.id =  :departmentId " +
-            "   and trunc(ups.disableDate) =  :disableDate " +
+            "   and (:disableDate is null or trunc(ups.disableDate) =  :disableDate) " +
             "   and ups.organization.id =  :organizationId " +
             "   and ups.allLedgerTypesFlag =  :allLedgerTypesFlag " +
             "   and ups.allFncDepartmentFlag =  :allFncDepartmentFlag " +
@@ -124,6 +124,5 @@ public interface UserPermissionScopeRepository extends JpaRepository<UserPermiss
             "  from UserPermissionScope us  " +
             " where us.financialUser.id = :financialUserId  ")
     Long findUserPermissionScopeByFinancialUserId(Long financialUserId);
-
 
 }
