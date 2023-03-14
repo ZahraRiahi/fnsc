@@ -284,14 +284,14 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                         .build();
                 Long countByUserPermissionByAllDocumentTypeFlagAndEffectiveDate = userPermissionService
                         .getUserPermissionByAllDocumentTypeFlagAndEffectiveDate(
-                        financialUserPermissionRequest.getUserPermissionScopeId(),
-                        financialUserPermissionRequest.getFinancialUserIdCreator(),
-                        financialUserPermissionRequest.getFinancialDocumentTypeId(),
-                        financialUserPermissionRequest.getFinancialDocumentTypeId(),
-                        financialUserPermissionRequest.getFinancialPeriodId(),
-                        DateUtil.truncate(financialUserPermissionRequest.getEffectiveDate()),
-                        financialUserPermissionRequest.getAllDocumentTypeFlag(),
-                        financialUserPermissionRequest.getAllFinancialPeriodFlag());
+                                financialUserPermissionRequest.getUserPermissionScopeId(),
+                                financialUserPermissionRequest.getFinancialUserIdCreator(),
+                                financialUserPermissionRequest.getFinancialDocumentTypeId(),
+                                financialUserPermissionRequest.getFinancialDocumentTypeId(),
+                                financialUserPermissionRequest.getFinancialPeriodId(),
+                                DateUtil.truncate(financialUserPermissionRequest.getEffectiveDate()),
+                                financialUserPermissionRequest.getAllDocumentTypeFlag(),
+                                financialUserPermissionRequest.getAllFinancialPeriodFlag());
                 Long countByUserPermissionByAllDocumentTypeFlagAndDisableDate = userPermissionService
                         .getUserPermissionByAllDocumentTypeFlagAndDisableDate(financialUserPermissionRequest.getUserPermissionScopeId(),
                                 financialUserPermissionRequest.getFinancialUserIdCreator(),
@@ -324,7 +324,8 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
 
     private List<FinancialSecPermissionScopeRequest> checkFinancialSecPermissionScopeRequest(SaveCompletePermissionRequest saveCompletePermissionRequest) {
         List<FinancialSecPermissionScopeRequest> financialSecPermissionScopeRequestList = saveCompletePermissionRequest.getFinancialSecPermissionScopeRequestList();
-        if (financialSecPermissionScopeRequestList.stream().anyMatch(i -> !i.getFinancialGroupId().isEmpty() && !i.getFinancialUserId().isEmpty())) {
+        if (financialSecPermissionScopeRequestList.stream().anyMatch(i -> (i.getFinancialUserId().isEmpty() && i.getFinancialGroupId().isEmpty()) ||
+                (!i.getFinancialUserId().isEmpty() && !i.getFinancialGroupId().isEmpty()))) {
             throw new RuleException("یکی از دو شناسه گروه و یا شناسه کاربر مالی باید  پر شده باشد ");
         }
         if (financialSecPermissionScopeRequestList.stream().anyMatch(i -> (i.getFinancialDepartmentId() == null && !i.getAllFncDepartmentFlag()) ||

@@ -3,14 +3,15 @@ package ir.demisco.cfs.service.impl;
 import ir.demisco.cfs.model.dto.request.FinancialSecUserPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserPermissionInputModelRequest;
 import ir.demisco.cfs.model.dto.request.UserPermissionRequest;
+import ir.demisco.cfs.model.entity.FinancialActivityType;
+import ir.demisco.cfs.model.entity.FinancialUser;
 import ir.demisco.cfs.model.entity.UserPermission;
+import ir.demisco.cfs.model.entity.UserPermissionScope;
+import ir.demisco.cfs.model.entity.FinancialDocumentType;
+import ir.demisco.cfs.model.entity.FinancialPeriod;
 import ir.demisco.cfs.service.api.UserPermissionService;
-import ir.demisco.cfs.service.repository.FinancialActivityTypeRepository;
-import ir.demisco.cfs.service.repository.FinancialDocumentTypeRepository;
-import ir.demisco.cfs.service.repository.FinancialUserRepository;
-import ir.demisco.cfs.service.repository.UserPermissionScopeRepository;
-import ir.demisco.cfs.service.repository.FinancialPeriodRepository;
 import ir.demisco.cfs.service.repository.UserPermissionRepository;
+import ir.demisco.cloud.basic.service.api.DaoService;
 import ir.demisco.cloud.core.middle.exception.RuleException;
 import ir.demisco.core.utils.DateUtil;
 import org.springframework.stereotype.Service;
@@ -21,79 +22,74 @@ import java.util.List;
 
 @Service
 public class DefaultUserPermission implements UserPermissionService {
-    private final UserPermissionScopeRepository userPermissionScopeRepository;
-    private final FinancialUserRepository financialUserRepository;
-    private final FinancialActivityTypeRepository financialActivityTypeRepository;
-    private final FinancialDocumentTypeRepository financialDocumentTypeRepository;
-    private final FinancialPeriodRepository financialPeriodRepository;
     private final UserPermissionRepository userPermissionRepository;
+    private final DaoService daoService;
 
-    public DefaultUserPermission(UserPermissionScopeRepository userPermissionScopeRepository, FinancialUserRepository financialUserRepository, FinancialActivityTypeRepository financialActivityTypeRepository, FinancialDocumentTypeRepository financialDocumentTypeRepository, FinancialPeriodRepository financialPeriodRepository, UserPermissionRepository userPermissionRepository) {
-        this.userPermissionScopeRepository = userPermissionScopeRepository;
-
-        this.financialUserRepository = financialUserRepository;
-        this.financialActivityTypeRepository = financialActivityTypeRepository;
-        this.financialDocumentTypeRepository = financialDocumentTypeRepository;
-        this.financialPeriodRepository = financialPeriodRepository;
+    public DefaultUserPermission(UserPermissionRepository userPermissionRepository, DaoService daoService) {
         this.userPermissionRepository = userPermissionRepository;
+        this.daoService = daoService;
     }
 
 
     @Override
-    @Transactional(rollbackFor = Throwable.class)
-    public Boolean saveUserPermission(List<FinancialUserPermissionInputModelRequest> financialUserPermissionInputModelRequest) {
-        Long s1 = financialUserPermissionInputModelRequest.get(0).getAllDocumentTypeFlag() == true ? 1L : 0L;
-        Long s2 = financialUserPermissionInputModelRequest.get(0).getAllFinancialPeriodFlag() == true ? 1L : 0L;
-        Object financialPeriodId = null;
-        if (financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId() != null) {
-            financialPeriodId = "financialPeriodId";
-        } else {
-            financialUserPermissionInputModelRequest.get(0).setFinancialPeriodId(0L);
-        }
-
-        Object financialUserIdCreatorId = null;
-        if (financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator() != null) {
-            financialUserIdCreatorId = "financialUserIdCreatorId";
-        } else {
-            financialUserPermissionInputModelRequest.get(0).setFinancialUserIdCreator(0L);
-        }
-        Object financialDocumentTypeId = null;
-        if (financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId() != null) {
-            financialDocumentTypeId = "financialDocumentTypeId";
-        } else {
-            financialUserPermissionInputModelRequest.get(0).setFinancialDocumentTypeId(0L);
-        }
-        Long countEffectiveDate = userPermissionRepository.getPermissionByScopeIdAndFlgAndEffectiveDate(financialUserPermissionInputModelRequest.get(0).getUserPermissionScopeId(),
-                financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(),
-                financialUserIdCreatorId, financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialDocumentTypeId, financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
-                s1, s2, financialUserPermissionInputModelRequest.get(0).getEffectiveDate(), financialPeriodId, financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId());
-        if (countEffectiveDate != 0) {
-            throw new RuleException(" رکوردی با این اطلاعات قبلا ثبت شده است");
-        }
-
-        Long countDisableDate = userPermissionRepository.getPermissionByScopeIdAndFlgAndDisableDate(financialUserPermissionInputModelRequest.get(0).getUserPermissionScopeId(),
-                financialUserPermissionInputModelRequest.get(0).getFinancialTypeActivityId(),
-                financialUserPermissionInputModelRequest.get(0).getDisableDate() == null ? LocalDateTime.now() : financialUserPermissionInputModelRequest.get(0).getDisableDate()
-                , financialUserIdCreatorId, financialUserPermissionInputModelRequest.get(0).getFinancialUserIdCreator(), financialDocumentTypeId, financialUserPermissionInputModelRequest.get(0).getFinancialDocumentTypeId(),
-                financialPeriodId, financialUserPermissionInputModelRequest.get(0).getFinancialPeriodId(), s1,
-                s2);
-        if (countDisableDate != 0) {
-            throw new RuleException(" رکوردی با این اطلاعات قبلا ثبت شده است");
-        }
-        financialUserPermissionInputModelRequest.forEach((FinancialUserPermissionInputModelRequest e) -> {
-            UserPermission userPermission = new UserPermission();
-            userPermission.setUserPermissionScopeId(userPermissionScopeRepository.getOne(e.getUserPermissionScopeId()));
-            userPermission.setFinancialUserIdCreator(e.getFinancialUserIdCreator() == 0L ? null : financialUserRepository.getOne(e.getFinancialUserIdCreator()));
-            userPermission.setFinancialTypeActivityId(financialActivityTypeRepository.getOne(e.getFinancialTypeActivityId()));
-            userPermission.setFinancialDocumentTypeId(e.getFinancialDocumentTypeId() == 0L ? null : financialDocumentTypeRepository.getOne(e.getFinancialDocumentTypeId()));
-            userPermission.setFinancialPeriodId(e.getFinancialPeriodId() == 0L ? null : financialPeriodRepository.getOne(e.getFinancialPeriodId()));
-            userPermission.setEffectiveDate(e.getEffectiveDate());
-            userPermission.setDisableDate(e.getDisableDate() == null ? null : e.getDisableDate());
-            userPermission.setAllDocumentTypeFlag(e.getAllDocumentTypeFlag() == true ? true : false);
-            userPermission.setAllFinancialPeriodFlag(e.getAllFinancialPeriodFlag() == true ? true : false);
+    public Boolean saveUserPermission(List<FinancialUserPermissionInputModelRequest> userPermissionInputModelRequestList) {
+        for (FinancialUserPermissionInputModelRequest financialUserPermissionInputModelRequest : userPermissionInputModelRequestList) {
+            checkUniqueUserPermission(userPermissionInputModelRequestList);
+            UserPermission userPermission = UserPermission.builder()
+                    .userPermissionScopeId(daoService.findById(UserPermissionScope.class, financialUserPermissionInputModelRequest.getUserPermissionScopeId()))
+                    .financialUserIdCreator(financialUserPermissionInputModelRequest.getFinancialUserIdCreator() != null ?
+                            daoService.findById(FinancialUser.class, financialUserPermissionInputModelRequest.getFinancialUserIdCreator()) : null)
+                    .financialTypeActivityId(daoService.findById(FinancialActivityType.class, financialUserPermissionInputModelRequest.getFinancialActivityTypeId()))
+                    .financialDocumentTypeId(financialUserPermissionInputModelRequest.getFinancialDocumentTypeId() != null ?
+                            daoService.findById(FinancialDocumentType.class, financialUserPermissionInputModelRequest.getFinancialDocumentTypeId()) : null)
+                    .financialPeriodId(financialUserPermissionInputModelRequest.getFinancialPeriodId() != null ?
+                            daoService.findById(FinancialPeriod.class, financialUserPermissionInputModelRequest.getFinancialPeriodId()) : null)
+                    .effectiveDate(financialUserPermissionInputModelRequest.getEffectiveDate())
+                    .disableDate(financialUserPermissionInputModelRequest.getDisableDate() == null ? null :
+                            financialUserPermissionInputModelRequest.getDisableDate())
+                    .allDocumentTypeFlag(financialUserPermissionInputModelRequest.getAllDocumentTypeFlag())
+                    .allFinancialPeriodFlag(financialUserPermissionInputModelRequest.getAllFinancialPeriodFlag())
+                    .build();
+            Long userPermissionByAllDocumentTypeFlagAndEffectiveDate = getUserPermissionByAllDocumentTypeFlagAndEffectiveDate(financialUserPermissionInputModelRequest.getUserPermissionScopeId(),
+                    financialUserPermissionInputModelRequest.getFinancialUserIdCreator() == null ? null :
+                            financialUserPermissionInputModelRequest.getFinancialUserIdCreator(),
+                    financialUserPermissionInputModelRequest.getFinancialActivityTypeId(),
+                    financialUserPermissionInputModelRequest.getFinancialDocumentTypeId() == null ? null :
+                            financialUserPermissionInputModelRequest.getFinancialDocumentTypeId()
+                    , financialUserPermissionInputModelRequest.getFinancialPeriodId(),
+                    DateUtil.truncate(financialUserPermissionInputModelRequest.getEffectiveDate()),
+                    financialUserPermissionInputModelRequest.getAllDocumentTypeFlag(),
+                    financialUserPermissionInputModelRequest.getAllFinancialPeriodFlag());
+            Long userPermissionByAllDocumentTypeFlagAndDisableDate = getUserPermissionByAllDocumentTypeFlagAndDisableDate(financialUserPermissionInputModelRequest.getUserPermissionScopeId(),
+                    financialUserPermissionInputModelRequest.getFinancialUserIdCreator() == null ? null :
+                            financialUserPermissionInputModelRequest.getFinancialUserIdCreator(),
+                    financialUserPermissionInputModelRequest.getFinancialActivityTypeId(),
+                    financialUserPermissionInputModelRequest.getFinancialDocumentTypeId() == null ? null :
+                            financialUserPermissionInputModelRequest.getFinancialDocumentTypeId(),
+                    financialUserPermissionInputModelRequest.getFinancialPeriodId(),
+                    financialUserPermissionInputModelRequest.getDisableDate() == null ? null :
+                            DateUtil.truncate(financialUserPermissionInputModelRequest.getDisableDate()),
+                    financialUserPermissionInputModelRequest.getAllDocumentTypeFlag(), financialUserPermissionInputModelRequest.getAllFinancialPeriodFlag());
+            if (userPermissionByAllDocumentTypeFlagAndEffectiveDate > 0 || userPermissionByAllDocumentTypeFlagAndDisableDate > 0) {
+                continue;
+            }
             userPermissionRepository.save(userPermission);
-        });
+
+        }
         return true;
+    }
+
+    private void checkUniqueUserPermission(List<FinancialUserPermissionInputModelRequest> userPermissionInputModelRequestList) {
+        if (userPermissionInputModelRequestList.stream()
+                .anyMatch(i -> (i.getFinancialDocumentTypeId() == null && !i.getAllDocumentTypeFlag()) ||
+                        (i.getFinancialDocumentTypeId() != null && i.getAllDocumentTypeFlag()))) {
+            throw new RuleException(" فلگ دسترسی به همه انواع سند و فیلد نوع سند همخوانی ندارد. ");
+        }
+        if (userPermissionInputModelRequestList.stream()
+                .anyMatch(i -> (i.getFinancialPeriodId() == null && !i.getAllFinancialPeriodFlag()) ||
+                        (i.getFinancialPeriodId() != null && i.getAllFinancialPeriodFlag()))) {
+            throw new RuleException(" فلگ دسترسی به همه دوره های مالی  و فیلد دوره مالی همخوانی ندارد. ");
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package ir.demisco.cfs.app.web.controller;
 
 import ir.demisco.cfs.model.dto.request.FinancialGroupInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialGroupRequest;
+import ir.demisco.cfs.model.dto.request.ValidList;
 import ir.demisco.cfs.service.api.FinancialGroupService;
 import ir.demisco.cfs.service.impl.FinancialGroupGridProvider;
 import ir.demisco.cloud.core.middle.model.dto.DataSourceRequest;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api-financialGroup")
@@ -41,7 +41,7 @@ public class FinancialGroupController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Boolean> saveFinancialGroup(@Valid @RequestBody List<FinancialGroupRequest> financialGroupRequestList) {
+    public ResponseEntity<Boolean> saveFinancialGroup(@Valid @RequestBody ValidList<FinancialGroupRequest> financialGroupRequestList) {
         return ResponseEntity.ok(financialGroupService.saveFinancialGroup(financialGroupRequestList));
     }
 }
