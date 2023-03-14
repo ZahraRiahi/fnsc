@@ -50,5 +50,4 @@ public class UserPermissionController {
     public ResponseEntity<Boolean> setUserPermissionDisableDate(@RequestBody List<UserPermissionRequest> userPermissionRequestList) {
         return ResponseEntity.ok(userPermissionService.setUserPermissionDisableDate(userPermissionRequestList));
     }
-
 }
