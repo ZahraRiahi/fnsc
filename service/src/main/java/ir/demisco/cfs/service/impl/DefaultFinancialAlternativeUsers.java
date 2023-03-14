@@ -103,7 +103,6 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
     public Boolean saveFinancialAlternativeUsers(FinancialUserAlternativeRequest financialUserAlternativeRequest) {
         LocalDateTime effectiveDate = DateUtil.truncate(financialUserAlternativeRequest.getEffectiveDate());
         LocalDateTime disableDate = DateUtil.truncate(financialUserAlternativeRequest.getDisableDate());
-        Long currentOrganizationId = (Long) SecurityHelper.getCurrentUser().getAdditionalInformation().get(JwtSecurityPayloadKeys.ORGANIZATION_USER_ID.getValue());
         if (financialUserAlternativeRequest.getFlagAllOrganization()) {
             financialUserAlternativeRequest.setOrganizationId(organizationService
                     .getAllOrganizationsByUserAndApplicationSystem(SecurityHelper.getCurrentUser().getUserId(),
@@ -130,9 +129,9 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
                         .effectiveDate(financialUserAlternativeRequest.getEffectiveDate())
                         .build();
                 Long countByFinancialUserAndOrganizationAndEffectiveDate = getFinancialUserAlternativeByFinancialUserAndOrganizationAndEffectiveDate(financialUserAlternativeRequest.getMainFinancialUserId(),
-                        currentOrganizationId, effectiveDate, a);
+                        o, effectiveDate, a);
                 Long countByFinancialUserAndOrganizationAndDisableDate = getFinancialUserAlternativeByFinancialUserAndOrganizationAndDisableDate(financialUserAlternativeRequest.getMainFinancialUserId(),
-                        currentOrganizationId, disableDate, a);
+                        o, disableDate, a);
                 if (countByFinancialUserAndOrganizationAndDisableDate > 0 || countByFinancialUserAndOrganizationAndEffectiveDate > 0) {
                     continue;
                 }
