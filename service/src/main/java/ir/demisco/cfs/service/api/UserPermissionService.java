@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserPermissionService {
-    Boolean saveUserPermission(List<FinancialUserPermissionInputModelRequest> financialUserPermissionInputModelRequest);
+    Boolean saveUserPermission(List<FinancialUserPermissionInputModelRequest> userPermissionInputModelRequestList);
 
     Boolean deleteUserPermission(FinancialSecUserPermissionScopeInputModelRequest financialSecUserPermissionScopeInputModelRequest);
 

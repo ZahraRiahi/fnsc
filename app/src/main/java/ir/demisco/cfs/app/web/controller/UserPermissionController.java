@@ -3,6 +3,7 @@ package ir.demisco.cfs.app.web.controller;
 import ir.demisco.cfs.model.dto.request.FinancialSecUserPermissionScopeInputModelRequest;
 import ir.demisco.cfs.model.dto.request.FinancialUserPermissionInputModelRequest;
 import ir.demisco.cfs.model.dto.request.UserPermissionRequest;
+import ir.demisco.cfs.model.dto.request.ValidList;
 import ir.demisco.cfs.service.api.UserPermissionService;
 import ir.demisco.cfs.service.impl.UserPermissionGridProvider;
 import ir.demisco.cloud.core.middle.model.dto.DataSourceRequest;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -30,8 +32,8 @@ public class UserPermissionController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Boolean> saveUserPermission(@RequestBody List<FinancialUserPermissionInputModelRequest> financialUserPermissionInputModelRequest) {
-        return ResponseEntity.ok(userPermissionService.saveUserPermission(financialUserPermissionInputModelRequest));
+    public ResponseEntity<Boolean> saveUserPermission(@Valid @RequestBody ValidList<FinancialUserPermissionInputModelRequest> userPermissionInputModelRequestList) {
+        return ResponseEntity.ok(userPermissionService.saveUserPermission(userPermissionInputModelRequestList));
     }
 
     @PostMapping("/delete")
