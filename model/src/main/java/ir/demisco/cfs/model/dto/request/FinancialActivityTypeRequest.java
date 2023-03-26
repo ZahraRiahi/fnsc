@@ -13,7 +13,6 @@ public class FinancialActivityTypeRequest {
     private Long financialSystemId;
     private Long financialSystemSubjectId;
 
-    @NotNull(message = "لطفا شناسه فعالیت را وارد کنید.")
     public Long getActivityTypeId() {
         return activityTypeId;
     }
@@ -22,7 +21,7 @@ public class FinancialActivityTypeRequest {
         this.activityTypeId = activityTypeId;
     }
 
-    @NotNull(message = "لطفا کد فعالیت را وارد کنید.")
+    @NotNull(message = "fin.financialActivityType.enterCode")
 
     public String getCode() {
         return code;
@@ -32,7 +31,7 @@ public class FinancialActivityTypeRequest {
         this.code = code;
     }
 
-    @NotNull(message = "لطفا شرح فعالیت را وارد کنید.")
+    @NotNull(message = "fin.financialActivityType.enterDescription")
 
     public String getDescription() {
         return description;
@@ -42,7 +41,7 @@ public class FinancialActivityTypeRequest {
         this.description = description;
     }
 
-    @NotNull(message = "لطفا مقدار فلگ ایجاد را مشخص کنید.")
+    @NotNull(message = "fin.financialActivityType.enterInsertFlag")
     public Boolean getInsertFlag() {
         return insertFlag;
     }
@@ -51,7 +50,7 @@ public class FinancialActivityTypeRequest {
         this.insertFlag = insertFlag;
     }
 
-    @NotNull(message = "لطفا مقدار فلگ ویرایش را مشخص کنید.")
+    @NotNull(message = "fin.financialActivityType.enterUpdateFlag")
     public Boolean getUpdateFlag() {
         return updateFlag;
     }
@@ -60,7 +59,7 @@ public class FinancialActivityTypeRequest {
         this.updateFlag = updateFlag;
     }
 
-    @NotNull(message = "لطفا مقدار فلگ حذف را مشخص کنید.")
+    @NotNull(message = "fin.financialActivityType.enterDeleteFlag")
     public Boolean getDeleteFlag() {
         return deleteFlag;
     }
@@ -69,7 +68,7 @@ public class FinancialActivityTypeRequest {
         this.deleteFlag = deleteFlag;
     }
 
-    @NotNull(message = "لطفا مقدار فلگ واکشی را مشخص کنید.")
+    @NotNull(message = "fin.financialActivityType.enterQueryFlag")
     public Boolean getQueryFlag() {
         return queryFlag;
     }
@@ -78,7 +77,7 @@ public class FinancialActivityTypeRequest {
         this.queryFlag = queryFlag;
     }
 
-    @NotNull(message = "لطفا شناسه سیستم مالی  را وارد کنید.")
+    @NotNull(message = "fin.financialActivityType.enterFinancialSystemId")
     public Long getFinancialSystemId() {
         return financialSystemId;
     }
@@ -87,7 +86,7 @@ public class FinancialActivityTypeRequest {
         this.financialSystemId = financialSystemId;
     }
 
-    @NotNull(message = "لطفا شناسه شناسه موضوع سیستم مالی   را وارد کنید.")
+    @NotNull(message = "fin.financialActivityType.enterFinancialSystemSubjectId")
     public Long getFinancialSystemSubjectId() {
         return financialSystemSubjectId;
     }

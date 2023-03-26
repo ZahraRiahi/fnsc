@@ -12,7 +12,7 @@ public class FinancialUserAlternativeRequest {
     private Boolean flagAllOrganization;
     private Long mainFinancialUserId;
 
-    @NotNull(message = "لطفا شناسه کاربر سیستم را وارد کنید.")
+    @NotNull(message = "fin.financialUserAlternative.enterApplicationUserId")
     public List<Long> getApplicationUserId() {
         return applicationUserId;
     }
@@ -21,7 +21,7 @@ public class FinancialUserAlternativeRequest {
         this.applicationUserId = applicationUserId;
     }
 
-    @NotNull(message = "لطفا تاریخ شروع تاثیر را وارد کنید.")
+    @NotNull(message = "fin.financialUserAlternative.enterEffectiveDate")
     public LocalDateTime getEffectiveDate() {
         return effectiveDate;
     }
@@ -38,7 +38,7 @@ public class FinancialUserAlternativeRequest {
         this.organizationId = organizationId;
     }
 
-    @NotNull(message = "لطفا سازمان   را وارد کنید.")
+    @NotNull(message = "fin.financialUserAlternative.enterFlagAllOrganization")
     public Boolean getFlagAllOrganization() {
         return flagAllOrganization;
     }
@@ -47,7 +47,7 @@ public class FinancialUserAlternativeRequest {
         this.flagAllOrganization = flagAllOrganization;
     }
 
-    @NotNull(message = "لطفا شناسه کاربر اصلی  را وارد کنید.")
+    @NotNull(message = "fin.financialUserAlternative.enterMainFinancialUserId")
     public Long getMainFinancialUserId() {
         return mainFinancialUserId;
     }

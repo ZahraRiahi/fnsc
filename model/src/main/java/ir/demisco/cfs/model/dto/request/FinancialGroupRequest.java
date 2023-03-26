@@ -24,7 +24,7 @@ public class FinancialGroupRequest {
         this.organizationId = organizationId;
     }
 
-    @NotNull(message = "لطفا کد گروه را وارد کنید.")
+    @NotNull(message = "fin.financialGroupCode.enterGroupCode")
     public String getFinancialGroupCode() {
         return financialGroupCode;
     }
@@ -33,7 +33,7 @@ public class FinancialGroupRequest {
         this.financialGroupCode = financialGroupCode;
     }
 
-    @NotNull(message = "لطفا شرح گروه را وارد کنید.")
+    @NotNull(message = "fin.financialGroupCode.enterGroupDescription")
     public String getFinancialGroupDescription() {
         return financialGroupDescription;
     }

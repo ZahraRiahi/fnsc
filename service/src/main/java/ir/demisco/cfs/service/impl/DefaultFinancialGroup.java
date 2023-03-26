@@ -32,8 +32,8 @@ public class DefaultFinancialGroup implements FinancialGroupService {
     @Transactional(rollbackOn = Throwable.class)
     public Boolean deleteFinancialGroup(FinancialGroupInputModelRequest financialGroupInputModelRequest) {
         List<FinancialUserGroup> financialUserGroupList = financialUserGroupRepository.findByFinancialGroupId(financialGroupInputModelRequest.getGroupId());
-        if(!financialUserGroupList.isEmpty()){
-            throw new RuleException("امکان حذف این گروه/گروهها وجود ندارد");
+        if (!financialUserGroupList.isEmpty()) {
+            throw new RuleException("fin.financialGroup.notBeDeleted");
         }
         financialUserGroupList.forEach(along1 -> financialUserGroupRepository.deleteById(along1.getFinancialGroupId().getId()));
         financialGroupInputModelRequest.getGroupId().forEach(aLong -> financialGroupRepository.deleteById(aLong));

@@ -56,7 +56,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
     public List<FinancialSecPermissionScopeOutputResponse> getFinancialSecPermissionScope(FinancialSecPermissionScopeInputRequest financialSecPermissionScopeInputRequest) {
         Object financialUser = null;
         if (financialSecPermissionScopeInputRequest.getFinancialGroupId() == null && financialSecPermissionScopeInputRequest.getFinancialUserId() == null) {
-            throw new RuleException("باید یکی از دو شناسه ی گروه یا شناسه ی کاربر مالی پر شده باشد");
+            throw new RuleException("fin.financialSecPermissionScope.oneShouldBeFilled");
         }
         if (financialSecPermissionScopeInputRequest.getFinancialUserId() != null) {
             financialUser = "financialUser";
@@ -108,7 +108,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
     public Boolean deleteFinancialSecPermissionScope(FinancialSecPermissionScopeInputModelRequest financialSecPermissionScopeInputModelRequest) {
         List<Long> userPermissionCount = userPermissionRepository.getUserPermissionByUserPermissionScopeId(financialSecPermissionScopeInputModelRequest.getUserPermissionScopeId().get(0));
         if (!userPermissionCount.isEmpty()) {
-            throw new RuleException("امکان حذف این محدوده ی دسترسی کاربر وجود ندارد.");
+            throw new RuleException("fin.financialSecPermissionScope.notBeDeleted");
         }
         financialSecPermissionScopeInputModelRequest.getUserPermissionScopeId().forEach(aLong -> userPermissionScopeRepository.deleteById(aLong));
         return true;
@@ -313,12 +313,12 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         if (saveCompletePermissionRequest.getFinancialUserPermissionRequestList().stream()
                 .anyMatch(i -> (i.getFinancialDocumentTypeId() == null && !i.getAllDocumentTypeFlag()) ||
                         (i.getFinancialDocumentTypeId() != null && i.getAllDocumentTypeFlag()))) {
-            throw new RuleException(" فلگ دسترسی به همه انواع سند و فیلد نوع سند همخوانی ندارد. ");
+            throw new RuleException("fin.UserPermission.misMatchOfFinancialDocumentTypeId.allDocumentTypeFlag");
         }
         if (saveCompletePermissionRequest.getFinancialUserPermissionRequestList().stream()
                 .anyMatch(i -> (i.getFinancialPeriodId() == null && !i.getAllFinancialPeriodFlag()) ||
                         (i.getFinancialPeriodId() != null && i.getAllFinancialPeriodFlag()))) {
-            throw new RuleException(" فلگ دسترسی به همه دوره های مالی  و فیلد دوره مالی همخوانی ندارد. ");
+            throw new RuleException("fin.UserPermission.misMatchOfFinancialPeriodId.AllFinancialPeriodFlag");
         }
     }
 
@@ -326,15 +326,15 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
         List<FinancialSecPermissionScopeRequest> financialSecPermissionScopeRequestList = saveCompletePermissionRequest.getFinancialSecPermissionScopeRequestList();
         if (financialSecPermissionScopeRequestList.stream().anyMatch(i -> (i.getFinancialUserId().isEmpty() && i.getFinancialGroupId().isEmpty()) ||
                 (!i.getFinancialUserId().isEmpty() && !i.getFinancialGroupId().isEmpty()))) {
-            throw new RuleException("یکی از دو شناسه گروه و یا شناسه کاربر مالی باید  پر شده باشد ");
+            throw new RuleException("fin.financialSecPermissionScope.oneOfShouldBeFilled");
         }
         if (financialSecPermissionScopeRequestList.stream().anyMatch(i -> (i.getFinancialDepartmentId() == null && !i.getAllFncDepartmentFlag()) ||
                 (i.getFinancialDepartmentId() != null && i.getAllFncDepartmentFlag()))) {
-            throw new RuleException("فلگ  دسترسی به همه واحد های مالی و فیلد واحد مالی همخوانی ندارد. ");
+            throw new RuleException("fin.UserPermissionScope.misMatchOfFinancialDepartmentId.AllFncDepartmentFlag");
         }
         if (financialSecPermissionScopeRequestList.stream().anyMatch(i -> (i.getFinancialLedgerTypeId() == null && !i.getAllLedgerTypesFlag()) ||
                 (i.getFinancialLedgerTypeId() != null && i.getAllLedgerTypesFlag()))) {
-            throw new RuleException("فلگ  دسترسی به همه دفاتر مالی  و فیلد دفتر مالی همخوانی ندارد. ");
+            throw new RuleException("fin.UserPermissionScope.misMatchOfFinancialLedgerTypeId.AllLedgerTypesFlag");
         }
 
         return financialSecPermissionScopeRequestList;

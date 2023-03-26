@@ -35,7 +35,7 @@ public class DefaultFinancialActivityType implements FinancialActivityTypeServic
                     if (getFinancialActivityTypeByFinancialSystem(financialActivityTypeObject.getFinancialSystemId(),
                             financialActivityTypeObject.getFinancialSystemSubjectId(),
                             financialActivityTypeObject.getCode()).isPresent()) {
-                        throw new RuleException("کد تکراری است ");
+                        throw new RuleException("fin.financialActivityType.duplicate");
                     } else {
                         FinancialActivityType financialActivityType = FinancialActivityType.builder()
                                 .code(financialActivityTypeObject.getCode())
@@ -68,7 +68,7 @@ public class DefaultFinancialActivityType implements FinancialActivityTypeServic
     public Boolean deleteFinancialActivityType(Long financialActivityTypeId) {
         Long userPermissionByFinancialActivityTypeId = userPermissionService.getUserPermissionByFinancialActivityTypeId(financialActivityTypeId);
         if (userPermissionByFinancialActivityTypeId > 0L) {
-            throw new RuleException("امکان حذف فعالیت مورد نظر  وجود ندارد.");
+            throw new RuleException("fin.financialActivityType.notBeDeleted");
         } else {
             financialActivityTypeRepository.deleteById(financialActivityTypeId);
         }
