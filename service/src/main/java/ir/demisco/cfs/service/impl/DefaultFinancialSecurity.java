@@ -28,21 +28,22 @@ public class DefaultFinancialSecurity implements FinancialSecurityService {
     @Transactional(rollbackFor = Throwable.class)
     public FinancialSecurityOutputResponse hasPermission(FinancialSecurityFilterRequest financialSecurityFilterRequest, Long organizationId) {
         if (financialSecurityFilterRequest.getUserId() == null) {
-            throw new RuleException("لطفا شناسه ی کاربر را وارد نمایید.");
+            throw new RuleException("fin.financialSecurity.enterUser");
         }
         if (financialSecurityFilterRequest.getDepartmentId() == null) {
-            throw new RuleException("لطفا شناسه ی شعبه را وارد نمایید.");
+            throw new RuleException("fin.financialSecurity.enterDepartmentId");
         }
         if (financialSecurityFilterRequest.getActivityCode() == null) {
-            throw new RuleException("لطفا کد نوع فعالیت را وارد نمایید.");
+            throw new RuleException("fin.financialSecurity.enterActivityCode");
+
         }
         if (financialSecurityFilterRequest.getInputFromConfigFlag() == null) {
-            throw new RuleException("لطفا فلگ تنظیمات را وارد نمایید.");
+            throw new RuleException("fin.financialSecurity.enterInputFromConfigFlag");
         }
         List<Object[]> financialDocumentItemList = financialActivityTypeRepository.getFinancialActivityTypeByActivityCode(financialSecurityFilterRequest.getActivityCode());
         FinancialSecurityOutputResponse financialSecurityOutputResponse = new FinancialSecurityOutputResponse();
         if (financialDocumentItemList.size() == 0) {
-            financialSecurityOutputResponse.setPermissionMessage("اشکال در واکشی اطلاعات امنیت سیستم");
+            financialSecurityOutputResponse.setPermissionMessage("fin.financialSecurity.errorInFetching");
             financialSecurityOutputResponse.setHasPermissionStatus(2L);
         } else {
             int resultSet = resultSet(financialSecurityFilterRequest);
@@ -68,15 +69,15 @@ public class DefaultFinancialSecurity implements FinancialSecurityService {
     @Transactional(rollbackFor = Throwable.class)
     public int resultSet(FinancialSecurityFilterRequest financialSecurityFilterRequest) {
         List<Object> resultList = entityManager.createNativeQuery(
-                " select * from table(fnsc.pkg_financial_security.GET_PERMISSION(p_organization_id => ?1," +
-                        "                                                       p_activity_code => ?2," +
-                        "                                                       p_financial_period_id => ?3," +
-                        "                                                       p_financial_document_type_id => ?4," +
-                        "                                                       p_creator_user => ?5," +
-                        "                                                       p_financial_department_id => ?6," +
-                        "                                                       p_financial_ledger_type_id => ?7," +
-                        "                                                       p_department_id => ?8," +
-                        "                                                       p_user_id => ?9))")
+                        " select * from table(fnsc.pkg_financial_security.GET_PERMISSION(p_organization_id => ?1," +
+                                "                                                       p_activity_code => ?2," +
+                                "                                                       p_financial_period_id => ?3," +
+                                "                                                       p_financial_document_type_id => ?4," +
+                                "                                                       p_creator_user => ?5," +
+                                "                                                       p_financial_department_id => ?6," +
+                                "                                                       p_financial_ledger_type_id => ?7," +
+                                "                                                       p_department_id => ?8," +
+                                "                                                       p_user_id => ?9))")
                 .setParameter(1, SecurityHelper.getCurrentUser().getOrganizationId())
                 .setParameter(2, financialSecurityFilterRequest.getActivityCode())
                 .setParameter(3, new TypedParameterValue(StandardBasicTypes.LONG, financialSecurityFilterRequest.getFinancialPeriodId()))

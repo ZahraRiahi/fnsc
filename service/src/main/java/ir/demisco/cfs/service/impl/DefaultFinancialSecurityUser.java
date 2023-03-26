@@ -71,19 +71,19 @@ public class DefaultFinancialSecurityUser implements FinancialSecurityUserServic
     public Boolean deleteFinancialUser(Long financialUserId) {
         Long financialUserAlternativeByFinancialUserId = financialAlternativeUsersService.getFinancialUserAlternativeByFinancialUserId(financialUserId);
         if (financialUserAlternativeByFinancialUserId > 0L) {
-            throw new RuleException("امکان حذف این کاربر مالی وجود ندارد.");
+            throw new RuleException("fin.financialUserAlternative.notBeDeleted");
         }
         Long userPermissionByFinancialUserId = userPermissionService.getUserPermissionByFinancialUserId(financialUserId);
         if (userPermissionByFinancialUserId > 0L) {
-            throw new RuleException("امکان حذف این کاربر مالی وجود ندارد.");
+            throw new RuleException("fin.financialUserAlternative.notBeDeleted");
         }
         Long userPermissionScopeByFinancialUserId = financialSecPermissionScopeService.findUserPermissionScopeByFinancialUserId(financialUserId);
         if (userPermissionScopeByFinancialUserId > 0L) {
-            throw new RuleException("امکان حذف این کاربر مالی وجود ندارد.");
+            throw new RuleException("fin.financialUserAlternative.notBeDeleted");
         }
         Long financialUserGroupByFinancialUserId = financialUserGroupService.getFinancialUserGroupByFinancialUserId(financialUserId);
         if (financialUserGroupByFinancialUserId > 0L) {
-            throw new RuleException("امکان حذف این کاربر مالی وجود ندارد.");
+            throw new RuleException("fin.financialUserAlternative.notBeDeleted");
         }
         financialUserRepository.deleteById(financialUserId);
         return true;

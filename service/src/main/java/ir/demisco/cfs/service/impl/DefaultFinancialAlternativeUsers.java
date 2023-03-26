@@ -56,7 +56,7 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
         List<Long> count = financialUsersAlternativeRepository.getFinancialUserAlternativeByIdList(financialUserAlternativeInputModelRequest.getUserAlternativeIdList(),
                 financialUserAlternativeInputModelRequest.getDisableDate());
         if (!count.isEmpty()) {
-            throw new RuleException("برای کاربران جایگزین نمیبایست همپوشانی تاریخ وجود داشته باشد");
+            throw new RuleException("fin.financialUserAlternative.overlapping.dates");
         }
         entityManager.createNativeQuery(" update FNSC.FINANCIAL_USER_ALTERNATIVE  T " +
                         "   set   T.DISABLE_DATE = :disableDate " +
@@ -117,7 +117,7 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
                         effectiveDate, o).isPresent()).collect(Collectors.toList());
 
         if (organizationList.isEmpty()) {
-            throw new RuleException("کاربر/کاربران جایگزین در بازه ی زمانی مورد نظر نمی توانند  به عنوان جایگزین کاربر اصلی درج شوند.");
+            throw new RuleException("fin.financialAlternativeUsers.overlapping.dates");
         }
 
         for (Long o : organizationList) {

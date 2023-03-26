@@ -16,7 +16,7 @@ public class FinancialUserPermissionInputModelRequest {
     private Long userPermissionId;
     private Boolean allUsersCreator;
 
-    @NotNull(message = "لطفا  شناسه محدوده دسترسی کاربر را وارد کنید.")
+    @NotNull(message = "fin.financialUserPermission.enterUserPermissionScopeId")
     public Long getUserPermissionScopeId() {
         return userPermissionScopeId;
     }
@@ -33,7 +33,7 @@ public class FinancialUserPermissionInputModelRequest {
         this.financialUserIdCreator = financialUserIdCreator;
     }
 
-    @NotNull(message = "لطفا شناسه نوع فعالیت راوارد کنید.")
+    @NotNull(message = "fin.financialUserPermission.enterFinancialActivityTypeId")
     public Long getFinancialActivityTypeId() {
         return financialActivityTypeId;
     }
@@ -58,7 +58,7 @@ public class FinancialUserPermissionInputModelRequest {
         this.financialPeriodId = financialPeriodId;
     }
 
-    @NotNull(message = "لطفا تاریخ شروع را وارد کنید.")
+    @NotNull(message = "fin.financialUserPermission.enterEffectiveDate")
     public LocalDateTime getEffectiveDate() {
         return effectiveDate;
     }

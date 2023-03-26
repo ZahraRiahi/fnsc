@@ -31,7 +31,7 @@ public class FinancialUserPermissionRequest {
         this.financialUserIdCreator = financialUserIdCreator;
     }
 
-    @NotNull(message = "لطفا شناسه نوع فعالیت راوارد کنید.")
+    @NotNull(message = "fin.financialUserPermission.enterFinancialActivityTypeId")
     public Long getFinancialTypeActivityId() {
         return financialTypeActivityId;
     }
@@ -56,7 +56,7 @@ public class FinancialUserPermissionRequest {
         this.financialPeriodId = financialPeriodId;
     }
 
-    @NotNull(message = "لطفا تاریخ شروع  را وارد کنید.")
+    @NotNull(message = "fin.financialUserPermission.enterEffectiveDate")
     public LocalDateTime getEffectiveDate() {
         return effectiveDate;
     }

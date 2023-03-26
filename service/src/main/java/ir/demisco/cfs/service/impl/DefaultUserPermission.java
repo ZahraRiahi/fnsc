@@ -83,12 +83,12 @@ public class DefaultUserPermission implements UserPermissionService {
         if (userPermissionInputModelRequestList.stream()
                 .anyMatch(i -> (i.getFinancialDocumentTypeId() == null && !i.getAllDocumentTypeFlag()) ||
                         (i.getFinancialDocumentTypeId() != null && i.getAllDocumentTypeFlag()))) {
-            throw new RuleException(" فلگ دسترسی به همه انواع سند و فیلد نوع سند همخوانی ندارد. ");
+            throw new RuleException("fin.UserPermission.misMatchOfFinancialDocumentTypeId.allDocumentTypeFlag");
         }
         if (userPermissionInputModelRequestList.stream()
                 .anyMatch(i -> (i.getFinancialPeriodId() == null && !i.getAllFinancialPeriodFlag()) ||
                         (i.getFinancialPeriodId() != null && i.getAllFinancialPeriodFlag()))) {
-            throw new RuleException(" فلگ دسترسی به همه دوره های مالی  و فیلد دوره مالی همخوانی ندارد. ");
+            throw new RuleException("fin.UserPermission.misMatchOfFinancialPeriodId.AllFinancialPeriodFlag");
         }
     }
 
