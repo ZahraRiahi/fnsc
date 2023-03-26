@@ -11,7 +11,7 @@ public class FinancialUserGroupRequest {
     private LocalDateTime disableDate;
     private Long organizationId;
 
-    @NotNull(message = "لطفا شناسه گروه را وارد کنید.")
+    @NotNull(message = "fin.financialUserGroup.enterFinancialUserGroup")
     public Long getGroupId() {
         return groupId;
     }
@@ -20,7 +20,7 @@ public class FinancialUserGroupRequest {
         this.groupId = groupId;
     }
 
-    @NotNull(message = "لطفا لیست شناسه های کاربران مالی را وارد کنید.")
+    @NotNull(message = "fin.financialUserGroup.enterFinancialUserId")
     public List<Long> getFinancialUserId() {
         return financialUserId;
     }
@@ -29,7 +29,7 @@ public class FinancialUserGroupRequest {
         this.financialUserId = financialUserId;
     }
 
-    @NotNull(message = "لطفا تاریخ شروع تاثیر را وارد کنید.")
+    @NotNull(message = "fin.financialUserGroup.enterEffectiveDate")
     public LocalDateTime getEffectiveDate() {
         return effectiveDate;
     }

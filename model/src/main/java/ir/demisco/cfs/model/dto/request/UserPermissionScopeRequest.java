@@ -7,7 +7,7 @@ public class UserPermissionScopeRequest {
     private Long userPermissionScopeId;
     private LocalDateTime disableDate;
 
-    @NotNull(message = "لطفا شناسه محدوه دسترسی را وارد کنید.")
+    @NotNull(message = "fin.userPermissionScope.userPermissionScopeId")
     public Long getUserPermissionScopeId() {
         return userPermissionScopeId;
     }

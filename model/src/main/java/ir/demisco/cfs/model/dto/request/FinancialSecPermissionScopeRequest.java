@@ -40,7 +40,7 @@ public class FinancialSecPermissionScopeRequest {
         this.financialDepartmentId = financialDepartmentId;
     }
 
-    @NotNull(message = "لطفا شناسه شعبه  را وارد کنید.")
+    @NotNull(message = "fin.financial.enterDepartmentId")
     public Long getDepartmentId() {
         return departmentId;
     }
@@ -49,7 +49,7 @@ public class FinancialSecPermissionScopeRequest {
         this.departmentId = departmentId;
     }
 
-    @NotNull(message = "لطفا تاریخ شروع را وارد کنید.")
+    @NotNull(message = "fin.financial.enterEffectiveDate")
     public LocalDateTime getEffectiveDate() {
         return effectiveDate;
     }
@@ -90,7 +90,7 @@ public class FinancialSecPermissionScopeRequest {
         this.financialGroupId = financialGroupId;
     }
 
-    @NotNull(message = "لطفا شناسه سازمان  را وارد کنید.")
+    @NotNull(message = "fin.financial.enterOrganizationId")
     public Long getOrganizationId() {
         return organizationId;
     }

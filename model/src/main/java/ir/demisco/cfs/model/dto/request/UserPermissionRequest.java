@@ -7,7 +7,7 @@ public class UserPermissionRequest {
     private Long userPermissionId;
     private LocalDateTime disableDate;
 
-    @NotNull(message = "لطفا شناسه دسترسی را وارد کنید.")
+    @NotNull(message = "fin.userPermission.enterUserPermissionId")
     public Long getUserPermissionId() {
         return userPermissionId;
     }
