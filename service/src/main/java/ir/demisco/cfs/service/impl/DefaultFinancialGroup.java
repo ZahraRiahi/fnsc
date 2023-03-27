@@ -52,9 +52,13 @@ public class DefaultFinancialGroup implements FinancialGroupService {
                         .build();
                 Long countByFinancialGroupByCode = getFinancialGroupByCode(groupRequest.getOrganizationId() != null ? groupRequest.getOrganizationId() : null, groupRequest.getFinancialGroupCode());
                 Long countByFinancialGroupByDescription = getFinancialGroupByDescription(groupRequest.getOrganizationId() != null ? groupRequest.getOrganizationId() : null, groupRequest.getFinancialGroupDescription());
-                if (countByFinancialGroupByCode > 0 || countByFinancialGroupByDescription > 0) {
-                    continue;
+                if (countByFinancialGroupByCode > 0) {
+                    throw new RuleException("fin.financialGroup.codeHasBeenRegistered");
                 }
+                if (countByFinancialGroupByDescription > 0) {
+                    throw new RuleException("fin.financialGroup.DescriptionHasBeenRegistered");
+                }
+
                 financialGroupRepository.save(financialGroup);
             } else {
                 updateFinancialGroup(financialGroupRequestList);
@@ -82,8 +86,11 @@ public class DefaultFinancialGroup implements FinancialGroupService {
             oldFinancialGroup.setOrganization(groupRequest.getOrganizationId() != null ? daoService.findById(Organization.class, groupRequest.getOrganizationId()) : null);
             Long countByFinancialGroupByCode = getFinancialGroupByCode(groupRequest.getOrganizationId() != null ? groupRequest.getOrganizationId() : null, groupRequest.getFinancialGroupCode());
             Long countByFinancialGroupByDescription = getFinancialGroupByDescription(groupRequest.getOrganizationId() != null ? groupRequest.getOrganizationId() : null, groupRequest.getFinancialGroupDescription());
-            if (countByFinancialGroupByCode > 0 || countByFinancialGroupByDescription > 0) {
-                continue;
+            if (countByFinancialGroupByCode > 0) {
+                throw new RuleException("fin.financialGroup.codeHasBeenRegistered");
+            }
+            if (countByFinancialGroupByDescription > 0) {
+                throw new RuleException("fin.financialGroup.DescriptionHasBeenRegistered");
             }
             financialGroupRepository.save(oldFinancialGroup);
         }
