@@ -28,10 +28,11 @@ public class FinancialUserGroupGridProvider implements GridDataProvider {
     public Predicate getCustomRestriction(FilterContext filterContext) {
         Root<Object> root = filterContext.getRoot();
         Join<Object, Object> financialUser = root.join("financialUserId");
+        Join<Object, Object> financialGroup = root.join("financialGroupId");
         Join<Object, Object> applicationUser = financialUser.join("applicationUser");
 
         filterContext.getJoins().putAll(CommonUtils.keyValueMap("financialUser", financialUser,
-                "applicationUser", applicationUser));
+                "applicationUser", applicationUser, "financialGroup", financialGroup));
 
         return GridDataProvider.super.getCustomRestriction(filterContext);
     }
@@ -41,6 +42,7 @@ public class FinancialUserGroupGridProvider implements GridDataProvider {
         CriteriaBuilder criteriaBuilder = filterContext.getCriteriaBuilder();
         Map<String, Object> joins = filterContext.getJoins();
         Join<Object, Object> financialUser = (Join) joins.get("financialUser");
+        Join<Object, Object> financialGroup = (Join) joins.get("financialGroup");
         Join<Object, Object> applicationUser = (Join) joins.get("applicationUser");
 
         return criteriaBuilder.array(
@@ -50,7 +52,9 @@ public class FinancialUserGroupGridProvider implements GridDataProvider {
                 applicationUser.get("username"),
                 applicationUser.get("nickName"),
                 filterContext.getPath("effectiveDate"),
-                filterContext.getPath("disableDate")
+                filterContext.getPath("disableDate"),
+                financialGroup.get("id"),
+                financialGroup.get("description")
         );
 
     }
@@ -77,6 +81,7 @@ public class FinancialUserGroupGridProvider implements GridDataProvider {
         Map<String, String> fullPaths = new HashMap<>();
         fullPaths.put("organizationId", "organizationId");
         fullPaths.put("financialGroupId", "financialGroupId");
+        fullPaths.put("financialUserId", "financialUserId");
         return fullPaths;
     }
 
