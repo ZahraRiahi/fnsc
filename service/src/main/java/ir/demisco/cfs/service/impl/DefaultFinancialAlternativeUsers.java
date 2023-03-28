@@ -102,7 +102,6 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
     @Transactional
     public Boolean saveFinancialAlternativeUsers(FinancialUserAlternativeRequest financialUserAlternativeRequest) {
         LocalDateTime effectiveDate = DateUtil.truncate(financialUserAlternativeRequest.getEffectiveDate());
-        LocalDateTime disableDate = DateUtil.truncate(financialUserAlternativeRequest.getDisableDate());
         if (financialUserAlternativeRequest.getFlagAllOrganization()) {
             financialUserAlternativeRequest.setOrganizationId(organizationService
                     .getAllOrganizationsByUserAndApplicationSystem(SecurityHelper.getCurrentUser().getUserId(),
@@ -128,13 +127,6 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
                         .alternative(daoService.findById(FinancialUser.class, a))
                         .effectiveDate(financialUserAlternativeRequest.getEffectiveDate())
                         .build();
-                Long countByFinancialUserAndOrganizationAndEffectiveDate = getFinancialUserAlternativeByFinancialUserAndOrganizationAndEffectiveDate(financialUserAlternativeRequest.getMainFinancialUserId(),
-                        o, effectiveDate, a);
-                Long countByFinancialUserAndOrganizationAndDisableDate = getFinancialUserAlternativeByFinancialUserAndOrganizationAndDisableDate(financialUserAlternativeRequest.getMainFinancialUserId(),
-                        o, disableDate, a);
-                if (countByFinancialUserAndOrganizationAndDisableDate > 0 || countByFinancialUserAndOrganizationAndEffectiveDate > 0) {
-                    continue;
-                }
                 financialUsersAlternativeRepository.save(userAlternative);
 
             }
