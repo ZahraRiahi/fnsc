@@ -70,8 +70,11 @@ public class DefaultUserPermission implements UserPermissionService {
                     financialUserPermissionInputModelRequest.getDisableDate() == null ? null :
                             DateUtil.truncate(financialUserPermissionInputModelRequest.getDisableDate()),
                     financialUserPermissionInputModelRequest.getAllDocumentTypeFlag(), financialUserPermissionInputModelRequest.getAllFinancialPeriodFlag());
-            if (userPermissionByAllDocumentTypeFlagAndEffectiveDate > 0 || userPermissionByAllDocumentTypeFlagAndDisableDate > 0) {
-                continue;
+            if (userPermissionByAllDocumentTypeFlagAndEffectiveDate > 0) {
+                throw new RuleException("fin.userPermission.EffectiveDateHasBeenRegistered");
+            }
+            if (userPermissionByAllDocumentTypeFlagAndDisableDate > 0) {
+                throw new RuleException("fin.userPermission.DisableDateHasBeenRegistered");
             }
             userPermissionRepository.save(userPermission);
 
