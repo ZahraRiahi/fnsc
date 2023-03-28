@@ -181,6 +181,10 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
 
     private void checkNotEmptyFinancialGroup(SaveCompletePermissionRequest saveCompletePermissionRequest, FinancialSecPermissionScopeRequest permissionScopeRequest) {
         for (Long financialGroupId : permissionScopeRequest.getFinancialGroupId()) {
+            FinancialGroup financialGroup = daoService.findById(FinancialGroup.class, financialGroupId);
+            if (financialGroup == null) {
+                throw new RuleException("fin.userPermission.financialGroupIdNotFound");
+            }
             UserPermissionScope userPermissionScope = UserPermissionScope.builder()
                     .financialLedgerType(permissionScopeRequest.getFinancialLedgerTypeId() != null ?
                             daoService.findById(FinancialLedgerType.class, permissionScopeRequest.getFinancialLedgerTypeId()) : null)
@@ -191,7 +195,7 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                     .disableDate(permissionScopeRequest.getDisableDate() == null ? null : permissionScopeRequest.getDisableDate())
                     .allLedgerTypesFlag(permissionScopeRequest.getAllLedgerTypesFlag())
                     .allFncDepartmentFlag(permissionScopeRequest.getAllFncDepartmentFlag())
-                    .financialGroup(daoService.findById(FinancialGroup.class, financialGroupId))
+                    .financialGroup(financialGroup)
                     .organization(daoService.findById(Organization.class, permissionScopeRequest.getOrganizationId()))
                     .build();
             Long countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate = getUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate(null,
@@ -211,8 +215,11 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                     permissionScopeRequest.getOrganizationId(),
                     permissionScopeRequest.getAllLedgerTypesFlag(),
                     permissionScopeRequest.getAllFncDepartmentFlag(), financialGroupId);
-            if (countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate > 0 || countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate > 0) {
-                continue;
+            if (countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate > 0) {
+                throw new RuleException("fin.userPermissionScope.effectiveDateHasBeenRegistered");
+            }
+            if (countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate > 0) {
+                throw new RuleException("fin.userPermissionScope.disableDateHasBeenRegistered");
             }
             UserPermissionScope save = userPermissionScopeRepository.save(userPermissionScope);
             Long userPermissionScopeId = save.getId();
@@ -223,8 +230,12 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
     private void checkNotEmptyFinancialUser(SaveCompletePermissionRequest saveCompletePermissionRequest,
                                             FinancialSecPermissionScopeRequest permissionScopeRequest) {
         for (Long financialUserId : permissionScopeRequest.getFinancialUserId()) {
+            FinancialUser financialUser = daoService.findById(FinancialUser.class, financialUserId);
+            if (financialUser == null) {
+                throw new RuleException("fin.userPermission.financialUserIdNotFound");
+            }
             UserPermissionScope userPermissionScope = UserPermissionScope.builder()
-                    .financialUser(daoService.findById(FinancialUser.class, financialUserId))
+                    .financialUser(financialUser)
                     .financialLedgerType(permissionScopeRequest.getFinancialLedgerTypeId() != null ?
                             daoService.findById(FinancialLedgerType.class, permissionScopeRequest.getFinancialLedgerTypeId()) : null)
                     .financialDepartment(permissionScopeRequest.getFinancialDepartmentId() != null ?
@@ -252,9 +263,13 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                     permissionScopeRequest.getOrganizationId(),
                     permissionScopeRequest.getAllLedgerTypesFlag(),
                     permissionScopeRequest.getAllFncDepartmentFlag(), null);
-            if (countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate > 0 || countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate > 0) {
-                continue;
+            if (countByUserPermissionScopeByAllLedgerTypesFlagAndEffectiveDate > 0) {
+                throw new RuleException("fin.userPermissionScope.effectiveDateHasBeenRegistered");
             }
+            if (countByUserPermissionScopeByAllLedgerTypesFlagAndDisableDate > 0) {
+                throw new RuleException("fin.userPermissionScope.disableDateHasBeenRegistered");
+            }
+
             UserPermissionScope save = userPermissionScopeRepository.save(userPermissionScope);
             Long userPermissionScopeId = save.getId();
             saveUserPermission(saveCompletePermissionRequest, userPermissionScopeId);
@@ -301,8 +316,11 @@ public class DefaultFinancialSecPermissionScope implements FinancialSecPermissio
                                 DateUtil.truncate(financialUserPermissionRequest.getDisableDate()),
                                 financialUserPermissionRequest.getAllDocumentTypeFlag(),
                                 financialUserPermissionRequest.getAllFinancialPeriodFlag());
-                if (countByUserPermissionByAllDocumentTypeFlagAndEffectiveDate > 0 || countByUserPermissionByAllDocumentTypeFlagAndDisableDate > 0) {
-                    continue;
+                if (countByUserPermissionByAllDocumentTypeFlagAndEffectiveDate > 0) {
+                    throw new RuleException("fin.userPermission.EffectiveDateHasBeenRegistered");
+                }
+                if (countByUserPermissionByAllDocumentTypeFlagAndDisableDate > 0) {
+                    throw new RuleException("fin.userPermission.DisableDateHasBeenRegistered");
                 }
                 userPermissionRepository.save(userPermission);
             }
