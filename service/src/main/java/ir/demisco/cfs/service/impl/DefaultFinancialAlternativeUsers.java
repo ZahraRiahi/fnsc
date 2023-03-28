@@ -102,7 +102,6 @@ public class DefaultFinancialAlternativeUsers implements FinancialAlternativeUse
     @Transactional
     public Boolean saveFinancialAlternativeUsers(FinancialUserAlternativeRequest financialUserAlternativeRequest) {
         LocalDateTime effectiveDate = DateUtil.truncate(financialUserAlternativeRequest.getEffectiveDate());
-        LocalDateTime disableDate = DateUtil.truncate(financialUserAlternativeRequest.getDisableDate());
         if (financialUserAlternativeRequest.getFlagAllOrganization()) {
             financialUserAlternativeRequest.setOrganizationId(organizationService
                     .getAllOrganizationsByUserAndApplicationSystem(SecurityHelper.getCurrentUser().getUserId(),
