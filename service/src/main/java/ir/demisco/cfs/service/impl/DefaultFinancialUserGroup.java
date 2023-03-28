@@ -79,14 +79,17 @@ public class DefaultFinancialUserGroup implements FinancialUserGroupService {
                     .financialUserId(daoService.findById(FinancialUser.class, userId))
                     .effectiveDate(financialUserGroupRequest.getEffectiveDate())
                     .disableDate(financialUserGroupRequest.getDisableDate() == null ? null : financialUserGroupRequest.getDisableDate())
-                    .organizationId(daoService.findById(Organization.class, financialUserGroupRequest.getOrganizationId()))
+                    .organizationId(financialUserGroupRequest.getOrganizationId() != null ?
+                            daoService.findById(Organization.class, financialUserGroupRequest.getOrganizationId()) : null)
                     .build();
             Long countByFinancialUserGroupByEffectiveDate = getFinancialUserGroupByEffectiveDate(userId, financialUserGroupRequest.getGroupId(), financialUserGroupRequest.getEffectiveDate(), financialUserGroupRequest.getOrganizationId());
             Long countByFinancialUserGroupByDisableDate = getFinancialUserGroupByDisableDate(userId, financialUserGroupRequest.getGroupId(), financialUserGroupRequest.getDisableDate(), financialUserGroupRequest.getOrganizationId());
 
-
-            if (countByFinancialUserGroupByEffectiveDate > 0 || countByFinancialUserGroupByDisableDate > 0) {
-                continue;
+            if (countByFinancialUserGroupByEffectiveDate > 0) {
+                throw new RuleException("fin.financialUserGroup.EffectiveDateHasBeenRegistered");
+            }
+            if (countByFinancialUserGroupByDisableDate > 0) {
+                throw new RuleException("fin.financialUserGroup.DisableDateDateHasBeenRegistered");
             }
             financialUserGroupRepository.save(financialUserGroup);
 
